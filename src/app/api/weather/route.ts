@@ -68,7 +68,6 @@ out center 80;
     const els: any[] = Array.isArray(data?.elements) ? data.elements : []
     if (els.length === 0) return null
 
-    // pick the closest named POI
     const toRad = (d: number) => (d * Math.PI) / 180
     const distM = (aLat: number, aLon: number, bLat: number, bLon: number) => {
       const R = 6371000
@@ -98,6 +97,8 @@ out center 80;
   }
 }
 
+const numOrNull = (v: any): number | null => (typeof v === "number" && Number.isFinite(v) ? v : null)
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
 
@@ -109,10 +110,33 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Invalid lat/lon" }, { status: 400 })
   }
 
-  // Open-Meteo weather (no key)
+  // ✅ Request more variables for your cycler pages
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,visibility,is_day` +
+    `&current=` +
+    [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "apparent_temperature",
+      "dew_point_2m",
+      "weather_code",
+      "is_day",
+      "visibility",
+      "cloud_cover",
+      "pressure_msl",
+      "surface_pressure",
+      "wind_speed_10m",
+      "wind_direction_10m",
+      "wind_gusts_10m",
+      "precipitation",
+      "rain",
+      "showers",
+      "snowfall",
+      "uv_index",
+      // some locations/models may not support it in current, so we also fetch hourly below
+      "precipitation_probability",
+    ].join(",") +
+    `&hourly=precipitation_probability&forecast_hours=1` +
     `&daily=sunrise,sunset&forecast_days=1` +
     `&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph`
 
@@ -139,6 +163,11 @@ export async function GET(req: Request) {
     }
   }
 
+  // Precip prob: prefer current if present, else hourly[0]
+  const probFromCurrent = numOrNull(c.precipitation_probability)
+  const probFromHourly = numOrNull(data?.hourly?.precipitation_probability?.[0])
+  const precipitationProbability = probFromCurrent ?? probFromHourly
+
   const out: WeatherResult = {
     locationName,
     temperature: c.temperature_2m,
@@ -152,6 +181,22 @@ export async function GET(req: Request) {
     isDay: Boolean(c.is_day),
     sunrise: data?.daily?.sunrise?.[0] ?? null,
     sunset: data?.daily?.sunset?.[0] ?? null,
+
+    // ✅ extras
+    uvIndex: numOrNull(c.uv_index),
+    cloudCover: numOrNull(c.cloud_cover),
+    pressureMsl: numOrNull(c.pressure_msl),
+    surfacePressure: numOrNull(c.surface_pressure),
+    dewPoint: numOrNull(c.dew_point_2m),
+
+    precipitationProbability,
+    precipitation: numOrNull(c.precipitation),
+    rain: numOrNull(c.rain),
+    showers: numOrNull(c.showers),
+    snowfall: numOrNull(c.snowfall),
+
+    windGusts: numOrNull(c.wind_gusts_10m),
+    windDirection: numOrNull(c.wind_direction_10m),
   }
 
   return NextResponse.json(out)

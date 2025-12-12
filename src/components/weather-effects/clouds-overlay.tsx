@@ -8,7 +8,7 @@ export default function CloudsOverlay({ variant = "dark" }: Props) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[2] overflow-hidden"
+      className="pointer-events-none absolute inset-0 z-[2] overflow-hidden"
       data-variant={variant}
     >
       <div className="mc-cloud mc-cloud--1" />

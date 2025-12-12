@@ -62,7 +62,7 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
   const tempC = typeof tempF === "number" ? ((tempF - 32) * 5) / 9 : null
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border p-8 shadow-sm">
+    <div className="relative h-full overflow-hidden rounded-2xl border border-border p-8 shadow-sm">
       {/* Background MP4 (original file, no Next image compression) */}
       <video
         className="absolute inset-0 h-full w-full object-cover"

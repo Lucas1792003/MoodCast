@@ -34,16 +34,26 @@ export default function Header({ onSearch }: HeaderProps) {
         try {
           const { latitude, longitude } = pos.coords
 
-          const r = await fetch(`/api/reverse-city?lat=${latitude}&lon=${longitude}`, {
-            cache: "no-store",
-          })
-          const data = await r.json()
-
-          const label =
-            typeof data?.label === "string" && data.label.trim() ? data.label.trim() : "Current location"
+          // Optional: fetch a friendly label for the input UI (does NOT affect onSearch format)
+          let label = "Current location"
+          try {
+            const r = await fetch(`/api/reverse-city?lat=${latitude}&lon=${longitude}`, {
+              cache: "no-store",
+            })
+            if (r.ok) {
+              const data = await r.json()
+              const maybe =
+                typeof data?.label === "string" && data.label.trim() ? data.label.trim() : ""
+              if (maybe) label = maybe
+            }
+          } catch {
+            // ignore label failure
+          }
 
           setSearchInput(label)
-          onSearch(`geo:${latitude},${longitude}|${encodeURIComponent(label)}`)
+
+          // ✅ IMPORTANT: match page.tsx expected format exactly
+          onSearch(`geo:${latitude},${longitude}`)
         } catch (err) {
           console.error(err)
           alert("Failed to use current location.")

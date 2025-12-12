@@ -11,8 +11,22 @@ export type WeatherResult = {
   isDay?: boolean
   sunrise?: string | null
   sunset?: string | null
-}
 
+  uvIndex?: number | null
+  cloudCover?: number | null
+  pressureMsl?: number | null
+  surfacePressure?: number | null
+  dewPoint?: number | null
+
+  precipitationProbability?: number | null
+  precipitation?: number | null
+  rain?: number | null
+  showers?: number | null
+  snowfall?: number | null
+
+  windGusts?: number | null
+  windDirection?: number | null
+}
 
 export type GeocodeResult = {
   name: string

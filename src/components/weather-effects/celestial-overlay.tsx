@@ -16,14 +16,10 @@ export default function CelestialOverlay({ kind, dim = 0 }: Props) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed top-[-48px] right-[-48px] z-[1]"
+      className="pointer-events-none absolute top-[-48px] right-[-48px] z-[1]"
       style={{ opacity }}
     >
-      {kind === "sun" ? (
-        <div className="mc-sun" />
-      ) : (
-        <div className="mc-moon" />
-      )}
+      {kind === "sun" ? <div className="mc-sun" /> : <div className="mc-moon" />}
     </div>
   )
 }
