@@ -58,6 +58,12 @@ html, body {
   height: 100%;
 }
 
+html.mc-force-motion *,
+html.mc-force-motion *::before,
+html.mc-force-motion *::after {
+  animation-play-state: running !important;
+}
+
 .mc-effects-root {
   pointer-events: none;
   position: fixed;
