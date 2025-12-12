@@ -3077,33 +3077,72 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$
 ;
 function EffectsPortal({ children }) {
     const [mounted, setMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const root = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        if (typeof document === "undefined") return null;
-        return document.getElementById("mc-effects-root");
+    const wrapperRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        let root = document.getElementById("mc-effects-root");
+        if (!root) {
+            root = document.createElement("div");
+            root.id = "mc-effects-root";
+            document.body.appendChild(root);
+        }
+        setMounted(true);
+    }, []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (!mounted) return;
+        const apply = ()=>{
+            const vv = window.visualViewport;
+            const w = Math.round(vv?.width ?? window.innerWidth);
+            const h = Math.round(vv?.height ?? window.innerHeight);
+            const top = Math.round(vv?.offsetTop ?? 0);
+            const left = Math.round(vv?.offsetLeft ?? 0);
+            const el = wrapperRef.current;
+            if (!el) return;
+            el.style.setProperty("--vv-width", `${w}px`);
+            el.style.setProperty("--vv-height", `${h}px`);
+            el.style.setProperty("--vv-top", `${top}px`);
+            el.style.setProperty("--vv-left", `${left}px`);
+        };
+        apply();
+        const vv = window.visualViewport;
+        window.addEventListener("resize", apply, {
+            passive: true
+        });
+        window.addEventListener("scroll", apply, {
+            passive: true
+        });
+        window.addEventListener("orientationchange", apply);
+        vv?.addEventListener("resize", apply, {
+            passive: true
+        });
+        vv?.addEventListener("scroll", apply, {
+            passive: true
+        });
+        // keyboard open/close
+        window.addEventListener("focusin", apply);
+        window.addEventListener("focusout", apply);
+        return ()=>{
+            window.removeEventListener("resize", apply);
+            window.removeEventListener("scroll", apply);
+            window.removeEventListener("orientationchange", apply);
+            vv?.removeEventListener("resize", apply);
+            vv?.removeEventListener("scroll", apply);
+            window.removeEventListener("focusin", apply);
+            window.removeEventListener("focusout", apply);
+        };
     }, [
         mounted
     ]);
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (typeof document === "undefined") return;
-        let el = document.getElementById("mc-effects-root");
-        if (!el) {
-            el = document.createElement("div");
-            el.id = "mc-effects-root";
-            document.body.appendChild(el);
-        }
-        setMounted(true);
-        return ()=>{
-        // keep the root around to avoid DOM churn across client navigations
-        };
-    }, []);
-    if (!mounted || !root) return null;
+    if (!mounted) return null;
+    const root = document.getElementById("mc-effects-root");
+    if (!root) return null;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$dom$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createPortal"])(/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        ref: wrapperRef,
         "aria-hidden": true,
         className: "mc-effects-root",
         children: children
     }, void 0, false, {
         fileName: "[project]/MoodCast/src/components/weather-effects/effects-portal.tsx",
-        lineNumber: 41,
+        lineNumber: 72,
         columnNumber: 5
     }, this), root);
 }
