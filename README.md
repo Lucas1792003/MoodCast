@@ -1,134 +1,173 @@
-# MoodCast 🌤️🌙
+# MoodCast ☁️✨
+**Weather-powered outfits & vibes.**  
+MoodCast turns real-time weather into a clean, animated interface with **mood tips**, **outfit ideas**, and **what to do nearby**—all styled to match the sky outside.
 
-MoodCast is a clean, animated weather web app built with **Next.js (App Router)** + **Tailwind CSS**.  
-It pulls real-time weather from an API and updates the UI to match real-world conditions (day/night, weather icons, and animated backgrounds).
+> Built for “open the app → instantly feel the day.”
+
+---
+
+## What it does
+MoodCast pulls current conditions for your location (or any city you search) and translates them into:
+- a **weather card** (day/night aware),
+- a **dynamic theme layer** (rain, snow, fog, clouds, heat shimmer, sun rays, sun/moon),
+- a **4-card metrics grid** you can cycle through (humidity → UV → pressure → sunrise, etc.),
+- plus **mood**, **outfit**, **activity**, and **health** suggestions based on conditions.
 
 ---
 
 ## Features
+### Real-time weather, instantly readable
+- Current temperature + “feels like”
+- Wind, humidity, visibility
+- Sunrise/sunset
+- Extra metrics (UV, pressure, dew point, precip chance/amount, gusts, wind direction) via the cycle grid
 
-- **Real-time weather** by searched location
-- **Day/Night UI switching** (based on API `is_day`)
-- **Weather condition icons** (Lucide React)
-- **Animated card background** using short MP4 loops:
-  - Day card → `public/day.mp4`
-  - Night card → `public/night.mp4`
-- Clean bright daytime UI, darker night UI
+### UI that matches the sky
+- **SnowCanvas** (icon snowflakes + particles)
+- **Rain overlay**
+- **Fog overlay**
+- **Cloud overlay** (light/dark variants)
+- **Heatwave shimmer**
+- **Sun rays** (clear day)
+- **Celestial overlay** (sun/moon)
+- Effects render through a portal for better mobile reliability
+
+### Smart location labeling
+When you load via GPS, MoodCast tries to show a human-friendly name:
+- Reverse geocoding via **OpenStreetMap Nominatim**
+- If the label looks weak, it falls back to a nearby POI name using **Overpass API**
+
+### Mobile-first
+- Fixed header layout designed for iPhone/iPad space constraints
+- Uses `visualViewport` where needed for viewport-safe rendering
 
 ---
 
-## Tech Stack
+## Demo
+Add your screenshots/gifs here:
 
-- **Next.js** (App Router)
-- **React**
-- **TypeScript**
-- **Tailwind CSS**
-- **Lucide React** (icons)
+- `docs/screenshot-1.png`
+- `docs/screenshot-2.png`
+- `docs/mobile.gif`
 
----
+```md
+![MoodCast](docs/screenshot-1.png)
+Tech stack
+Next.js (App Router)
 
-## Getting Started
+TypeScript
 
-### 1) Install dependencies
+Tailwind CSS
 
-```bash
-npm install
-2) Add your background videos
-Place your videos in the public/ folder:
+lucide-react icons
 
-arduino
+Data: Open-Meteo (no API key required), OpenStreetMap (Nominatim + Overpass)
+
+Getting started
+1) Install
+bash
 Copy code
-public/day.mp4
-public/night.mp4
-Tip: Keep them short (2–6 seconds), loop-friendly, and ideally under ~3–8 MB for fast loading.
-
-3) Run the dev server
+git clone https://github.com/Lucas1792003/MoodCast.git
+cd MoodCast
+npm install
+2) Run locally
 bash
 Copy code
 npm run dev
+Open http://localhost:3000
+
+3) Build / start
+bash
+Copy code
+npm run build
+npm run start
+✅ No API keys required by default.
+
+How it works
+Core flow
+Header search
+
+City search → /api/geocode → lat/lon → /api/weather
+
+“Current” button → browser geolocation → /api/weather?lat=...&lon=...
+
+WeatherThemeLayer
+
+Converts weather code + day/night + feels-like into a theme
+
+Applies CSS variables
+
+Renders weather effects in a portal (so they stay stable over the UI)
+
+Info-grid cycler
+
+Shows 4 tiles at a time
+
+Center button cycles through pages of metrics
+
+API routes
+Your app typically includes routes like:
+
+GET /api/weather?lat=..&lon=..&name=..
+Returns current weather + extras + sunrise/sunset.
+
+GET /api/geocode?q=...
+Converts a city name into coordinates.
+
+GET /api/reverse-city?lat=..&lon=.. (optional)
+Friendly label for the input pill.
+
+Customization
+Weather effects
 Open:
 
-arduino
+src/components/weather-effects/*
+
+src/components/weather-theme-layer.tsx
+
+Tweak:
+
+snow density / intensity
+
+wind push
+
+fog opacity and speed
+
+cloud variant selection
+
+heat shimmer strength
+
+Metrics pages
+Open:
+
+src/components/weather-info-grid-cycler.tsx
+
+Add/modify tile pages (p1, p2, p3, p4) to control what the user cycles through.
+
+Contributing
+PRs are welcome. Good areas to contribute:
+
+better activity suggestions
+
+new effect styles (lightning, drizzle, haze)
+
+improved weather-code mapping
+
+performance improvements on low-power mobile devices
+
+Credits
+Weather data: Open-Meteo
+
+Geocoding & POIs: OpenStreetMap (Nominatim, Overpass)
+
+Icons: Lucide
+
+License
+Add your license here (MIT recommended):
+
+md
 Copy code
-http://localhost:3000
-How Day/Night Works
-The app uses the weather API response field:
-
-is_day: 1 → day
-
-is_day: 0 → night
-
-The page background uses weather.isDay (boolean).
-The card uses weather.is_day (number) passed into the component.
-
-✅ Make sure the data you pass into WeatherCard includes is_day, for example:
-
-ts
+MIT License © 2025 Lucas
+makefile
 Copy code
-const weatherForComponents = {
-  temperature_2m: weather.temperature,
-  weather_code: weather.weatherCode,
-  is_day: weather.isDay ? 1 : 0,
-}
-Project Structure (typical)
-csharp
-Copy code
-src/
-  app/
-    api/
-      weather/
-        route.ts        # Weather API endpoint
-    page.tsx            # Main UI
-  components/
-    WeatherCard.tsx     # Weather card (MP4 day/night background)
-public/
-  day.mp4
-  night.mp4
-Your exact names may differ slightly, but this is the general layout.
-
-WeatherCard MP4 Background
-The weather card renders a looping MP4 (no Next.js image compression):
-
-tsx
-Copy code
-<video
-  className="absolute inset-0 h-full w-full object-cover"
-  src={isDay ? "/day.mp4" : "/night.mp4"}
-  autoPlay
-  muted
-  loop
-  playsInline
-  preload="auto"
-/>
-Troubleshooting
-Card shows day when it should be night
-That means weather.is_day is missing in the data passed to WeatherCard.
-Fix: pass is_day from the API result (see above).
-
-Video not showing
-Confirm files exist:
-
-public/day.mp4
-
-public/night.mp4
-
-Restart the dev server after adding files:
-
-bash
-Copy code
-npm run dev
-Check the browser console for 404 errors.
-
-Video looks stretched
-Try using a video with an aspect ratio closer to your card size (e.g., 16:9), and keep:
-
-css
-Copy code
-object-cover
-Scripts
-bash
-Copy code
-npm run dev       # Start dev server
-npm run build     # Build for production
-npm run start     # Start production server
-npm run lint      # Lint
+::contentReference[oaicite:0]{index=0}
