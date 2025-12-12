@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react"
 
 type Props = {
   enabled: boolean
-  intensity?: number // overall: 0.7 -> 2.2
-  wind?: number // -1..1
+  intensity?: number
+  wind?: number
   iconSrc?: string
-  iconRate?: number // 0..1
-  densityBoost?: number // extra multiplier ONLY for number of flakes (e.g. 1.0..2.5)
+  iconRate?: number
+  densityBoost?: number
 }
 
 type Flake = {
@@ -49,7 +49,14 @@ export default function SnowCanvas({
     img.src = iconSrc
     img.onload = () => {
       iconRef.current = img
-      iconReadyRef.current = true
+      // decode() helps Safari avoid a first-frame drawImage hiccup.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      img
+        .decode?.()
+        .catch(() => null)
+        .finally(() => {
+          iconReadyRef.current = true
+        })
     }
     img.onerror = () => {
       iconRef.current = null
@@ -62,7 +69,15 @@ export default function SnowCanvas({
 
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d", { alpha: true })
+
+    // iOS Safari can be picky about passing context attributes to 2D.
+    let ctx: CanvasRenderingContext2D | null = null
+    try {
+      ctx = canvas.getContext("2d", { alpha: true }) as CanvasRenderingContext2D | null
+    } catch {
+      ctx = null
+    }
+    if (!ctx) ctx = canvas.getContext("2d")
     if (!ctx) return
 
     const prefersReduced =
@@ -72,22 +87,27 @@ export default function SnowCanvas({
 
     const rand = (min: number, max: number) => min + Math.random() * (max - min)
 
+    const getViewport = () => {
+      const vv = window.visualViewport
+      const w = Math.round(vv?.width ?? window.innerWidth)
+      const h = Math.round(vv?.height ?? window.innerHeight)
+      return { w, h }
+    }
+
     const resize = () => {
+      const { w, h } = getViewport()
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
-      canvas.width = Math.floor(window.innerWidth * dpr)
-      canvas.height = Math.floor(window.innerHeight * dpr)
-      canvas.style.width = "100%"
-      canvas.style.height = "100%"
+      canvas.width = Math.floor(w * dpr)
+      canvas.height = Math.floor(h * dpr)
+      canvas.style.width = `${w}px`
+      canvas.style.height = `${h}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
     const spawn = (count: number) => {
-      const w = window.innerWidth
-      const h = window.innerHeight
-
+      const { w, h } = getViewport()
       for (let i = 0; i < count; i++) {
         const isIcon = Math.random() < clamp(iconRate, 0, 1)
-
         const baseVy = rand(16, 70) * rand(0.75, 1.2)
         const baseVx = rand(-10, 10)
         const size = isIcon ? rand(10, 24) : rand(0.8, 2.9)
@@ -110,10 +130,14 @@ export default function SnowCanvas({
     }
 
     resize()
-    window.addEventListener("resize", resize)
 
-    // ✅ Density scales more strongly than speed
-    const base = Math.round((window.innerWidth * window.innerHeight) / 18000)
+    const vv = window.visualViewport
+    window.addEventListener("resize", resize, { passive: true })
+    vv?.addEventListener("resize", resize, { passive: true })
+    vv?.addEventListener("scroll", resize, { passive: true })
+
+    const initial = getViewport()
+    const base = Math.round((initial.w * initial.h) / 18000)
     const densityMult = clamp(densityBoost, 0.8, 3.0)
     const targetCount = clamp(Math.round(base * intensity * densityMult), 70, 650)
 
@@ -124,19 +148,13 @@ export default function SnowCanvas({
       const dt = Math.min(0.05, (t - (lastTRef.current || t)) / 1000)
       lastTRef.current = t
 
-      const w = window.innerWidth
-      const h = window.innerHeight
+      const { w, h } = getViewport()
 
       ctx.clearRect(0, 0, w, h)
-
-      // subtle haze
       ctx.fillStyle = "rgba(255,255,255,0.015)"
       ctx.fillRect(0, 0, w, h)
 
-      // ✅ Speed scales with intensity, but not as aggressively
       const speedMult = clamp(intensity, 0.6, 2.2)
-
-      // wind push (px/sec)
       const windPush = clamp(wind, -1, 1) * 70
 
       const icon = iconRef.current
@@ -181,6 +199,8 @@ export default function SnowCanvas({
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
       window.removeEventListener("resize", resize)
+      vv?.removeEventListener("resize", resize)
+      vv?.removeEventListener("scroll", resize)
       flakesRef.current = []
       lastTRef.current = 0
     }
@@ -188,11 +208,5 @@ export default function SnowCanvas({
 
   if (!enabled) return null
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-[5]"
-    />
-  )
+  return <canvas ref={canvasRef} aria-hidden className="pointer-events-none absolute inset-0 z-[5]" />
 }

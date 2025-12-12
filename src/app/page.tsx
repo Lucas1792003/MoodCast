@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Cloud, Wind, Droplets, Eye, Gauge, AlertTriangle } from "lucide-react"
+import { Cloud, AlertTriangle } from "lucide-react"
 
 import Header from "@/components/header"
 import WeatherCard from "@/components/weather-card"
@@ -12,6 +12,8 @@ import HealthSection from "@/components/health-section"
 import ARSkyViewer from "@/components/ar-sky-viewer"
 
 import WeatherThemeLayer from "@/components/weather-theme-layer"
+import WeatherInfoGridCycler from "@/components/weather-info-grid-cycler"
+
 import { geocodeCity, getWeather } from "@/lib/weather-client"
 import type { WeatherResult } from "@/lib/weather-types"
 
@@ -23,6 +25,21 @@ type OpenMeteoCurrentLike = {
   wind_speed_10m: number
   visibility: number
   is_day?: number
+
+  // ✅ extras for the cycler pages
+  uv_index?: number
+  cloud_cover?: number
+  pressure_msl?: number
+  dew_point_2m?: number
+
+  precipitation_probability?: number
+  precipitation?: number
+
+  wind_gusts_10m?: number
+  wind_direction_10m?: number
+
+  sunrise?: string
+  sunset?: string
 }
 
 export default function Page() {
@@ -36,6 +53,7 @@ export default function Page() {
 
   const weatherForComponents: OpenMeteoCurrentLike | null = useMemo(() => {
     if (!weather) return null
+
     return {
       temperature_2m: weather.temperature,
       relative_humidity_2m: weather.humidity,
@@ -44,6 +62,21 @@ export default function Page() {
       wind_speed_10m: weather.windSpeed,
       visibility: weather.visibility,
       is_day: weather.isDay ? 1 : 0,
+
+      // ✅ pass-through extras (will be defined once API returns them)
+      uv_index: weather.uvIndex ?? undefined,
+      cloud_cover: weather.cloudCover ?? undefined,
+      pressure_msl: weather.pressureMsl ?? undefined,
+      dew_point_2m: weather.dewPoint ?? undefined,
+
+      precipitation_probability: weather.precipitationProbability ?? undefined,
+      precipitation: weather.precipitation ?? undefined,
+
+      wind_gusts_10m: weather.windGusts ?? undefined,
+      wind_direction_10m: weather.windDirection ?? undefined,
+
+      sunrise: weather.sunrise ?? undefined,
+      sunset: weather.sunset ?? undefined,
     }
   }, [weather])
 
@@ -118,16 +151,17 @@ export default function Page() {
     }
   }
 
-  const getWeatherDescription = (code: number) => {
-    if (code === 0) return "Clear sky"
-    if (code === 1 || code === 2) return "Mostly clear"
-    if (code === 3) return "Overcast"
-    if (code === 45 || code === 48) return "Foggy"
-    if (code >= 51 && code <= 67) return "Drizzle"
-    if (code >= 71 && code <= 77) return "Snow"
-    if (code >= 80 && code <= 82) return "Rain showers"
-    if (code >= 85 && code <= 86) return "Snow showers"
-    if (code >= 95 && code <= 99) return "Thunderstorm"
+  const getWeatherDescription = (code?: number) => {
+    const c = typeof code === "number" ? code : 3
+    if (c === 0) return "Clear sky"
+    if (c === 1 || c === 2) return "Mostly clear"
+    if (c === 3) return "Overcast"
+    if (c === 45 || c === 48) return "Foggy"
+    if (c >= 51 && c <= 67) return "Drizzle"
+    if (c >= 71 && c <= 77) return "Snow"
+    if (c >= 80 && c <= 82) return "Rain showers"
+    if (c >= 85 && c <= 86) return "Snow showers"
+    if (c >= 95 && c <= 99) return "Thunderstorm"
     return "Mixed conditions"
   }
 
@@ -174,61 +208,21 @@ export default function Page() {
 
         {!loading && weatherForComponents && (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              <div className="lg:col-span-2">
-                <WeatherCard location={locationLabel} weather={weatherForComponents} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-stretch">
+              <div className="lg:col-span-2 h-full">
+                <div className="h-full">
+                  <WeatherCard location={locationLabel} weather={weatherForComponents} />
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-card/90 backdrop-blur rounded-lg p-4 border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Droplets className="w-4 h-4 text-primary" />
-                    <p className="text-xs font-medium text-muted-foreground">Humidity</p>
-                  </div>
-                  <p className="text-2xl font-semibold text-foreground">
-                    {Math.round(weatherForComponents.relative_humidity_2m)}%
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">Feels more sticky as it rises</p>
-                </div>
-
-                <div className="bg-card/90 backdrop-blur rounded-lg p-4 border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Wind className="w-4 h-4 text-primary" />
-                    <p className="text-xs font-medium text-muted-foreground">Wind</p>
-                  </div>
-                  <p className="text-2xl font-semibold text-foreground">
-                    {Math.round(weatherForComponents.wind_speed_10m)} mph
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">Stronger winds = extra chill</p>
-                </div>
-
-                <div className="bg-card/90 backdrop-blur rounded-lg p-4 border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Eye className="w-4 h-4 text-primary" />
-                    <p className="text-xs font-medium text-muted-foreground">Visibility</p>
-                  </div>
-                  <p className="text-2xl font-semibold text-foreground">
-                    {(weatherForComponents.visibility / 1000).toFixed(1)} km
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Fog & haze can reduce how far you see
-                  </p>
-                </div>
-
-                <div className="bg-card/90 backdrop-blur rounded-lg p-4 border border-border">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Gauge className="w-4 h-4 text-primary" />
-                    <p className="text-xs font-medium text-muted-foreground">Feels like</p>
-                  </div>
-                  <p className="text-2xl font-semibold text-foreground">
-                    {Math.round(weatherForComponents.apparent_temperature)}°
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {getWeatherDescription(weatherForComponents.weather_code)}
-                  </p>
-                </div>
+              <div className="h-full">
+                <WeatherInfoGridCycler
+                  weather={weatherForComponents}
+                  getWeatherDescription={getWeatherDescription}
+                />
               </div>
             </div>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <MoodSection

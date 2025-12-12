@@ -54,6 +54,20 @@
   --sidebar-ring: oklch(0.45 0.18 260);
 }
 
+.mc-effects-root {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100svw;
+  height: 100svh;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: 5;
+  overflow: hidden;
+}
+
 .dark {
   /* Dark mode palette - Ocean & Nature */
   --background: oklch(0.13 0.02 220);
