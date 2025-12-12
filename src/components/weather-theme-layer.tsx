@@ -75,6 +75,16 @@ export default function WeatherThemeLayer({
     return clamp(windFactor, 0, 1) * (0.7 + insaneFactor * 0.3)
   }, [showSnow, windFactor, insaneFactor])
 
+  // ✅ Set CSS override class when ?motion=1 is present
+  useEffect(() => {
+    const forceMotion = new URLSearchParams(window.location.search).get("motion") === "1"
+    document.documentElement.classList.toggle("mc-force-motion", forceMotion)
+
+    return () => {
+      document.documentElement.classList.remove("mc-force-motion")
+    }
+  }, [])
+
   useEffect(() => {
     const root = document.documentElement
     for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v)
@@ -85,7 +95,6 @@ export default function WeatherThemeLayer({
 
   return (
     <div className="relative min-h-[100svh] min-h-screen weather-bg">
-      {/* Effects are rendered into a viewport portal for better iOS reliability */}
       <EffectsPortal>
         <CelestialOverlay
           kind={isDay === false ? "moon" : "sun"}

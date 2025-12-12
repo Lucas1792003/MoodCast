@@ -83,7 +83,13 @@ export default function SnowCanvas({
     const prefersReduced =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
-    if (prefersReduced) return
+
+    // ✅ allow override with ?motion=1
+    const forceMotion =
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("motion") === "1"
+
+    if (prefersReduced && !forceMotion) return
 
     const rand = (min: number, max: number) => min + Math.random() * (max - min)
 

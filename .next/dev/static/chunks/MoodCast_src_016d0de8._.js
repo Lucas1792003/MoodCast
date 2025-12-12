@@ -2823,7 +2823,9 @@ function SnowCanvas({ enabled, intensity = 1, wind = 0, iconSrc = "/snowflake.pn
             if (!ctx) ctx = canvas.getContext("2d");
             if (!ctx) return;
             const prefersReduced = ("TURBOPACK compile-time value", "object") !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-            if (prefersReduced) return;
+            // ✅ allow override with ?motion=1
+            const forceMotion = ("TURBOPACK compile-time value", "object") !== "undefined" && new URLSearchParams(window.location.search).get("motion") === "1";
+            if (prefersReduced && !forceMotion) return;
             const rand = {
                 "SnowCanvas.useEffect.rand": (min, max)=>min + Math.random() * (max - min)
             }["SnowCanvas.useEffect.rand"];
@@ -2960,7 +2962,7 @@ function SnowCanvas({ enabled, intensity = 1, wind = 0, iconSrc = "/snowflake.pn
         className: "pointer-events-none absolute inset-0 z-[5]"
     }, void 0, false, {
         fileName: "[project]/MoodCast/src/components/weather-effects/SnowCanvas.tsx",
-        lineNumber: 211,
+        lineNumber: 217,
         columnNumber: 10
     }, this);
 }
@@ -3420,6 +3422,18 @@ function WeatherThemeLayer({ weatherCode, isDay, feelsLikeF, windSpeed, children
         windFactor,
         insaneFactor
     ]);
+    // ✅ Set CSS override class when ?motion=1 is present
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "WeatherThemeLayer.useEffect": ()=>{
+            const forceMotion = new URLSearchParams(window.location.search).get("motion") === "1";
+            document.documentElement.classList.toggle("mc-force-motion", forceMotion);
+            return ({
+                "WeatherThemeLayer.useEffect": ()=>{
+                    document.documentElement.classList.remove("mc-force-motion");
+                }
+            })["WeatherThemeLayer.useEffect"];
+        }
+    }["WeatherThemeLayer.useEffect"], []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "WeatherThemeLayer.useEffect": ()=>{
             const root = document.documentElement;
@@ -3443,34 +3457,34 @@ function WeatherThemeLayer({ weatherCode, isDay, feelsLikeF, windSpeed, children
                         dim: theme.startsWith("storm") ? 1 : theme.startsWith("rain") ? 0.6 : theme.startsWith("fog") ? 0.8 : theme.startsWith("cloudy") ? 0.45 : 0
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 90,
+                        lineNumber: 99,
                         columnNumber: 9
                     }, this),
                     showSunRays ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$weather$2d$effects$2f$sun$2d$rays$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 105,
+                        lineNumber: 114,
                         columnNumber: 24
                     }, this) : null,
                     showClouds ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$weather$2d$effects$2f$clouds$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                         variant: theme.startsWith("cloudy_day") || theme.startsWith("fog_day") ? "light" : "dark"
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 108,
+                        lineNumber: 117,
                         columnNumber: 11
                     }, this) : null,
                     showFog ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$weather$2d$effects$2f$fog$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 115,
+                        lineNumber: 124,
                         columnNumber: 20
                     }, this) : null,
                     isHeat ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$weather$2d$effects$2f$heatwave$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 116,
+                        lineNumber: 125,
                         columnNumber: 19
                     }, this) : null,
                     showRain ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$weather$2d$effects$2f$rain$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 117,
+                        lineNumber: 126,
                         columnNumber: 21
                     }, this) : null,
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$weather$2d$effects$2f$SnowCanvas$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -3482,13 +3496,13 @@ function WeatherThemeLayer({ weatherCode, isDay, feelsLikeF, windSpeed, children
                         iconRate: 0.35
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                        lineNumber: 119,
+                        lineNumber: 128,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                lineNumber: 89,
+                lineNumber: 98,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3496,17 +3510,17 @@ function WeatherThemeLayer({ weatherCode, isDay, feelsLikeF, windSpeed, children
                 children: children
             }, void 0, false, {
                 fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-                lineNumber: 129,
+                lineNumber: 138,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/MoodCast/src/components/weather-theme-layer.tsx",
-        lineNumber: 87,
+        lineNumber: 97,
         columnNumber: 5
     }, this);
 }
-_s(WeatherThemeLayer, "60nA5NiGHiPYMJth3kAFeU4vSK4=");
+_s(WeatherThemeLayer, "XAsWti/jnNVH1VF7U0mOqzI1bkA=");
 _c = WeatherThemeLayer;
 var _c;
 __turbopack_context__.k.register(_c, "WeatherThemeLayer");
