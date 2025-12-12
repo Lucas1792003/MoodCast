@@ -15,7 +15,6 @@ import WeatherThemeLayer from "@/components/weather-theme-layer"
 import { geocodeCity, getWeather } from "@/lib/weather-client"
 import type { WeatherResult } from "@/lib/weather-types"
 
-// Keep compatibility with your existing components (they may still expect Open-Meteo-style keys)
 type OpenMeteoCurrentLike = {
   temperature_2m: number
   relative_humidity_2m: number
@@ -32,7 +31,9 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>("")
 
-  // Map normalized WeatherResult -> shape your components already expect
+  // ✅ only true after user searches in the header
+  const [hasSearched, setHasSearched] = useState(false)
+
   const weatherForComponents: OpenMeteoCurrentLike | null = useMemo(() => {
     if (!weather) return null
     return {
@@ -46,7 +47,6 @@ export default function Page() {
     }
   }, [weather])
 
-  // Auto-load with geolocation on first load
   useEffect(() => {
     if (!navigator.geolocation) return
 
@@ -57,9 +57,12 @@ export default function Page() {
       async (position) => {
         try {
           const { latitude, longitude } = position.coords
-          const w = await getWeather(latitude, longitude, "Current location")
+          const w = await getWeather(latitude, longitude)
           setWeather(w)
           setLocationLabel(w.locationName || "Current location")
+
+          // ✅ initial load = GPS, not "searched"
+          setHasSearched(false)
         } catch {
           setError("Couldn’t load weather for your location.")
         } finally {
@@ -67,26 +70,47 @@ export default function Page() {
         }
       },
       () => {
-        // User denied / failed
         setLoading(false)
       }
     )
   }, [])
 
-  const handleLocationSearch = async (city: string) => {
-    const q = city.trim()
+  const handleLocationSearch = async (input: string) => {
+    const q = input.trim()
     if (!q) return
 
     setLoading(true)
     setError("")
 
     try {
+      if (q.startsWith("geo:")) {
+        const raw = q.slice(4)
+        const [latStr, lonStr] = raw.split(",")
+        const lat = Number(latStr?.trim())
+        const lon = Number(lonStr?.trim())
+
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+          throw new Error("Invalid coords")
+        }
+
+        const w = await getWeather(lat, lon)
+        setWeather(w)
+        setLocationLabel(w.locationName || "Near you")
+
+        // ✅ user typed a location
+        setHasSearched(true)
+        return
+      }
+
       const g = await geocodeCity(q)
       const display = g.country ? `${g.name}, ${g.country}` : g.name
       const w = await getWeather(g.latitude, g.longitude, display)
 
       setWeather(w)
-      setLocationLabel(display)
+      setLocationLabel(w.locationName || display)
+
+      // ✅ user searched a city
+      setHasSearched(true)
     } catch {
       setError("Location not found or weather service unavailable.")
     } finally {
@@ -107,10 +131,6 @@ export default function Page() {
     return "Mixed conditions"
   }
 
-
-  const themeWeatherCode = weatherForComponents?.weather_code ?? 3 
-  const themeFeelsLikeC = weatherForComponents?.apparent_temperature ?? null
-
   return (
     <WeatherThemeLayer
       weatherCode={weatherForComponents?.weather_code ?? 3}
@@ -121,7 +141,6 @@ export default function Page() {
       <Header onSearch={handleLocationSearch} />
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
-
         {error && (
           <div className="mb-6 rounded-xl border border-border bg-card/90 backdrop-blur p-4 flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-primary mt-0.5" />
@@ -132,7 +151,6 @@ export default function Page() {
           </div>
         )}
 
-
         {loading && (
           <div className="flex items-center justify-center py-20">
             <div className="flex flex-col items-center gap-3">
@@ -142,7 +160,6 @@ export default function Page() {
           </div>
         )}
 
-
         {!loading && !weatherForComponents && (
           <div className="flex items-center justify-center py-20">
             <div className="text-center space-y-4">
@@ -150,20 +167,16 @@ export default function Page() {
               <p className="text-foreground/70">
                 Search for a city to see outfits, activities & mood tips.
               </p>
-              <p className="text-sm text-muted-foreground">
-                Try: London, Tokyo, New York, Toronto…
-              </p>
+              <p className="text-sm text-muted-foreground">Try: London, Tokyo, New York, Toronto…</p>
             </div>
           </div>
         )}
 
-
         {!loading && weatherForComponents && (
           <>
-
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               <div className="lg:col-span-2">
-                <WeatherCard weather={weatherForComponents} location={locationLabel} />
+                <WeatherCard location={locationLabel} weather={weatherForComponents} />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -175,9 +188,7 @@ export default function Page() {
                   <p className="text-2xl font-semibold text-foreground">
                     {Math.round(weatherForComponents.relative_humidity_2m)}%
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Feels more sticky as it rises
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Feels more sticky as it rises</p>
                 </div>
 
                 <div className="bg-card/90 backdrop-blur rounded-lg p-4 border border-border">
@@ -188,9 +199,7 @@ export default function Page() {
                   <p className="text-2xl font-semibold text-foreground">
                     {Math.round(weatherForComponents.wind_speed_10m)} mph
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Stronger winds = extra chill
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Stronger winds = extra chill</p>
                 </div>
 
                 <div className="bg-card/90 backdrop-blur rounded-lg p-4 border border-border">
@@ -234,11 +243,13 @@ export default function Page() {
 
             <div className="mb-8">
               <ActivitySection
-                weatherCode={weatherForComponents.weather_code}
-                temperature={weatherForComponents.temperature_2m}
+                weather={weatherForComponents}
+                location={locationLabel}
+                selectedCityEnabled={hasSearched}
+                selectedLat={hasSearched ? weather?.latitude : null}
+                selectedLon={hasSearched ? weather?.longitude : null}
               />
             </div>
-
 
             <div className="mb-8">
               <HealthSection
@@ -246,7 +257,6 @@ export default function Page() {
                 humidity={weatherForComponents.relative_humidity_2m}
               />
             </div>
-
 
             <ARSkyViewer
               weatherCode={weatherForComponents.weather_code}

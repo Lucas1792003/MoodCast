@@ -54,6 +54,13 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
   // Keep day bright; night a bit darker for readability
   const overlayClass = isDay ? "bg-black/0" : "bg-black/30"
 
+  // --- Temps ---
+  const tempF =
+    typeof weather?.temperature_2m === "number" ? weather.temperature_2m : null
+
+  // Convert F -> C
+  const tempC = typeof tempF === "number" ? ((tempF - 32) * 5) / 9 : null
+
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border p-8 shadow-sm">
       {/* Background MP4 (original file, no Next image compression) */}
@@ -75,7 +82,16 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
         <div className="flex items-start justify-between mb-6">
           <div>
             <h2 className="text-3xl font-bold mb-1 drop-shadow">
-              {Math.round(weather.temperature_2m)}°F
+              {typeof tempF === "number" ? (
+                <>
+                  {Math.round(tempF)}°F{" "}
+                  <span className="text-white/85 text-xl font-semibold">
+                    ({Math.round(tempC!)}°C)
+                  </span>
+                </>
+              ) : (
+                "--"
+              )}
             </h2>
             <p className="text-sm text-white/90 drop-shadow">{location}</p>
           </div>
@@ -91,7 +107,14 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
 
         <p className="text-sm text-white/90 drop-shadow">
           The current conditions suggest a{" "}
-          {weather.temperature_2m > 70 ? "warm" : weather.temperature_2m > 50 ? "mild" : "cool"} day ahead.
+          {typeof tempF === "number"
+            ? tempF > 70
+              ? "warm"
+              : tempF > 50
+              ? "mild"
+              : "cool"
+            : "pleasant"}{" "}
+          day ahead.
         </p>
       </div>
     </div>

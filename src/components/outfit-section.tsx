@@ -9,7 +9,7 @@ interface OutfitSectionProps {
 
 export default function OutfitSection({ temperature, weatherCode }: OutfitSectionProps) {
   const getOutfitRecommendation = () => {
-    const items = []
+    const items: string[] = []
     let style = ""
 
     if (temperature > 80) {
@@ -26,9 +26,10 @@ export default function OutfitSection({ temperature, weatherCode }: OutfitSectio
       style = "Winter Warmth"
     }
 
-    if (weatherCode >= 50) {
-      items.push("Waterproof jacket")
-    }
+    const isRain =
+      (weatherCode >= 51 && weatherCode <= 67) || (weatherCode >= 80 && weatherCode <= 82)
+
+    if (isRain) items.push("Waterproof jacket / umbrella")
 
     return { items, style }
   }
@@ -41,7 +42,9 @@ export default function OutfitSection({ temperature, weatherCode }: OutfitSectio
         <Shirt className="w-6 h-6 text-primary" />
         <h3 className="text-lg font-semibold text-foreground">Outfit Suggestion</h3>
       </div>
+
       <p className="text-primary font-semibold mb-4">{rec.style}</p>
+
       <div className="space-y-2">
         {rec.items.map((item, idx) => (
           <div key={idx} className="flex items-center gap-3">
