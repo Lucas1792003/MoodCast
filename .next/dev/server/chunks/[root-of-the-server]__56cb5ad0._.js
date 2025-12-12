@@ -46,15 +46,103 @@ module.exports = mod;
 
 __turbopack_context__.s([
     "GET",
-    ()=>GET
+    ()=>GET,
+    "runtime",
+    ()=>runtime
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
 ;
+const runtime = "nodejs";
+function labelLooksWeak(label) {
+    if (!label) return true;
+    const s = label.toLowerCase();
+    if (s.includes("subdistrict")) return true;
+    if (s.includes("district") && !s.includes("city")) return true;
+    return false;
+}
+async function reverseLabel(lat, lon) {
+    try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=14&addressdetails=1`;
+        const res = await fetch(url, {
+            headers: {
+                "User-Agent": "MoodCast/1.0",
+                "Accept-Language": "en"
+            },
+            cache: "no-store"
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        const addr = data?.address ?? {};
+        const main = addr.city || addr.town || addr.village || addr.hamlet || addr.suburb || addr.neighbourhood || null;
+        const admin = addr.state || addr.county || addr.region || null;
+        const country = addr.country || null;
+        if (main) return [
+            main,
+            admin,
+            country
+        ].filter(Boolean).join(", ");
+        return data?.display_name ?? null;
+    } catch  {
+        return null;
+    }
+}
+async function nearbyPoi(lat, lon) {
+    try {
+        const radius = 3000;
+        const q = `
+[out:json][timeout:20];
+(
+  nwr(around:${radius},${lat},${lon})[name][amenity~"university|college|school|hospital|clinic|restaurant|cafe|cinema|theatre|library|marketplace"];
+  nwr(around:${radius},${lat},${lon})[name][shop~"mall|supermarket|department_store"];
+  nwr(around:${radius},${lat},${lon})[name][tourism~"attraction|museum"];
+  nwr(around:${radius},${lat},${lon})[name][leisure="park"];
+);
+out center 80;
+`;
+        const res = await fetch("https://overpass-api.de/api/interpreter", {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=UTF-8",
+                "User-Agent": "MoodCast/1.0"
+            },
+            body: q,
+            cache: "no-store"
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        const els = Array.isArray(data?.elements) ? data.elements : [];
+        if (els.length === 0) return null;
+        // pick the closest named POI
+        const toRad = (d)=>d * Math.PI / 180;
+        const distM = (aLat, aLon, bLat, bLon)=>{
+            const R = 6371000;
+            const dLat = toRad(bLat - aLat);
+            const dLon = toRad(bLon - aLon);
+            const x = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLon / 2) ** 2;
+            return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+        };
+        const scored = els.map((el)=>{
+            const name = el?.tags?.name;
+            if (!name) return null;
+            const elLat = typeof el.lat === "number" ? el.lat : el?.center?.lat;
+            const elLon = typeof el.lon === "number" ? el.lon : el?.center?.lon;
+            if (typeof elLat !== "number" || typeof elLon !== "number") return null;
+            return {
+                name,
+                d: distM(lat, lon, elLat, elLon)
+            };
+        }).filter(Boolean);
+        scored.sort((a, b)=>a.d - b.d);
+        return scored[0]?.name ?? null;
+    } catch  {
+        return null;
+    }
+}
 async function GET(req) {
     const { searchParams } = new URL(req.url);
     const lat = Number(searchParams.get("lat"));
     const lon = Number(searchParams.get("lon"));
-    const locationName = searchParams.get("name") ?? "";
+    const providedName = (searchParams.get("name") ?? "").trim();
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: "Invalid lat/lon"
@@ -62,8 +150,8 @@ async function GET(req) {
             status: 400
         });
     }
-    // NOTE: Open-Meteo needs no key.
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,visibility,is_day` + `&daily=sunrise,sunset&forecast_days=1` + `&timezone=auto` + `&temperature_unit=fahrenheit&wind_speed_unit=mph`;
+    // Open-Meteo weather (no key)
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,visibility,is_day` + `&daily=sunrise,sunset&forecast_days=1` + `&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph`;
     const res = await fetch(url, {
         next: {
             revalidate: 300
@@ -84,6 +172,17 @@ async function GET(req) {
         }, {
             status: 502
         });
+    }
+    // ✅ Build a better locationName when name is missing (Current Location flow)
+    let locationName = providedName;
+    if (!locationName) {
+        const rev = await reverseLabel(lat, lon);
+        if (labelLooksWeak(rev)) {
+            const poi = await nearbyPoi(lat, lon);
+            locationName = poi || rev || "Near you";
+        } else {
+            locationName = rev || "Near you";
+        }
     }
     const out = {
         locationName,

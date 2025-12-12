@@ -65,6 +65,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/api/reverse-city/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/reverse-city">> = Specific
+  const handler = {} as typeof import("../../../src/app/api/reverse-city/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/api/suggestion/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/suggestion">> = Specific
+  const handler = {} as typeof import("../../../src/app/api/suggestion/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/api/weather/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/weather">> = Specific
