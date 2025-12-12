@@ -54,19 +54,28 @@
   --sidebar-ring: oklch(0.45 0.18 260);
 }
 
+html, body {
+  height: 100%;
+}
+
 .mc-effects-root {
   pointer-events: none;
   position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  width: 100svw;
-  height: 100svh;
-  width: 100dvw;
-  height: 100dvh;
+  top: var(--vv-top, 0px);
+  left: var(--vv-left, 0px);
+  width: var(--vv-width, 100vw);
+  height: var(--vv-height, 100vh);
+
   z-index: 5;
   overflow: hidden;
+
+  /* help WebKit composite layers reliably */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  contain: paint;
+  isolation: isolate;
 }
+
 
 .dark {
   /* Dark mode palette - Ocean & Nature */
