@@ -1,0 +1,248 @@
+/* [project]/MoodCast/src/components/leaves-overlay.module.css [app-client] (css) */
+.leaves-overlay-module__Mm3JNq__container {
+  pointer-events: none;
+  z-index: 0;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.leaves-overlay-module__Mm3JNq__particle {
+  top: -12%;
+  left: var(--x, 50%);
+  width: var(--w, 14px);
+  height: var(--h, 10px);
+  opacity: var(--o, .8);
+  transform: translate3d(0, 0, 0) rotate(var(--r, 0deg));
+  animation: leaves-overlay-module__Mm3JNq__fall var(--dur, 10s) linear var(--del, 0s) infinite, leaves-overlay-module__Mm3JNq__sway var(--sway, 3.6s) ease-in-out var(--sdel, 0s) infinite;
+  will-change: transform;
+  filter: drop-shadow(0 8px 10px #00000014);
+  position: absolute;
+}
+
+.leaves-overlay-module__Mm3JNq__sakura {
+  background: radial-gradient(circle at 30% 30%, #ffffffd9, #fff0 55%), linear-gradient(135deg, #ffb6d4f2, #fff0f8f2);
+  border-radius: 60% 40% 55% 45% / 55% 45%;
+  box-shadow: inset 0 -1px #fff9;
+}
+
+.leaves-overlay-module__Mm3JNq__autumn {
+  background: linear-gradient(135deg, var(--c1, #b91c1c), var(--c2, #fb923c));
+  border-radius: 30% 70% / 40% 60%;
+  box-shadow: inset 0 0 0 1px #0000000f, inset 0 -2px #ffffff1a;
+}
+
+.leaves-overlay-module__Mm3JNq__autumn:after {
+  content: "";
+  background: #0000001a;
+  border-radius: 999px;
+  width: 2px;
+  position: absolute;
+  inset: 15% 45%;
+  transform: rotate(-12deg);
+}
+
+@keyframes leaves-overlay-module__Mm3JNq__fall {
+  0% {
+    transform: translate3d(0, -20%, 0) rotate(var(--r, 0deg));
+  }
+
+  100% {
+    transform: translate3d(0, 130%, 0) rotate(calc(var(--r, 0deg)  + 240deg));
+  }
+}
+
+@keyframes leaves-overlay-module__Mm3JNq__sway {
+  0%, 100% {
+    margin-left: 0;
+  }
+
+  50% {
+    margin-left: var(--dx, 22px);
+  }
+}
+
+.leaves-overlay-module__Mm3JNq__particle:first-child {
+  --x: 6%;
+  --w: 10px;
+  --h: 8px;
+  --o: .55;
+  --dur: 11s;
+  --del: -2s;
+  --dx: 18px;
+  --r: 10deg;
+  --sway: 3.4s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(2) {
+  --x: 14%;
+  --w: 14px;
+  --h: 10px;
+  --o: .7;
+  --dur: 9s;
+  --del: -6s;
+  --dx: 28px;
+  --r: 40deg;
+  --sway: 4.2s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(3) {
+  --x: 22%;
+  --w: 12px;
+  --h: 9px;
+  --o: .6;
+  --dur: 12s;
+  --del: -4s;
+  --dx: 16px;
+  --r: 80deg;
+  --sway: 3.8s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(4) {
+  --x: 30%;
+  --w: 16px;
+  --h: 12px;
+  --o: .78;
+  --dur: 10s;
+  --del: -8s;
+  --dx: 30px;
+  --r: 15deg;
+  --sway: 4.6s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(5) {
+  --x: 38%;
+  --w: 11px;
+  --h: 8px;
+  --o: .52;
+  --dur: 13s;
+  --del: -1s;
+  --dx: 20px;
+  --r: 70deg;
+  --sway: 3.2s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(6) {
+  --x: 46%;
+  --w: 15px;
+  --h: 11px;
+  --o: .72;
+  --dur: 9.5s;
+  --del: -7s;
+  --dx: 26px;
+  --r: 5deg;
+  --sway: 4.1s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(7) {
+  --x: 54%;
+  --w: 13px;
+  --h: 10px;
+  --o: .62;
+  --dur: 11.5s;
+  --del: -3s;
+  --dx: 22px;
+  --r: 95deg;
+  --sway: 3.7s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(8) {
+  --x: 62%;
+  --w: 17px;
+  --h: 12px;
+  --o: .8;
+  --dur: 10.5s;
+  --del: -9s;
+  --dx: 34px;
+  --r: 25deg;
+  --sway: 4.8s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(9) {
+  --x: 70%;
+  --w: 12px;
+  --h: 9px;
+  --o: .58;
+  --dur: 12.5s;
+  --del: -5s;
+  --dx: 18px;
+  --r: 60deg;
+  --sway: 3.3s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(10) {
+  --x: 78%;
+  --w: 14px;
+  --h: 10px;
+  --o: .68;
+  --dur: 9.2s;
+  --del: -10s;
+  --dx: 30px;
+  --r: 35deg;
+  --sway: 4s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(11) {
+  --x: 86%;
+  --w: 11px;
+  --h: 8px;
+  --o: .5;
+  --dur: 13.5s;
+  --del: -6s;
+  --dx: 16px;
+  --r: 120deg;
+  --sway: 3.5s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(12) {
+  --x: 92%;
+  --w: 16px;
+  --h: 12px;
+  --o: .76;
+  --dur: 10.8s;
+  --del: -2s;
+  --dx: 28px;
+  --r: 18deg;
+  --sway: 4.4s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(13) {
+  --x: 50%;
+  --w: 10px;
+  --h: 7px;
+  --o: .45;
+  --dur: 14s;
+  --del: -12s;
+  --dx: 14px;
+  --r: 75deg;
+  --sway: 3.1s;
+}
+
+.leaves-overlay-module__Mm3JNq__particle:nth-child(14) {
+  --x: 34%;
+  --w: 18px;
+  --h: 13px;
+  --o: .82;
+  --dur: 9.8s;
+  --del: -11s;
+  --dx: 36px;
+  --r: 8deg;
+  --sway: 5s;
+}
+
+.leaves-overlay-module__Mm3JNq__autumn:nth-child(3n+1) {
+  --c1: #7f1d1d;
+  --c2: #fb7185;
+}
+
+.leaves-overlay-module__Mm3JNq__autumn:nth-child(3n+2) {
+  --c1: #b91c1c;
+  --c2: #f97316;
+}
+
+.leaves-overlay-module__Mm3JNq__autumn:nth-child(3n+3) {
+  --c1: #9a3412;
+  --c2: #f59e0b;
+}
+
+/*# sourceMappingURL=MoodCast_src_components_leaves-overlay_module_8c2914e8.css.map*/
