@@ -1824,7 +1824,7 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                         },
                                         className: "rounded-full border border-border px-3 py-1.5 text-xs sm:text-sm text-foreground hover:bg-muted transition",
                                         title: `Switch to ${otherGender}`,
-                                        children: otherGender === "male" ? "Male" : "Female"
+                                        children: "Gender"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
                                         lineNumber: 265,
@@ -1835,7 +1835,7 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                         onClick: ()=>setSeed((s)=>s + 1),
                                         className: "rounded-full bg-primary px-3 py-1.5 text-xs sm:text-sm text-primary-foreground hover:opacity-90 transition",
                                         title: "Generate a new combination",
-                                        children: "Change"
+                                        children: "More"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
                                         lineNumber: 277,
