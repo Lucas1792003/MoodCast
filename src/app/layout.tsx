@@ -13,24 +13,21 @@ export const metadata: Metadata = {
   description:
     "Your weather-powered lifestyle companion. Sync your mood, fashion, activities, and wellness with the weather.",
   generator: "v0.app",
+
   icons: {
     icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
+      { url: "/app_icon.png", type: "image/png" }, 
     ],
-    apple: "/apple-icon.png",
+    apple: [
+      { url: "/app_icon.png", type: "image/png" }, 
+    ],
+    shortcut: ["/app_icon.png"],
   },
+
+  // ✅ optional but recommended if you add it
+  // manifest: "/manifest.webmanifest",
 }
+
 
 export const viewport: Viewport = {
   themeColor: [
