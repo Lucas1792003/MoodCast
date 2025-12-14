@@ -78,7 +78,6 @@ async function GET(req) {
             status: 400
         });
     }
-    // zoom=10 tends to be “city/region”, not street/subdistrict
     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`;
     const res = await fetch(url, {
         headers: {
@@ -99,7 +98,6 @@ async function GET(req) {
     const country = cleanName(pickFirst(addr, [
         "country"
     ]) || "");
-    // “City-ish” candidates
     let city = pickFirst(addr, [
         "city",
         "town",
@@ -115,17 +113,14 @@ async function GET(req) {
     ]) || "";
     city = cleanName(city);
     region = cleanName(region);
-    // If city is too local (subdistrict-level), fall back to region as “city”
     if (!city || looksTooLocal(city)) {
         city = region || city;
     }
-    // Final query your app understands: City + Country (keep it simple for your DB)
     const query = [
         city,
         country
     ].filter(Boolean).join(", ").trim() || "Thailand";
-    const label = query // what you show inside the search bar
-    ;
+    const label = query;
     return __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
         city,
         region,

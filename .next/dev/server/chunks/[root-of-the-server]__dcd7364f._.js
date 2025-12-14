@@ -111,16 +111,13 @@ async function GET(req) {
             status: 400
         });
     }
-    // 1) Try Open-Meteo normally
     let result = await openMeteoGeocode(qRaw);
-    // 2) Try Open-Meteo with cleaned query (removes “Subdistrict/Province” noise)
     if (!result) {
         const cleaned = cleanQuery(qRaw);
         if (cleaned && cleaned !== qRaw) {
             result = await openMeteoGeocode(cleaned);
         }
     }
-    // 3) Fallback to Nominatim (works for districts/places too)
     if (!result) {
         result = await nominatimGeocode(qRaw);
     }

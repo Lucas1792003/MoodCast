@@ -470,6 +470,15 @@ html.mc-force-motion *::after {
   50%     { margin-left: var(--dx, 30px); }
 }
 
+@media (max-width: 480px){
+  .leaf{
+    width: var(--w, 28px);
+    height: var(--h, 28px);
+    opacity: 0.75;
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.10));
+  }
+}
+
 /* ===== 34 variation blocks (nonstop, staggered) ===== */
 .leaf:nth-child(1)  { --x: 4%;  --w: 18px; --h: 18px; --o:.55; --dur: 18s; --del:-2s;  --dx: 18px; --r: 10deg;  --sway: 4.1s; }
 .leaf:nth-child(2)  { --x: 8%;  --w: 24px; --h: 24px; --o:.72; --dur: 15s; --del:-9s;  --dx: 28px; --r: 40deg;  --sway: 4.8s; }

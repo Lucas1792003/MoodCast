@@ -110,7 +110,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Invalid lat/lon" }, { status: 400 })
   }
 
-  // ✅ Request more variables for your cycler pages
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
     `&current=` +
@@ -133,7 +132,6 @@ export async function GET(req: Request) {
       "showers",
       "snowfall",
       "uv_index",
-      // some locations/models may not support it in current, so we also fetch hourly below
       "precipitation_probability",
     ].join(",") +
     `&hourly=precipitation_probability&forecast_hours=1` +
@@ -151,7 +149,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Missing current weather" }, { status: 502 })
   }
 
-  // ✅ Build a better locationName when name is missing (Current Location flow)
   let locationName = providedName
   if (!locationName) {
     const rev = await reverseLabel(lat, lon)
@@ -163,7 +160,6 @@ export async function GET(req: Request) {
     }
   }
 
-  // Precip prob: prefer current if present, else hourly[0]
   const probFromCurrent = numOrNull(c.precipitation_probability)
   const probFromHourly = numOrNull(data?.hourly?.precipitation_probability?.[0])
   const precipitationProbability = probFromCurrent ?? probFromHourly
@@ -181,8 +177,6 @@ export async function GET(req: Request) {
     isDay: Boolean(c.is_day),
     sunrise: data?.daily?.sunrise?.[0] ?? null,
     sunset: data?.daily?.sunset?.[0] ?? null,
-
-    // ✅ extras
     uvIndex: numOrNull(c.uv_index),
     cloudCover: numOrNull(c.cloud_cover),
     pressureMsl: numOrNull(c.pressure_msl),
