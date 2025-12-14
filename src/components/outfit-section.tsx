@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Shirt } from "lucide-react"
 import LeavesOverlay from "./leaves-overlay"
 
@@ -22,6 +22,12 @@ type OutfitCatalogItem = {
 type OutfitLook = {
   style: string
   pieces: Record<Category, OutfitCatalogItem>
+}
+
+type AiOutfit = {
+  styleTitle: string
+  pieces: Record<Category, string>
+  reason?: string
 }
 
 interface OutfitSectionProps {
@@ -132,8 +138,7 @@ function buildLook(opts: {
       top: "Oxford / T-shirt",
       bottom: "Chinos / Jeans",
       shoes: "Sneakers",
-      accessory:
-        tags.rain || tags.storm ? "Umbrella" : band === "cold" || band === "freezing" ? "Scarf" : "Sunglasses",
+      accessory: tags.rain || tags.storm ? "Umbrella" : band === "cold" || band === "freezing" ? "Scarf" : "Sunglasses",
     }
     const defaultsFemale: Record<Category, string> = {
       head: "Cap / Beanie",
@@ -141,19 +146,11 @@ function buildLook(opts: {
       top: "Blouse / T-shirt",
       bottom: "Wide-leg pants / Jeans",
       shoes: "Sneakers",
-      accessory:
-        tags.rain || tags.storm ? "Umbrella" : band === "cold" || band === "freezing" ? "Scarf" : "Sunglasses",
+      accessory: tags.rain || tags.storm ? "Umbrella" : band === "cold" || band === "freezing" ? "Scarf" : "Sunglasses",
     }
 
     const name = gender === "male" ? defaultsMale[cat] : defaultsFemale[cat]
-    return {
-      id: `fallback-${gender}-${cat}`,
-      name,
-      category: cat,
-      gender: "unisex",
-      weather: ["any"],
-      regions: ["global"],
-    }
+    return { id: `fallback-${gender}-${cat}`, name, category: cat, gender: "unisex", weather: ["any"], regions: ["global"] }
   }
 
   const categories: Category[] = ["head", "outer", "top", "bottom", "shoes", "accessory"]
@@ -182,6 +179,16 @@ function buildLook(opts: {
   return { style: `${style}${weatherNote}${regional}`, pieces }
 }
 
+function isValidAiOutfit(x: any): x is AiOutfit {
+  const cats: Category[] = ["head", "outer", "top", "bottom", "shoes", "accessory"]
+  return (
+    x &&
+    typeof x.styleTitle === "string" &&
+    x.pieces &&
+    cats.every((k) => typeof x.pieces?.[k] === "string" && x.pieces[k].trim().length > 0)
+  )
+}
+
 export default function OutfitSection({
   temperature,
   weatherCode,
@@ -191,62 +198,116 @@ export default function OutfitSection({
 }: OutfitSectionProps) {
   const [gender, setGender] = useState<Gender>("female")
   const [seed, setSeed] = useState(1)
-  const [catalog, setCatalog] = useState<OutfitCatalogItem[]>([])
+
+  const [aiLook, setAiLook] = useState<AiOutfit | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  useEffect(() => {
-    let cancelled = false
-
-    async function run() {
-      setLoading(true)
-      setError("")
-      try {
-        const qs = new URLSearchParams({
-          location: locationLabel || "",
-          gender,
-          tempF: String(temperature),
-          weatherCode: String(weatherCode),
-        })
-        if (typeof lat === "number") qs.set("lat", String(lat))
-        if (typeof lon === "number") qs.set("lon", String(lon))
-
-        const r = await fetch(`/api/outfits?${qs.toString()}`, { cache: "no-store" })
-        if (!r.ok) throw new Error("Outfit API failed")
-        const data = await r.json()
-        if (!cancelled) setCatalog(Array.isArray(data?.items) ? data.items : [])
-      } catch {
-        if (!cancelled) setError("Couldn’t load outfit catalog.")
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-
-    run()
-    return () => {
-      cancelled = true
-    }
-  }, [gender, locationLabel, lat, lon, temperature, weatherCode])
-
-  const look = useMemo(() => {
+  // kept only for styleLine/pieces if AI is unavailable (won't be shown if AI exists)
+  const fallbackLook = useMemo(() => {
     return buildLook({
-      catalog,
+      catalog: [],
       gender,
       tempF: temperature,
       weatherCode,
       locationLabel,
       seed,
     })
-  }, [catalog, gender, temperature, weatherCode, locationLabel, seed])
+  }, [gender, temperature, weatherCode, locationLabel, seed])
+
+  // ✅ dedupe + debounce to reduce Gemini quota exhaustion
+  const lastRequestKeyRef = useRef<string>("")
+  const debounceTimerRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (!locationLabel) return
+
+    const controller = new AbortController()
+    let cancelled = false
+
+    const requestKey = JSON.stringify({
+      gender,
+      seed,
+      locationLabel,
+      t: Math.round(temperature), // reduce spam from tiny temp changes
+      wc: weatherCode,
+    })
+
+    // ✅ if same key, don't call again
+    if (lastRequestKeyRef.current === requestKey) return
+    lastRequestKeyRef.current = requestKey
+
+    async function runAI() {
+      setLoading(true)
+      setError("")
+
+      try {
+        const r = await fetch("/api/ai-outfit", {
+          method: "POST",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
+          body: JSON.stringify({
+            gender,
+            seed,
+            locationLabel,
+            temperature: Math.round(temperature),
+            weatherCode,
+            lat,
+            lon,
+          }),
+        })
+
+        const data = await r.json().catch(() => null)
+
+        if (!r.ok) {
+          if (r.status === 429 || String(data?.error || "").toLowerCase().includes("resource")) {
+            setError("AI quota reached (Gemini free limit). Please try again in a bit.")
+            return
+          }
+          throw new Error(data?.error || `AI outfit failed (${r.status})`)
+        }
+
+        if (!cancelled) {
+          if (isValidAiOutfit(data)) {
+            setAiLook(data)
+            setError("")
+          } else {
+            // keep last aiLook if exists
+            setError("AI returned an unexpected format.")
+          }
+        }
+      } catch (e: any) {
+        if (!cancelled && e?.name !== "AbortError") {
+          setError(aiLook ? "AI is busy right now (showing last result)." : "AI is busy right now. Try again.")
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    // ✅ debounce collapses multiple updates into a single AI call
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
+    debounceTimerRef.current = setTimeout(runAI, 400)
+
+    return () => {
+      cancelled = true
+      controller.abort()
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
+    }
+    // ⚠️ intentionally exclude lat/lon from deps to prevent extra calls from tiny changes
+  }, [gender, seed, locationLabel, temperature, weatherCode])
 
   const otherGender: Gender = gender === "male" ? "female" : "male"
+
+  const styleLine = aiLook?.styleTitle ?? fallbackLook.style
+  const pieceName = (cat: Category) => aiLook?.pieces?.[cat] ?? fallbackLook.pieces[cat].name
 
   return (
     <div className="relative isolate overflow-hidden bg-card rounded-2xl border border-border p-5 sm:p-8 shadow-sm">
       <LeavesOverlay variant={gender === "female" ? "sakura" : "autumn"} />
 
       <div className="relative z-10">
-        {/* ✅ responsive header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
           <div className="flex items-start gap-3 min-w-0">
             <Shirt className="w-6 h-6 text-primary shrink-0 mt-0.5" />
@@ -254,21 +315,20 @@ export default function OutfitSection({
               <h3 className="text-lg sm:text-lg font-semibold leading-tight text-foreground break-words">
                 {gender === "female" ? "Female" : "Male"} Outfit Suggestion
               </h3>
-              <p className="text-xs text-muted-foreground">
-                One full look based on weather + local vibe
-              </p>
+              <p className="text-xs text-muted-foreground">One full look based on weather + local vibe</p>
             </div>
           </div>
 
-          {/* buttons sit nicely under title on mobile */}
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             <button
               type="button"
+              disabled={loading}
               onClick={() => {
                 setGender(otherGender)
                 setSeed(1)
+                setError("")
               }}
-              className="rounded-full border border-border px-3 py-1.5 text-xs sm:text-sm text-foreground hover:bg-muted transition"
+              className="rounded-full border border-border px-3 py-1.5 text-xs sm:text-sm text-foreground hover:bg-muted transition disabled:opacity-60 disabled:pointer-events-none"
               title={`Switch to ${otherGender}`}
             >
               Gender
@@ -276,11 +336,15 @@ export default function OutfitSection({
 
             <button
               type="button"
-              onClick={() => setSeed((s) => s + 1)}
-              className="rounded-full bg-primary px-3 py-1.5 text-xs sm:text-sm text-primary-foreground hover:opacity-90 transition"
+              disabled={loading}
+              onClick={() => {
+                setError("")
+                setSeed((s) => s + 1)
+              }}
+              className="rounded-full bg-primary px-3 py-1.5 text-xs sm:text-sm text-primary-foreground hover:opacity-90 transition disabled:opacity-60 disabled:pointer-events-none"
               title="Generate a new combination"
             >
-              More
+              {loading ? "..." : "More"}
             </button>
           </div>
         </div>
@@ -288,29 +352,28 @@ export default function OutfitSection({
         {error && <p className="text-sm text-muted-foreground mb-3">{error}</p>}
 
         <p className="text-primary font-semibold mb-4 text-base sm:text-base">
-          {loading ? "Finding outfits..." : look.style}
+          {loading ? "Finding outfits..." : styleLine}
         </p>
 
         <div className="space-y-2">
           {(
             [
-              ["Head", look.pieces.head],
-              ["Outer", look.pieces.outer],
-              ["Top", look.pieces.top],
-              ["Bottom", look.pieces.bottom],
-              ["Shoes", look.pieces.shoes],
-              ["Accessory", look.pieces.accessory],
+              ["Head", "head"],
+              ["Outer", "outer"],
+              ["Top", "top"],
+              ["Bottom", "bottom"],
+              ["Shoes", "shoes"],
+              ["Accessory", "accessory"],
             ] as const
-          ).map(([label, piece]) => (
+          ).map(([label, cat]) => (
             <div key={label} className="flex items-center gap-3">
               <div className="w-2 h-2 bg-accent rounded-full" />
               <span className="text-xs text-muted-foreground w-20">{label}</span>
-              <span className="text-foreground text-sm">{piece.name}</span>
+              <span className="text-foreground text-sm">{pieceName(cat)}</span>
             </div>
           ))}
         </div>
       </div>
     </div>
   )
-
 }
