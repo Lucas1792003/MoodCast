@@ -20,6 +20,7 @@ out
 # Environment
 .env
 .env.*.local
+.env.local
 
 # OS / Editor
 .DS_Store
