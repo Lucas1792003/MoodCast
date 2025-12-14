@@ -334,6 +334,9 @@ export default function Page() {
               <OutfitSection
                 temperature={weatherForComponents.apparent_temperature}
                 weatherCode={weatherForComponents.weather_code}
+                locationLabel={locationLabel}
+                lat={weather?.latitude ?? null}
+                lon={weather?.longitude ?? null}
               />
             </div>
 

@@ -1518,6 +1518,55 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
+"[project]/MoodCast/src/components/leaves-overlay.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>LeavesOverlay
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/MoodCast/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+"use client";
+;
+function pickVariant(i) {
+    const x = Math.sin((i + 1) * 999) * 10000;
+    return Math.floor((x - Math.floor(x)) * 2);
+}
+function LeavesOverlay({ variant }) {
+    const count = 40;
+    const src1 = variant === "sakura" ? "/sakura_1.png" : "/autumn_1.png";
+    const src2 = variant === "sakura" ? "/sakura_2.png" : "/autumn_2.png";
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "leaves-container",
+        "aria-hidden": "true",
+        children: Array.from({
+            length: count
+        }).map((_, i)=>{
+            const src = pickVariant(i) === 0 ? src1 : src2;
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                className: `leaf leaf-img ${variant === "sakura" ? "leaf-sakura" : "leaf-autumn"}`,
+                style: {
+                    backgroundImage: `url(${src})`
+                }
+            }, i, false, {
+                fileName: "[project]/MoodCast/src/components/leaves-overlay.tsx",
+                lineNumber: 20,
+                columnNumber: 11
+            }, this);
+        })
+    }, void 0, false, {
+        fileName: "[project]/MoodCast/src/components/leaves-overlay.tsx",
+        lineNumber: 16,
+        columnNumber: 5
+    }, this);
+}
+_c = LeavesOverlay;
+var _c;
+__turbopack_context__.k.register(_c, "LeavesOverlay");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
 "[project]/MoodCast/src/components/outfit-section.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
@@ -1528,9 +1577,11 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/MoodCast/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/MoodCast/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shirt$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Shirt$3e$__ = __turbopack_context__.i("[project]/MoodCast/node_modules/lucide-react/dist/esm/icons/shirt.js [app-client] (ecmascript) <export default as Shirt>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$leaves$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/MoodCast/src/components/leaves-overlay.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 function weatherTagsFromCode(weatherCode) {
@@ -1614,7 +1665,6 @@ function buildLook(opts) {
         if (r.includes("global")) return true;
         return locationTokens.some((t)=>r.includes(String(t).toLowerCase()));
     };
-    // ✅ IMPORTANT: gender-specific first, then unisex fallback
     const genderSpecificPool = catalog.filter((it)=>it.gender === gender && matchesRegion(it) && matchesTemp(it) && matchesWeather(it));
     const unisexPool = catalog.filter((it)=>it.gender === "unisex" && matchesRegion(it) && matchesTemp(it) && matchesWeather(it));
     const byCat = (cat)=>{
@@ -1622,7 +1672,6 @@ function buildLook(opts) {
         if (specific.length > 0) return specific;
         return unisexPool.filter((x)=>x.category === cat);
     };
-    // ✅ gender-aware fallback so male never gets “skirt” even as fallback
     const fallbackPiece = (cat)=>{
         const defaultsMale = {
             head: "Cap / Beanie",
@@ -1746,175 +1795,194 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
     ]);
     const otherGender = gender === "male" ? "female" : "male";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "bg-card rounded-2xl border border-border p-8 shadow-sm",
+        className: "relative isolate overflow-hidden bg-card rounded-2xl border border-border p-8 shadow-sm",
         children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$leaves$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                variant: gender === "female" ? "sakura" : "autumn"
+            }, void 0, false, {
+                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                lineNumber: 247,
+                columnNumber: 7
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex items-start justify-between gap-4 mb-4",
+                className: "relative z-10",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center gap-3",
+                        className: "flex items-start justify-between gap-4 mb-4",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shirt$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Shirt$3e$__["Shirt"], {
-                                className: "w-6 h-6 text-primary"
-                            }, void 0, false, {
-                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 240,
-                                columnNumber: 11
-                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-3",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        className: "text-lg font-semibold text-foreground",
-                                        children: "Outfit Suggestion"
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shirt$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Shirt$3e$__["Shirt"], {
+                                        className: "w-6 h-6 text-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 242,
+                                        lineNumber: 253,
                                         columnNumber: 13
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "text-xs text-muted-foreground",
-                                        children: "One full look based on weather + local vibe"
-                                    }, void 0, false, {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "text-lg font-semibold text-foreground",
+                                                children: [
+                                                    gender === "female" ? "Female" : "Male",
+                                                    " Outfit Suggestion"
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                                lineNumber: 255,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-xs text-muted-foreground",
+                                                children: "One full look based on weather + local vibe"
+                                            }, void 0, false, {
+                                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                                lineNumber: 256,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 243,
+                                        lineNumber: 254,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 241,
+                                lineNumber: 252,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>{
+                                            setGender(otherGender);
+                                            setSeed(1);
+                                        },
+                                        className: "rounded-full border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition",
+                                        title: `Switch to ${otherGender}`,
+                                        children: "Gender"
+                                    }, void 0, false, {
+                                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                        lineNumber: 261,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        type: "button",
+                                        onClick: ()=>setSeed((s)=>s + 1),
+                                        className: "rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90 transition",
+                                        title: "Generate a new combination",
+                                        children: "More"
+                                    }, void 0, false, {
+                                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                        lineNumber: 274,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                lineNumber: 260,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 239,
+                        lineNumber: 251,
+                        columnNumber: 9
+                    }, this),
+                    error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-sm text-muted-foreground mb-3",
+                        children: error
+                    }, void 0, false, {
+                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                        lineNumber: 285,
+                        columnNumber: 19
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-primary font-semibold mb-4",
+                        children: loading ? "Finding outfits..." : look.style
+                    }, void 0, false, {
+                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                        lineNumber: 287,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center gap-2",
+                        className: "space-y-2",
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: ()=>{
-                                    setGender(otherGender);
-                                    setSeed(1);
-                                },
-                                className: "rounded-full border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition",
-                                title: `Switch to ${otherGender}`,
-                                children: otherGender === "male" ? "Male" : "Female"
-                            }, void 0, false, {
+                            [
+                                "Head",
+                                look.pieces.head
+                            ],
+                            [
+                                "Outer",
+                                look.pieces.outer
+                            ],
+                            [
+                                "Top",
+                                look.pieces.top
+                            ],
+                            [
+                                "Bottom",
+                                look.pieces.bottom
+                            ],
+                            [
+                                "Shoes",
+                                look.pieces.shoes
+                            ],
+                            [
+                                "Accessory",
+                                look.pieces.accessory
+                            ]
+                        ].map(([label, piece])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-2 h-2 bg-accent rounded-full"
+                                    }, void 0, false, {
+                                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                        lineNumber: 301,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-xs text-muted-foreground w-20",
+                                        children: label
+                                    }, void 0, false, {
+                                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                        lineNumber: 302,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-foreground text-sm",
+                                        children: piece.name
+                                    }, void 0, false, {
+                                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
+                                        lineNumber: 303,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, label, true, {
                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 249,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                type: "button",
-                                onClick: ()=>setSeed((s)=>s + 1),
-                                className: "rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90 transition",
-                                title: "Generate a new combination",
-                                children: "Change"
-                            }, void 0, false, {
-                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 261,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                                lineNumber: 300,
+                                columnNumber: 13
+                            }, this))
+                    }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 248,
+                        lineNumber: 289,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                lineNumber: 238,
-                columnNumber: 7
-            }, this),
-            error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "text-sm text-muted-foreground mb-3",
-                children: error
-            }, void 0, false, {
-                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                lineNumber: 272,
-                columnNumber: 17
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "text-primary font-semibold mb-4",
-                children: loading ? "Finding outfits..." : look.style
-            }, void 0, false, {
-                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                lineNumber: 274,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "space-y-2",
-                children: [
-                    [
-                        "Head",
-                        look.pieces.head
-                    ],
-                    [
-                        "Outer",
-                        look.pieces.outer
-                    ],
-                    [
-                        "Top",
-                        look.pieces.top
-                    ],
-                    [
-                        "Bottom",
-                        look.pieces.bottom
-                    ],
-                    [
-                        "Shoes",
-                        look.pieces.shoes
-                    ],
-                    [
-                        "Accessory",
-                        look.pieces.accessory
-                    ]
-                ].map(([label, piece])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center gap-3",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-2 h-2 bg-accent rounded-full"
-                            }, void 0, false, {
-                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 288,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-xs text-muted-foreground w-20",
-                                children: label
-                            }, void 0, false, {
-                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 289,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-foreground text-sm",
-                                children: piece.name
-                            }, void 0, false, {
-                                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 290,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, label, true, {
-                        fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 287,
-                        columnNumber: 11
-                    }, this))
-            }, void 0, false, {
-                fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                lineNumber: 276,
+                lineNumber: 250,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-        lineNumber: 237,
+        lineNumber: 245,
         columnNumber: 5
     }, this);
 }
@@ -4761,4 +4829,4 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 }),
 ]);
 
-//# sourceMappingURL=MoodCast_src_016d0de8._.js.map
+//# sourceMappingURL=MoodCast_src_4fdcc364._.js.map

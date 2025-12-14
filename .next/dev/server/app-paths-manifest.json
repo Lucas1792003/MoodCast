@@ -1,7 +1,7 @@
 {
   "/api/geocode/route": "app/api/geocode/route.js",
+  "/api/outfits/route": "app/api/outfits/route.js",
   "/api/reverse-city/route": "app/api/reverse-city/route.js",
-  "/api/suggestion/route": "app/api/suggestion/route.js",
   "/api/weather/route": "app/api/weather/route.js",
   "/page": "app/page.js"
 }
