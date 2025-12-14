@@ -25,8 +25,6 @@ type OpenMeteoCurrentLike = {
   wind_speed_10m: number
   visibility: number
   is_day?: number
-
-  // ✅ extras for the cycler pages
   uv_index?: number
   cloud_cover?: number
   pressure_msl?: number
@@ -48,10 +46,8 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>("")
 
-  // ✅ only true after user searches in the header
   const [hasSearched, setHasSearched] = useState(false)
 
-  // ✅ cache the most recent GPS-based weather (so "Current" can reuse instantly)
   const lastGeoCacheRef = useRef<{
     lat: number
     lon: number
@@ -59,8 +55,8 @@ export default function Page() {
     fetchedAt: number
   } | null>(null)
 
-  const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000 // 10 minutes
-  const GEO_MATCH_RADIUS_M = 250 // treat within 250m as same place
+  const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000 
+  const GEO_MATCH_RADIUS_M = 250
 
   const toRad = (d: number) => (d * Math.PI) / 180
   const distM = (aLat: number, aLon: number, bLat: number, bLon: number) => {
@@ -84,8 +80,6 @@ export default function Page() {
       wind_speed_10m: weather.windSpeed,
       visibility: weather.visibility,
       is_day: weather.isDay ? 1 : 0,
-
-      // ✅ pass-through extras (will be defined once API returns them)
       uv_index: weather.uvIndex ?? undefined,
       cloud_cover: weather.cloudCover ?? undefined,
       pressure_msl: weather.pressureMsl ?? undefined,
@@ -118,7 +112,6 @@ export default function Page() {
         try {
           const { latitude, longitude } = position.coords
 
-          // ✅ FAST PATH: pass a name so /api/weather skips reverseLabel + nearbyPoi
           const fastLabel = "Current location"
           if (!active) return
           setLocationLabel(fastLabel)
@@ -127,7 +120,6 @@ export default function Page() {
           if (!active) return
           setWeather(w)
 
-          // ✅ save GPS weather cache for later "Current" clicks
           lastGeoCacheRef.current = {
             lat: latitude,
             lon: longitude,
@@ -135,10 +127,8 @@ export default function Page() {
             fetchedAt: Date.now(),
           }
 
-          // ✅ initial load = GPS, not "searched"
           setHasSearched(false)
 
-          // ✅ NICE-TO-HAVE: upgrade label in the background (does NOT block weather render)
           void (async () => {
             try {
               const r = await fetch(`/api/reverse-city?lat=${latitude}&lon=${longitude}`, {
@@ -151,7 +141,7 @@ export default function Page() {
 
               if (label && active) setLocationLabel(label)
             } catch {
-              // ignore label failures
+
             }
           })()
         } catch {
@@ -172,7 +162,7 @@ export default function Page() {
       {
         enableHighAccuracy: true,
         timeout: 8000,
-        maximumAge: 5 * 60 * 1000, // reuse recent location if available
+        maximumAge: 5 * 60 * 1000, 
       }
     )
 
@@ -192,7 +182,6 @@ export default function Page() {
       if (q.startsWith("geo:")) {
         const raw = q.slice(4)
 
-        // allow "geo:lat,lon|<urlencoded label>"
         const pipeIdx = raw.indexOf("|")
         const coordsPart = pipeIdx >= 0 ? raw.slice(0, pipeIdx) : raw
         const labelPart = pipeIdx >= 0 ? raw.slice(pipeIdx + 1) : ""
@@ -205,7 +194,6 @@ export default function Page() {
 
         const label = labelPart ? decodeURIComponent(labelPart) : ""
 
-        // ✅ REUSE: if this matches cached GPS weather (same place + fresh), skip refetch
         const cached = lastGeoCacheRef.current
         if (cached) {
           const ageOk = Date.now() - cached.fetchedAt <= GEO_CACHE_MAX_AGE_MS
@@ -219,15 +207,11 @@ export default function Page() {
             return
           }
         }
-
-        // PASS name => /api/weather skips reverseLabel + nearbyPoi
         const w = await getWeather(lat, lon, label || undefined)
 
         setWeather(w)
         setLocationLabel(w.locationName || label || "Near you")
         setHasSearched(true)
-
-        // ✅ refresh cache on geo fetch too
         lastGeoCacheRef.current = {
           lat,
           lon,

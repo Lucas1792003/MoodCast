@@ -60,7 +60,7 @@ function pickOne(arr) {
 function pickRandom(arr) {
     return arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
 }
-/** Indoor “at-home” ideas (no POIs needed) */ const INDOOR_IDEAS = [
+const INDOOR_IDEAS = [
     {
         headline: "Cozy reading time",
         message: "It’s rainy outside — perfect time to read 20–30 mins with a warm drink ☕📖"
@@ -391,7 +391,6 @@ async function GET(req) {
     };
     const kind = classifyWeather(code);
     const radiusM = 2000;
-    // Overpass safe fetch
     let elements = [];
     try {
         const overpass = await fetchOverpass(lat, lon, radiusM);
@@ -400,7 +399,6 @@ async function GET(req) {
         elements = [];
     }
     const all = elements.map((el)=>elementToPlace(el, lat, lon)).filter(Boolean);
-    // dedup by name+category, keep closest for distance display
     const dedup = new Map();
     for (const p of all){
         const key = `${p.name.toLowerCase()}::${p.category}`;
@@ -415,7 +413,6 @@ async function GET(req) {
     let primary;
     let secondary = [];
     try {
-        // ✅ Random pick from nearby candidates (not nearest)
         const candidates = (filtered.length ? filtered : pool).slice(0, 30);
         const chosen = pickRandom(candidates);
         if (preferIndoorPrimary) {

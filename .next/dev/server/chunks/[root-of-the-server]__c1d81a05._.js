@@ -150,7 +150,6 @@ async function GET(req) {
             status: 400
         });
     }
-    // ✅ Request more variables for your cycler pages
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` + `&current=` + [
         "temperature_2m",
         "relative_humidity_2m",
@@ -170,7 +169,6 @@ async function GET(req) {
         "showers",
         "snowfall",
         "uv_index",
-        // some locations/models may not support it in current, so we also fetch hourly below
         "precipitation_probability"
     ].join(",") + `&hourly=precipitation_probability&forecast_hours=1` + `&daily=sunrise,sunset&forecast_days=1` + `&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph`;
     const res = await fetch(url, {
@@ -194,7 +192,6 @@ async function GET(req) {
             status: 502
         });
     }
-    // ✅ Build a better locationName when name is missing (Current Location flow)
     let locationName = providedName;
     if (!locationName) {
         const rev = await reverseLabel(lat, lon);
@@ -205,7 +202,6 @@ async function GET(req) {
             locationName = rev || "Near you";
         }
     }
-    // Precip prob: prefer current if present, else hourly[0]
     const probFromCurrent = numOrNull(c.precipitation_probability);
     const probFromHourly = numOrNull(data?.hourly?.precipitation_probability?.[0]);
     const precipitationProbability = probFromCurrent ?? probFromHourly;
@@ -222,7 +218,6 @@ async function GET(req) {
         isDay: Boolean(c.is_day),
         sunrise: data?.daily?.sunrise?.[0] ?? null,
         sunset: data?.daily?.sunset?.[0] ?? null,
-        // ✅ extras
         uvIndex: numOrNull(c.uv_index),
         cloudCover: numOrNull(c.cloud_cover),
         pressureMsl: numOrNull(c.pressure_msl),

@@ -1538,10 +1538,6 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
     overflow: hidden;
   }
 
-  .block {
-    display: block;
-  }
-
   .flex {
     display: flex;
   }
@@ -1838,6 +1834,10 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
+  }
+
+  .self-start {
+    align-self: flex-start;
   }
 
   .self-stretch {
@@ -2252,6 +2252,11 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
     line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
 
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+
   .text-lg {
     font-size: var(--text-lg);
     line-height: var(--tw-leading, var(--text-lg--line-height));
@@ -2310,6 +2315,10 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
   .tracking-tight {
     --tw-tracking: var(--tracking-tight);
     letter-spacing: var(--tracking-tight);
+  }
+
+  .break-words {
+    overflow-wrap: break-word;
   }
 
   .text-accent {
@@ -2661,8 +2670,38 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
   }
 
   @media (min-width: 40rem) {
+    .sm\:flex-row {
+      flex-direction: row;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:items-start {
+      align-items: flex-start;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:justify-between {
+      justify-content: space-between;
+    }
+  }
+
+  @media (min-width: 40rem) {
     .sm\:gap-4 {
       gap: calc(var(--spacing) * 4);
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:self-auto {
+      align-self: auto;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:p-8 {
+      padding: calc(var(--spacing) * 8);
     }
   }
 
@@ -2675,6 +2714,27 @@ a.maplibregl-ctrl-logo.maplibregl-compact {
   @media (min-width: 40rem) {
     .sm\:px-4 {
       padding-inline: calc(var(--spacing) * 4);
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:text-base {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .sm\:text-sm {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
     }
   }
 
@@ -3279,8 +3339,8 @@ html.mc-force-motion *, html.mc-force-motion :before, html.mc-force-motion :afte
 .leaf {
   top: 0;
   left: var(--x, 50%);
-  width: var(--w, 26px);
-  height: var(--h, 26px);
+  width: var(--w, 42px);
+  height: var(--h, 42px);
   opacity: var(--o, .85);
   transform: translate3d(0, 0, 0) rotate(var(--r, 0deg));
   animation: leaves-fall var(--dur, 14s) linear var(--del, 0s) infinite, leaves-sway var(--sway, 4.2s) ease-in-out var(--sdel, 0s) infinite;
@@ -3321,6 +3381,15 @@ html.mc-force-motion *, html.mc-force-motion :before, html.mc-force-motion :afte
 
   50% {
     margin-left: var(--dx, 30px);
+  }
+}
+
+@media (max-width: 480px) {
+  .leaf {
+    width: var(--w, 28px);
+    height: var(--h, 28px);
+    opacity: .75;
+    filter: drop-shadow(0 8px 10px #0000001a);
   }
 }
 

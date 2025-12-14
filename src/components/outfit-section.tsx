@@ -242,49 +242,54 @@ export default function OutfitSection({
   const otherGender: Gender = gender === "male" ? "female" : "male"
 
   return (
-    <div className="relative isolate overflow-hidden bg-card rounded-2xl border border-border p-8 shadow-sm">
-      {/* 🌸 female = sakura petals, 🍁 male = autumn leaves (behind everything) */}
+    <div className="relative isolate overflow-hidden bg-card rounded-2xl border border-border p-5 sm:p-8 shadow-sm">
       <LeavesOverlay variant={gender === "female" ? "sakura" : "autumn"} />
 
-      {/* content always above overlay */}
       <div className="relative z-10">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex items-center gap-3">
-            <Shirt className="w-6 h-6 text-primary" />
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">{gender === "female" ? "Female" : "Male"} Outfit Suggestion</h3>
-              <p className="text-xs text-muted-foreground">One full look based on weather + local vibe</p>
+        {/* ✅ responsive header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
+          <div className="flex items-start gap-3 min-w-0">
+            <Shirt className="w-6 h-6 text-primary shrink-0 mt-0.5" />
+            <div className="min-w-0">
+              <h3 className="text-lg sm:text-lg font-semibold leading-tight text-foreground break-words">
+                {gender === "female" ? "Female" : "Male"} Outfit Suggestion
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                One full look based on weather + local vibe
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* buttons sit nicely under title on mobile */}
+          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             <button
               type="button"
               onClick={() => {
                 setGender(otherGender)
                 setSeed(1)
               }}
-              className="rounded-full border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition"
+              className="rounded-full border border-border px-3 py-1.5 text-xs sm:text-sm text-foreground hover:bg-muted transition"
               title={`Switch to ${otherGender}`}
             >
-              {/* {otherGender === "male" ? "Male" : "Female"} */}
-              Gender
+              {otherGender === "male" ? "Male" : "Female"}
             </button>
 
             <button
               type="button"
               onClick={() => setSeed((s) => s + 1)}
-              className="rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90 transition"
+              className="rounded-full bg-primary px-3 py-1.5 text-xs sm:text-sm text-primary-foreground hover:opacity-90 transition"
               title="Generate a new combination"
             >
-              More
+              Change
             </button>
           </div>
         </div>
 
         {error && <p className="text-sm text-muted-foreground mb-3">{error}</p>}
 
-        <p className="text-primary font-semibold mb-4">{loading ? "Finding outfits..." : look.style}</p>
+        <p className="text-primary font-semibold mb-4 text-base sm:text-base">
+          {loading ? "Finding outfits..." : look.style}
+        </p>
 
         <div className="space-y-2">
           {(
@@ -307,4 +312,5 @@ export default function OutfitSection({
       </div>
     </div>
   )
+
 }

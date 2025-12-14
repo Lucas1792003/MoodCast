@@ -1795,42 +1795,43 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
     ]);
     const otherGender = gender === "male" ? "female" : "male";
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "relative isolate overflow-hidden bg-card rounded-2xl border border-border p-8 shadow-sm",
+        className: "relative isolate overflow-hidden bg-card rounded-2xl border border-border p-5 sm:p-8 shadow-sm",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$leaves$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 variant: gender === "female" ? "sakura" : "autumn"
             }, void 0, false, {
                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                lineNumber: 247,
+                lineNumber: 246,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "relative z-10",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-start justify-between gap-4 mb-4",
+                        className: "flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-3",
+                                className: "flex items-start gap-3 min-w-0",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shirt$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Shirt$3e$__["Shirt"], {
-                                        className: "w-6 h-6 text-primary"
+                                        className: "w-6 h-6 text-primary shrink-0 mt-0.5"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 252,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "min-w-0",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                className: "text-lg font-semibold text-foreground",
+                                                className: "text-lg sm:text-lg font-semibold leading-tight text-foreground break-words",
                                                 children: [
                                                     gender === "female" ? "Female" : "Male",
                                                     " Outfit Suggestion"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                                lineNumber: 255,
+                                                lineNumber: 254,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1838,23 +1839,23 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                                 children: "One full look based on weather + local vibe"
                                             }, void 0, false, {
                                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                                lineNumber: 256,
+                                                lineNumber: 257,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 254,
+                                        lineNumber: 253,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 252,
+                                lineNumber: 251,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-2",
+                                className: "flex items-center gap-2 self-start sm:self-auto shrink-0",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
@@ -1862,35 +1863,35 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                             setGender(otherGender);
                                             setSeed(1);
                                         },
-                                        className: "rounded-full border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted transition",
+                                        className: "rounded-full border border-border px-3 py-1.5 text-xs sm:text-sm text-foreground hover:bg-muted transition",
                                         title: `Switch to ${otherGender}`,
-                                        children: "Gender"
+                                        children: otherGender === "male" ? "Male" : "Female"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 261,
+                                        lineNumber: 265,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
                                         onClick: ()=>setSeed((s)=>s + 1),
-                                        className: "rounded-full bg-primary px-3 py-1.5 text-sm text-primary-foreground hover:opacity-90 transition",
+                                        className: "rounded-full bg-primary px-3 py-1.5 text-xs sm:text-sm text-primary-foreground hover:opacity-90 transition",
                                         title: "Generate a new combination",
-                                        children: "More"
+                                        children: "Change"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 274,
+                                        lineNumber: 277,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 260,
+                                lineNumber: 264,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 251,
+                        lineNumber: 250,
                         columnNumber: 9
                     }, this),
                     error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1898,15 +1899,15 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 285,
+                        lineNumber: 288,
                         columnNumber: 19
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-primary font-semibold mb-4",
+                        className: "text-primary font-semibold mb-4 text-base sm:text-base",
                         children: loading ? "Finding outfits..." : look.style
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 287,
+                        lineNumber: 290,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1943,7 +1944,7 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                         className: "w-2 h-2 bg-accent rounded-full"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 301,
+                                        lineNumber: 306,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1951,7 +1952,7 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                         children: label
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 302,
+                                        lineNumber: 307,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1959,24 +1960,24 @@ function OutfitSection({ temperature, weatherCode, locationLabel, lat = null, lo
                                         children: piece.name
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                        lineNumber: 303,
+                                        lineNumber: 308,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, label, true, {
                                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                                lineNumber: 300,
+                                lineNumber: 305,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                        lineNumber: 289,
+                        lineNumber: 294,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/MoodCast/src/components/outfit-section.tsx",
-                lineNumber: 250,
+                lineNumber: 248,
                 columnNumber: 7
             }, this)
         ]
@@ -4375,14 +4376,10 @@ function Page() {
     const [locationLabel, setLocationLabel] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
-    // ✅ only true after user searches in the header
     const [hasSearched, setHasSearched] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    // ✅ cache the most recent GPS-based weather (so "Current" can reuse instantly)
     const lastGeoCacheRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
-    const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000 // 10 minutes
-    ;
-    const GEO_MATCH_RADIUS_M = 250 // treat within 250m as same place
-    ;
+    const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000;
+    const GEO_MATCH_RADIUS_M = 250;
     const toRad = (d)=>d * Math.PI / 180;
     const distM = (aLat, aLon, bLat, bLon)=>{
         const R = 6371000;
@@ -4402,7 +4399,6 @@ function Page() {
                 wind_speed_10m: weather.windSpeed,
                 visibility: weather.visibility,
                 is_day: weather.isDay ? 1 : 0,
-                // ✅ pass-through extras (will be defined once API returns them)
                 uv_index: weather.uvIndex ?? undefined,
                 cloud_cover: weather.cloudCover ?? undefined,
                 pressure_msl: weather.pressureMsl ?? undefined,
@@ -4431,23 +4427,19 @@ function Page() {
                 "Page.useEffect": async (position)=>{
                     try {
                         const { latitude, longitude } = position.coords;
-                        // ✅ FAST PATH: pass a name so /api/weather skips reverseLabel + nearbyPoi
                         const fastLabel = "Current location";
                         if (!active) return;
                         setLocationLabel(fastLabel);
                         const w = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$lib$2f$weather$2d$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getWeather"])(latitude, longitude, fastLabel);
                         if (!active) return;
                         setWeather(w);
-                        // ✅ save GPS weather cache for later "Current" clicks
                         lastGeoCacheRef.current = {
                             lat: latitude,
                             lon: longitude,
                             weather: w,
                             fetchedAt: Date.now()
                         };
-                        // ✅ initial load = GPS, not "searched"
                         setHasSearched(false);
-                        // ✅ NICE-TO-HAVE: upgrade label in the background (does NOT block weather render)
                         void ({
                             "Page.useEffect": async ()=>{
                                 try {
@@ -4458,9 +4450,7 @@ function Page() {
                                     const data = await r.json();
                                     const label = typeof data?.label === "string" && data.label.trim() ? data.label.trim() : "";
                                     if (label && active) setLocationLabel(label);
-                                } catch  {
-                                // ignore label failures
-                                }
+                                } catch  {}
                             }
                         })["Page.useEffect"]();
                     } catch  {
@@ -4499,7 +4489,6 @@ function Page() {
         try {
             if (q.startsWith("geo:")) {
                 const raw = q.slice(4);
-                // allow "geo:lat,lon|<urlencoded label>"
                 const pipeIdx = raw.indexOf("|");
                 const coordsPart = pipeIdx >= 0 ? raw.slice(0, pipeIdx) : raw;
                 const labelPart = pipeIdx >= 0 ? raw.slice(pipeIdx + 1) : "";
@@ -4508,7 +4497,6 @@ function Page() {
                 const lon = Number(lonStr?.trim());
                 if (!Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error("Invalid coords");
                 const label = labelPart ? decodeURIComponent(labelPart) : "";
-                // ✅ REUSE: if this matches cached GPS weather (same place + fresh), skip refetch
                 const cached = lastGeoCacheRef.current;
                 if (cached) {
                     const ageOk = Date.now() - cached.fetchedAt <= GEO_CACHE_MAX_AGE_MS;
@@ -4521,12 +4509,10 @@ function Page() {
                         return;
                     }
                 }
-                // PASS name => /api/weather skips reverseLabel + nearbyPoi
                 const w = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$lib$2f$weather$2d$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getWeather"])(lat, lon, label || undefined);
                 setWeather(w);
                 setLocationLabel(w.locationName || label || "Near you");
                 setHasSearched(true);
-                // ✅ refresh cache on geo fetch too
                 lastGeoCacheRef.current = {
                     lat,
                     lon,
@@ -4571,7 +4557,7 @@ function Page() {
                 onSearch: handleLocationSearch
             }, void 0, false, {
                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                lineNumber: 278,
+                lineNumber: 262,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -4584,7 +4570,7 @@ function Page() {
                                 className: "w-5 h-5 text-primary mt-0.5"
                             }, void 0, false, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 283,
+                                lineNumber: 267,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4594,7 +4580,7 @@ function Page() {
                                         children: "Something went wrong"
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                                        lineNumber: 285,
+                                        lineNumber: 269,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4602,19 +4588,19 @@ function Page() {
                                         children: error
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                                        lineNumber: 286,
+                                        lineNumber: 270,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 284,
+                                lineNumber: 268,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                        lineNumber: 282,
+                        lineNumber: 266,
                         columnNumber: 11
                     }, this),
                     loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4626,7 +4612,7 @@ function Page() {
                                     className: "w-10 h-10 text-primary animate-pulse"
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 294,
+                                    lineNumber: 278,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4634,18 +4620,18 @@ function Page() {
                                     children: "Loading weather data..."
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 295,
+                                    lineNumber: 279,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/MoodCast/src/app/page.tsx",
-                            lineNumber: 293,
+                            lineNumber: 277,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                        lineNumber: 292,
+                        lineNumber: 276,
                         columnNumber: 11
                     }, this),
                     !loading && !weatherForComponents && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4657,7 +4643,7 @@ function Page() {
                                     className: "w-12 h-12 text-primary mx-auto"
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 303,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4665,7 +4651,7 @@ function Page() {
                                     children: "Search for a city to see outfits, activities & mood tips."
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 304,
+                                    lineNumber: 288,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4673,18 +4659,18 @@ function Page() {
                                     children: "Try: London, Tokyo, New York, Toronto…"
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 307,
+                                    lineNumber: 291,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/MoodCast/src/app/page.tsx",
-                            lineNumber: 302,
+                            lineNumber: 286,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                        lineNumber: 301,
+                        lineNumber: 285,
                         columnNumber: 11
                     }, this),
                     !loading && weatherForComponents && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -4701,17 +4687,17 @@ function Page() {
                                                 weather: weatherForComponents
                                             }, void 0, false, {
                                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                                lineNumber: 317,
+                                                lineNumber: 301,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/MoodCast/src/app/page.tsx",
-                                            lineNumber: 316,
+                                            lineNumber: 300,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                                        lineNumber: 315,
+                                        lineNumber: 299,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4721,18 +4707,18 @@ function Page() {
                                             getWeatherDescription: getWeatherDescription
                                         }, void 0, false, {
                                             fileName: "[project]/MoodCast/src/app/page.tsx",
-                                            lineNumber: 322,
+                                            lineNumber: 306,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                                        lineNumber: 321,
+                                        lineNumber: 305,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 314,
+                                lineNumber: 298,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4743,7 +4729,7 @@ function Page() {
                                         weatherCode: weatherForComponents.weather_code
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                                        lineNumber: 330,
+                                        lineNumber: 314,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$outfit$2d$section$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -4754,13 +4740,13 @@ function Page() {
                                         lon: weather?.longitude ?? null
                                     }, void 0, false, {
                                         fileName: "[project]/MoodCast/src/app/page.tsx",
-                                        lineNumber: 334,
+                                        lineNumber: 318,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 329,
+                                lineNumber: 313,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4773,12 +4759,12 @@ function Page() {
                                     selectedLon: hasSearched ? weather?.longitude : null
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 344,
+                                    lineNumber: 328,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 343,
+                                lineNumber: 327,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4788,12 +4774,12 @@ function Page() {
                                     humidity: weatherForComponents.relative_humidity_2m
                                 }, void 0, false, {
                                     fileName: "[project]/MoodCast/src/app/page.tsx",
-                                    lineNumber: 354,
+                                    lineNumber: 338,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 353,
+                                lineNumber: 337,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$MoodCast$2f$src$2f$components$2f$ar$2d$sky$2d$viewer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -4801,7 +4787,7 @@ function Page() {
                                 temperature: weatherForComponents.temperature_2m
                             }, void 0, false, {
                                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                                lineNumber: 360,
+                                lineNumber: 344,
                                 columnNumber: 13
                             }, this)
                         ]
@@ -4809,13 +4795,13 @@ function Page() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/MoodCast/src/app/page.tsx",
-                lineNumber: 280,
+                lineNumber: 264,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/MoodCast/src/app/page.tsx",
-        lineNumber: 272,
+        lineNumber: 256,
         columnNumber: 5
     }, this);
 }
