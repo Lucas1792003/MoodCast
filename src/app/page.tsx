@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Cloud, AlertTriangle } from "lucide-react"
 
 import Header from "@/components/header"
@@ -51,6 +51,28 @@ export default function Page() {
   // ✅ only true after user searches in the header
   const [hasSearched, setHasSearched] = useState(false)
 
+  // ✅ cache the most recent GPS-based weather (so "Current" can reuse instantly)
+  const lastGeoCacheRef = useRef<{
+    lat: number
+    lon: number
+    weather: WeatherResult
+    fetchedAt: number
+  } | null>(null)
+
+  const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000 // 10 minutes
+  const GEO_MATCH_RADIUS_M = 250 // treat within 250m as same place
+
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const distM = (aLat: number, aLon: number, bLat: number, bLon: number) => {
+    const R = 6371000
+    const dLat = toRad(bLat - aLat)
+    const dLon = toRad(bLon - aLon)
+    const x =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLon / 2) ** 2
+    return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))
+  }
+
   const weatherForComponents: OpenMeteoCurrentLike | null = useMemo(() => {
     if (!weather) return null
 
@@ -81,7 +103,12 @@ export default function Page() {
   }, [weather])
 
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser.")
+      return
+    }
+
+    let active = true
 
     setLoading(true)
     setError("")
@@ -90,22 +117,68 @@ export default function Page() {
       async (position) => {
         try {
           const { latitude, longitude } = position.coords
-          const w = await getWeather(latitude, longitude)
+
+          // ✅ FAST PATH: pass a name so /api/weather skips reverseLabel + nearbyPoi
+          const fastLabel = "Current location"
+          if (!active) return
+          setLocationLabel(fastLabel)
+
+          const w = await getWeather(latitude, longitude, fastLabel)
+          if (!active) return
           setWeather(w)
-          setLocationLabel(w.locationName || "Current location")
+
+          // ✅ save GPS weather cache for later "Current" clicks
+          lastGeoCacheRef.current = {
+            lat: latitude,
+            lon: longitude,
+            weather: w,
+            fetchedAt: Date.now(),
+          }
 
           // ✅ initial load = GPS, not "searched"
           setHasSearched(false)
+
+          // ✅ NICE-TO-HAVE: upgrade label in the background (does NOT block weather render)
+          void (async () => {
+            try {
+              const r = await fetch(`/api/reverse-city?lat=${latitude}&lon=${longitude}`, {
+                cache: "no-store",
+              })
+              if (!r.ok) return
+              const data = await r.json()
+              const label =
+                typeof data?.label === "string" && data.label.trim() ? data.label.trim() : ""
+
+              if (label && active) setLocationLabel(label)
+            } catch {
+              // ignore label failures
+            }
+          })()
         } catch {
-          setError("Couldn’t load weather for your location.")
+          if (active) setError("Couldn’t load weather for your location.")
         } finally {
-          setLoading(false)
+          if (active) setLoading(false)
         }
       },
-      () => {
+      (geoErr) => {
+        if (!active) return
+        if (geoErr?.code === 1) {
+          setError("Location permission denied. Please allow location access.")
+        } else {
+          setError("Couldn’t get your current location.")
+        }
         setLoading(false)
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 8000,
+        maximumAge: 5 * 60 * 1000, // reuse recent location if available
       }
     )
+
+    return () => {
+      active = false
+    }
   }, [])
 
   const handleLocationSearch = async (input: string) => {
@@ -118,20 +191,50 @@ export default function Page() {
     try {
       if (q.startsWith("geo:")) {
         const raw = q.slice(4)
-        const [latStr, lonStr] = raw.split(",")
+
+        // allow "geo:lat,lon|<urlencoded label>"
+        const pipeIdx = raw.indexOf("|")
+        const coordsPart = pipeIdx >= 0 ? raw.slice(0, pipeIdx) : raw
+        const labelPart = pipeIdx >= 0 ? raw.slice(pipeIdx + 1) : ""
+
+        const [latStr, lonStr] = coordsPart.split(",")
         const lat = Number(latStr?.trim())
         const lon = Number(lonStr?.trim())
 
-        if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-          throw new Error("Invalid coords")
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error("Invalid coords")
+
+        const label = labelPart ? decodeURIComponent(labelPart) : ""
+
+        // ✅ REUSE: if this matches cached GPS weather (same place + fresh), skip refetch
+        const cached = lastGeoCacheRef.current
+        if (cached) {
+          const ageOk = Date.now() - cached.fetchedAt <= GEO_CACHE_MAX_AGE_MS
+          const nearOk = distM(lat, lon, cached.lat, cached.lon) <= GEO_MATCH_RADIUS_M
+
+          if (ageOk && nearOk) {
+            setWeather(cached.weather)
+            setLocationLabel(label || cached.weather.locationName || "Near you")
+            setHasSearched(true)
+            setLoading(false)
+            return
+          }
         }
 
-        const w = await getWeather(lat, lon)
-        setWeather(w)
-        setLocationLabel(w.locationName || "Near you")
+        // PASS name => /api/weather skips reverseLabel + nearbyPoi
+        const w = await getWeather(lat, lon, label || undefined)
 
-        // ✅ user typed a location
+        setWeather(w)
+        setLocationLabel(w.locationName || label || "Near you")
         setHasSearched(true)
+
+        // ✅ refresh cache on geo fetch too
+        lastGeoCacheRef.current = {
+          lat,
+          lon,
+          weather: w,
+          fetchedAt: Date.now(),
+        }
+
         return
       }
 
@@ -222,7 +325,6 @@ export default function Page() {
                 />
               </div>
             </div>
-
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <MoodSection
