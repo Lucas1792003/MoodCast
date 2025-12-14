@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/src/app/api/cron/generate-dataset", "schedule": "0 2 * * *" }
+  ]
+}
