@@ -35,7 +35,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Invalid lat/lon" }, { status: 400 })
   }
 
-  // zoom=10 tends to be “city/region”, not street/subdistrict
   const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`
 
   const res = await fetch(url, {
@@ -55,21 +54,18 @@ export async function GET(req: NextRequest) {
 
   const country = cleanName(pickFirst(addr, ["country"]) || "")
 
-  // “City-ish” candidates
   let city = pickFirst(addr, ["city", "town", "municipality", "village", "county", "state_district"]) || ""
   let region = pickFirst(addr, ["state", "region", "province"]) || ""
 
   city = cleanName(city)
   region = cleanName(region)
 
-  // If city is too local (subdistrict-level), fall back to region as “city”
   if (!city || looksTooLocal(city)) {
     city = region || city
   }
 
-  // Final query your app understands: City + Country (keep it simple for your DB)
   const query = [city, country].filter(Boolean).join(", ").trim() || "Thailand"
-  const label = query // what you show inside the search bar
+  const label = query 
 
   return NextResponse.json({ city, region, country, query, label })
 }

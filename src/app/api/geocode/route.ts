@@ -83,10 +83,8 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Missing q" }, { status: 400 })
   }
 
-  // 1) Try Open-Meteo normally
   let result = await openMeteoGeocode(qRaw)
 
-  // 2) Try Open-Meteo with cleaned query (removes “Subdistrict/Province” noise)
   if (!result) {
     const cleaned = cleanQuery(qRaw)
     if (cleaned && cleaned !== qRaw) {
@@ -94,7 +92,6 @@ export async function GET(req: Request) {
     }
   }
 
-  // 3) Fallback to Nominatim (works for districts/places too)
   if (!result) {
     result = await nominatimGeocode(qRaw)
   }

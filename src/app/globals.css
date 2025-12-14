@@ -415,3 +415,104 @@ html.mc-force-motion *::after {
 @media (prefers-reduced-motion: reduce) {
   .rain-layer, .snow-layer, .mc-sun, .mc-moon, .mc-sunrays, .mc-cloud, .mc-fog, .mc-heat { animation: none; }
 }
+
+/* ===== Falling PNG Leaves Overlay ===== */
+.leaves-container{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+
+  /* optional: fade out near bottom a bit */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
+}
+
+.leaf{
+  position:absolute;
+  top:0;
+  left:var(--x, 50%);
+
+  width:var(--w, 42px);
+  height:var(--h, 42px);
+  opacity:var(--o, 0.85);
+
+  transform: translate3d(0,0,0) rotate(var(--r, 0deg));
+
+  animation:
+    leaves-fall var(--dur, 14s) linear var(--del, 0s) infinite,
+    leaves-sway var(--sway, 4.2s) ease-in-out var(--sdel, 0s) infinite;
+
+  will-change: transform;
+  pointer-events:none;
+}
+
+/* PNG rendering */
+.leaf-img{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.12));
+}
+
+/* Slight vibe differences */
+.leaf-sakura{ opacity: 0.75; }
+.leaf-autumn{ opacity: 0.90; }
+
+@keyframes leaves-fall{
+  0%   { transform: translate3d(0, -20vh, 0) rotate(var(--r, 0deg)); }
+  100% { transform: translate3d(0, 120vh, 0) rotate(calc(var(--r, 0deg) + 360deg)); }
+}
+
+@keyframes leaves-sway{
+  0%,100% { margin-left: 0px; }
+  50%     { margin-left: var(--dx, 30px); }
+}
+
+@media (max-width: 480px){
+  .leaf{
+    width: var(--w, 28px);
+    height: var(--h, 28px);
+    opacity: 0.75;
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.10));
+  }
+}
+
+/* ===== 34 variation blocks (nonstop, staggered) ===== */
+.leaf:nth-child(1)  { --x: 4%;  --w: 18px; --h: 18px; --o:.55; --dur: 18s; --del:-2s;  --dx: 18px; --r: 10deg;  --sway: 4.1s; }
+.leaf:nth-child(2)  { --x: 8%;  --w: 24px; --h: 24px; --o:.72; --dur: 15s; --del:-9s;  --dx: 28px; --r: 40deg;  --sway: 4.8s; }
+.leaf:nth-child(3)  { --x: 12%; --w: 20px; --h: 20px; --o:.60; --dur: 20s; --del:-13s; --dx: 16px; --r: 80deg;  --sway: 3.9s; }
+.leaf:nth-child(4)  { --x: 16%; --w: 28px; --h: 28px; --o:.80; --dur: 14s; --del:-6s;  --dx: 30px; --r: 15deg;  --sway: 5.2s; }
+.leaf:nth-child(5)  { --x: 20%; --w: 18px; --h: 18px; --o:.52; --dur: 22s; --del:-18s; --dx: 20px; --r: 70deg;  --sway: 4.0s; }
+.leaf:nth-child(6)  { --x: 24%; --w: 26px; --h: 26px; --o:.78; --dur: 16s; --del:-10s; --dx: 26px; --r: 5deg;   --sway: 4.6s; }
+.leaf:nth-child(7)  { --x: 28%; --w: 22px; --h: 22px; --o:.62; --dur: 19s; --del:-5s;  --dx: 22px; --r: 95deg;  --sway: 3.8s; }
+.leaf:nth-child(8)  { --x: 32%; --w: 30px; --h: 30px; --o:.82; --dur: 15s; --del:-12s; --dx: 34px; --r: 25deg;  --sway: 5.0s; }
+.leaf:nth-child(9)  { --x: 36%; --w: 20px; --h: 20px; --o:.58; --dur: 21s; --del:-16s; --dx: 18px; --r: 60deg;  --sway: 4.2s; }
+.leaf:nth-child(10) { --x: 40%; --w: 26px; --h: 26px; --o:.70; --dur: 14.5s;--del:-8s;  --dx: 30px; --r: 35deg;  --sway: 4.7s; }
+.leaf:nth-child(11) { --x: 44%; --w: 18px; --h: 18px; --o:.50; --dur: 24s; --del:-20s; --dx: 16px; --r: 120deg; --sway: 3.6s; }
+.leaf:nth-child(12) { --x: 48%; --w: 28px; --h: 28px; --o:.76; --dur: 16.5s;--del:-14s; --dx: 28px; --r: 18deg;  --sway: 5.3s; }
+.leaf:nth-child(13) { --x: 52%; --w: 16px; --h: 16px; --o:.45; --dur: 23s; --del:-3s;  --dx: 14px; --r: 75deg;  --sway: 3.7s; }
+.leaf:nth-child(14) { --x: 56%; --w: 32px; --h: 32px; --o:.84; --dur: 15.2s;--del:-11s; --dx: 36px; --r: 8deg;   --sway: 5.6s; }
+.leaf:nth-child(15) { --x: 60%; --w: 22px; --h: 22px; --o:.62; --dur: 19.5s;--del:-7s;  --dx: 20px; --r: 55deg;  --sway: 4.1s; }
+.leaf:nth-child(16) { --x: 64%; --w: 28px; --h: 28px; --o:.80; --dur: 14s; --del:-17s; --dx: 34px; --r: 28deg;  --sway: 5.1s; }
+.leaf:nth-child(17) { --x: 68%; --w: 18px; --h: 18px; --o:.52; --dur: 22s; --del:-9s;  --dx: 18px; --r: 100deg; --sway: 3.8s; }
+.leaf:nth-child(18) { --x: 72%; --w: 30px; --h: 30px; --o:.86; --dur: 15.8s;--del:-6s;  --dx: 38px; --r: 12deg;  --sway: 5.4s; }
+.leaf:nth-child(19) { --x: 76%; --w: 22px; --h: 22px; --o:.60; --dur: 20s; --del:-15s; --dx: 22px; --r: 66deg;  --sway: 4.0s; }
+.leaf:nth-child(20) { --x: 80%; --w: 26px; --h: 26px; --o:.74; --dur: 14.8s;--del:-4s;  --dx: 32px; --r: 38deg;  --sway: 4.9s; }
+.leaf:nth-child(21) { --x: 84%; --w: 16px; --h: 16px; --o:.50; --dur: 23s; --del:-19s; --dx: 16px; --r: 130deg; --sway: 3.7s; }
+.leaf:nth-child(22) { --x: 88%; --w: 32px; --h: 32px; --o:.88; --dur: 16.2s;--del:-10s; --dx: 40px; --r: 16deg;  --sway: 5.5s; }
+.leaf:nth-child(23) { --x: 92%; --w: 22px; --h: 22px; --o:.58; --dur: 21s; --del:-12s; --dx: 18px; --r: 72deg;  --sway: 4.2s; }
+.leaf:nth-child(24) { --x: 96%; --w: 28px; --h: 28px; --o:.80; --dur: 15.5s;--del:-7s;  --dx: 34px; --r: 22deg;  --sway: 5.0s; }
+
+.leaf:nth-child(25) { --x: 10%; --w: 34px; --h: 34px; --o:.78; --dur: 17s; --del:-21s; --dx: 42px; --r: 6deg;   --sway: 5.7s; }
+.leaf:nth-child(26) { --x: 26%; --w: 16px; --h: 16px; --o:.48; --dur: 25s; --del:-9s;  --dx: 14px; --r: 110deg; --sway: 3.4s; }
+.leaf:nth-child(27) { --x: 42%; --w: 24px; --h: 24px; --o:.66; --dur: 18.5s;--del:-14s; --dx: 26px; --r: 48deg;  --sway: 4.6s; }
+.leaf:nth-child(28) { --x: 58%; --w: 30px; --h: 30px; --o:.88; --dur: 15.1s;--del:-5s;  --dx: 38px; --r: 14deg;  --sway: 5.2s; }
+.leaf:nth-child(29) { --x: 74%; --w: 22px; --h: 22px; --o:.56; --dur: 22s; --del:-18s; --dx: 18px; --r: 90deg;  --sway: 3.9s; }
+.leaf:nth-child(30) { --x: 90%; --w: 26px; --h: 26px; --o:.76; --dur: 16.8s;--del:-11s; --dx: 30px; --r: 30deg;  --sway: 5.1s; }
+
+.leaf:nth-child(31) { --x: 6%;  --w: 20px; --h: 20px; --o:.62; --dur: 19s; --del:-24s; --dx: 22px; --r: 58deg;  --sway: 4.2s; }
+.leaf:nth-child(32) { --x: 33%; --w: 36px; --h: 36px; --o:.90; --dur: 14.2s;--del:-16s; --dx: 46px; --r: 10deg;  --sway: 5.9s; }
+.leaf:nth-child(33) { --x: 66%; --w: 18px; --h: 18px; --o:.52; --dur: 23.5s;--del:-20s; --dx: 16px; --r: 118deg; --sway: 3.6s; }
+.leaf:nth-child(34) { --x: 94%; --w: 28px; --h: 28px; --o:.82; --dur: 15.6s;--del:-13s; --dx: 36px; --r: 18deg;  --sway: 5.3s; }

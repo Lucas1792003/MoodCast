@@ -54,7 +54,6 @@ function pickRandom<T>(arr: T[]) {
   return arr.length ? arr[Math.floor(Math.random() * arr.length)] : null
 }
 
-/** Indoor “at-home” ideas (no POIs needed) */
 const INDOOR_IDEAS: Suggestion[] = [
   {
     headline: "Cozy reading time",
@@ -347,7 +346,6 @@ export async function GET(req: NextRequest) {
 
   const radiusM = 2000
 
-  // Overpass safe fetch
   let elements: any[] = []
   try {
     const overpass = await fetchOverpass(lat, lon, radiusM)
@@ -360,7 +358,6 @@ export async function GET(req: NextRequest) {
     .map((el) => elementToPlace(el, lat, lon))
     .filter(Boolean) as Place[]
 
-  // dedup by name+category, keep closest for distance display
   const dedup = new Map<string, Place>()
   for (const p of all) {
     const key = `${p.name.toLowerCase()}::${p.category}`
@@ -380,7 +377,6 @@ export async function GET(req: NextRequest) {
   let secondary: Suggestion[] = []
 
   try {
-    // ✅ Random pick from nearby candidates (not nearest)
     const candidates = (filtered.length ? filtered : pool).slice(0, 30)
     const chosen = pickRandom(candidates)
 
