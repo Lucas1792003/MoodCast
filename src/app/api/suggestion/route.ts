@@ -33,7 +33,11 @@ type Place = {
 type Suggestion = {
   headline: string
   message: string
-  place?: Pick<Place, "name" | "category" | "distanceM" | "address" | "osmUrl">
+  // Include coords so the client can render a map + route.
+  place?: Pick<
+    Place,
+    "id" | "name" | "category" | "lat" | "lon" | "distanceM" | "address" | "osmUrl"
+  >
 }
 
 type ApiOut = {
@@ -282,8 +286,11 @@ function vibeCopy(kind: string, w: WeatherInput, place?: Place): Suggestion {
             : "Night plan",
     message: msg,
     place: {
+      id: place.id,
       name: place.name,
       category: place.category,
+      lat: place.lat,
+      lon: place.lon,
       distanceM: place.distanceM,
       address: place.address,
       osmUrl: place.osmUrl,
@@ -318,8 +325,11 @@ function toSecondary(place: Place): Suggestion {
     headline: place.name,
     message: `${place.category} · ~${Math.round(place.distanceM)}m away`,
     place: {
+      id: place.id,
       name: place.name,
       category: place.category,
+      lat: place.lat,
+      lon: place.lon,
       distanceM: place.distanceM,
       address: place.address,
       osmUrl: place.osmUrl,
@@ -381,14 +391,17 @@ export async function GET(req: NextRequest) {
     const chosen = pickRandom(candidates)
 
     if (preferIndoorPrimary) {
-      primary = indoorPrimary(kind)
-
-      const nearbyIndoor = (filtered.length ? filtered : pool)
+      const indoorPool = (filtered.length ? filtered : pool)
         .filter((p) =>
           ["mall", "cafe", "dessert", "museum", "cinema", "gym", "food", "market"].includes(p.category)
         )
-        .filter((p) => (chosen ? p.id !== chosen.id : true))
-        .slice(0, 30)
+        .slice(0, 40)
+
+      const primaryPlace = pickRandom(indoorPool.slice(0, 20)) ?? (chosen ?? undefined)
+      primary = primaryPlace ? vibeCopy(kind, weatherUsed, primaryPlace) : indoorPrimary(kind)
+
+      const nearbyIndoor = indoorPool
+        .filter((p) => (primaryPlace ? p.id !== primaryPlace.id : true))
         .sort(() => Math.random() - 0.5)
         .slice(0, 3)
         .map(toSecondary)

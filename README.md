@@ -1,134 +1,49 @@
 # MoodCast 🌤️🌙
 
-MoodCast is a clean, animated weather web app built with **Next.js (App Router)** + **Tailwind CSS**.  
-It pulls real-time weather from an API and updates the UI to match real-world conditions (day/night, weather icons, and animated backgrounds).
+MoodCast is a simple, aesthetic weather + “what to do nearby” app.
+Type a city, see the current vibe (day/night + conditions), and get quick activity ideas around you.
 
 ---
 
-## Features
+## Who it’s for
 
-- **Real-time weather** by searched location
-- **Day/Night UI switching** (based on API `is_day`)
-- **Weather condition icons** (Lucide React)
-- **Animated card background** using short MP4 loops:
-  - Day card → `public/day.mp4`
-  - Night card → `public/night.mp4`
-- Clean bright daytime UI, darker night UI
+- People who want a fast weather check that *feels* nice
+- Anyone deciding “what should I do today?” when they’re out (or traveling)
+- Students / commuters who want a clean, no-noise forecast + ideas nearby
 
 ---
 
-## Tech Stack
+## What’s cool about it
 
-- **Next.js** (App Router)
-- **React**
-- **TypeScript**
-- **Tailwind CSS**
-- **Lucide React** (icons)
+- **Vibe-based UI** that shifts for **day vs night**
+- **Animated backgrounds** (day/night loops) for that “alive” feeling
+- **Live activities suggestions** based on:
+  - current weather
+  - what’s nearby (parks, food, cafes, etc.)
+- **Map + routing preview**
+  - shows your position, destination, and route
+  - route mode: **Walk / Bike / Drive**
+- **Quick actions**
+  - Start navigation
+  - Open directions in **Google Maps** or **Apple Maps**
+- **Clean cards**
+  - distance + ETA + category tags
+  - category tags are color-coded
 
 ---
 
-## Getting Started
+## How to use
 
-### 1) Install dependencies
+1. Search a city to view the weather vibe.
+2. Tap **Suggestion activity for today** to use GPS and get nearby ideas.
+3. Pick a place from “Other things you can do nearby”.
+4. Choose **Walk / Bike / Drive**, then hit **Start** or open in Google/Apple Maps.
 
-```bash
-npm install
-2) Add your background videos
-Place your videos in the public/ folder:
+---
 
-arduino
-Copy code
-public/day.mp4
-public/night.mp4
-Tip: Keep them short (2–6 seconds), loop-friendly, and ideally under ~3–8 MB for fast loading.
+## Notes
 
-3) Run the dev server
-bash
-Copy code
-npm run dev
-Open:
+- If location permission is off, map + live suggestions won’t show.
+- Suggestions can change each time you refresh (to keep things fresh).
 
-arduino
-Copy code
-http://localhost:3000
-How Day/Night Works
-The app uses the weather API response field:
-
-is_day: 1 → day
-
-is_day: 0 → night
-
-The page background uses weather.isDay (boolean).
-The card uses weather.is_day (number) passed into the component.
-
-✅ Make sure the data you pass into WeatherCard includes is_day, for example:
-
-ts
-Copy code
-const weatherForComponents = {
-  temperature_2m: weather.temperature,
-  weather_code: weather.weatherCode,
-  is_day: weather.isDay ? 1 : 0,
-}
-Project Structure (typical)
-csharp
-Copy code
-src/
-  app/
-    api/
-      weather/
-        route.ts        # Weather API endpoint
-    page.tsx            # Main UI
-  components/
-    WeatherCard.tsx     # Weather card (MP4 day/night background)
-public/
-  day.mp4
-  night.mp4
-Your exact names may differ slightly, but this is the general layout.
-
-WeatherCard MP4 Background
-The weather card renders a looping MP4 (no Next.js image compression):
-
-tsx
-Copy code
-<video
-  className="absolute inset-0 h-full w-full object-cover"
-  src={isDay ? "/day.mp4" : "/night.mp4"}
-  autoPlay
-  muted
-  loop
-  playsInline
-  preload="auto"
-/>
-Troubleshooting
-Card shows day when it should be night
-That means weather.is_day is missing in the data passed to WeatherCard.
-Fix: pass is_day from the API result (see above).
-
-Video not showing
-Confirm files exist:
-
-public/day.mp4
-
-public/night.mp4
-
-Restart the dev server after adding files:
-
-bash
-Copy code
-npm run dev
-Check the browser console for 404 errors.
-
-Video looks stretched
-Try using a video with an aspect ratio closer to your card size (e.g., 16:9), and keep:
-
-css
-Copy code
-object-cover
-Scripts
-bash
-Copy code
-npm run dev       # Start dev server
-npm run build     # Build for production
-npm run start     # Start production server
-npm run lint      # Lint
+---

@@ -23,9 +23,6 @@ export const metadata: Metadata = {
     ],
     shortcut: ["/app_icon.png"],
   },
-
-  // ✅ optional but recommended if you add it
-  // manifest: "/manifest.webmanifest",
 }
 
 
