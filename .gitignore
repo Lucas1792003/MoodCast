@@ -32,3 +32,7 @@ out
 *.njsproj
 *.sln
 *.sw?
+
+app.md
+.app*.md
+

@@ -23,6 +23,8 @@ type NavigationControlsProps = {
   selectedPlace: { lat: number; lon: number } | null
   googleMapsHref: string
   appleMapsHref: string
+  onStartNavigation?: () => void
+  isNavigating?: boolean
 }
 
 export function NavigationControls({
@@ -35,6 +37,8 @@ export function NavigationControls({
   selectedPlace,
   googleMapsHref,
   appleMapsHref,
+  onStartNavigation,
+  isNavigating,
 }: NavigationControlsProps) {
   const updatedAgo = timeAgo(lastGpsAt ?? undefined, now)
   const highAccuracy = gpsAccuracyM != null && gpsAccuracyM <= 30
@@ -88,13 +92,18 @@ export function NavigationControls({
         <div className="mt-2 grid grid-cols-3 gap-2">
           <button
             type="button"
-            onClick={() => {
-              // start navigation state (optional)
-            }}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs border border-slate-200 bg-white hover:bg-slate-50"
+            onClick={onStartNavigation}
+            disabled={!userPos || !selectedPlace || isNavigating}
+            className={cn(
+              "inline-flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs",
+              isNavigating
+                ? "bg-blue-600 text-white"
+                : "border border-slate-200 bg-white hover:bg-slate-50",
+              (!userPos || !selectedPlace) && "opacity-50 cursor-not-allowed"
+            )}
           >
             <Play className="w-4 h-4" />
-            Start
+            {isNavigating ? "Navigating" : "Start"}
           </button>
 
           <a
@@ -171,10 +180,18 @@ export function NavigationControls({
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="inline-flex w-[220px] flex-none items-center justify-center gap-2 rounded-xl px-4 py-2 text-xs border border-slate-200 bg-white hover:bg-slate-50"
+              onClick={onStartNavigation}
+              disabled={!userPos || !selectedPlace || isNavigating}
+              className={cn(
+                "inline-flex w-[220px] flex-none items-center justify-center gap-2 rounded-xl px-4 py-2 text-xs",
+                isNavigating
+                  ? "bg-blue-600 text-white"
+                  : "border border-slate-200 bg-white hover:bg-slate-50",
+                (!userPos || !selectedPlace) && "opacity-50 cursor-not-allowed"
+              )}
             >
               <Play className="w-4 h-4" />
-              Start
+              {isNavigating ? "Navigating" : "Start"}
             </button>
           </div>
 

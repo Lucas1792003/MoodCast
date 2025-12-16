@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { createRoot, type Root } from "react-dom/client"
 import {
   CakeSlice,
@@ -99,6 +99,8 @@ export default function ActivityMap({
   selectedPlaceId,
   onSelectPlace,
   className,
+  isNavigating = false,
+  compassHeading = null,
 }: {
   center: LngLat
   user?: LngLat
@@ -108,6 +110,10 @@ export default function ActivityMap({
   selectedPlaceId?: string
   onSelectPlace?: (placeId: string) => void
   className?: string
+  /** When true, map will rotate based on compass heading */
+  isNavigating?: boolean
+  /** Compass heading in degrees (0 = north, 90 = east, etc.) */
+  compassHeading?: number | null
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapRef = useRef<any>(null)
@@ -124,6 +130,7 @@ export default function ActivityMap({
   const userRef = useRef<LngLat | undefined>(user)
   const destRef = useRef<LngLat | undefined>(destination)
   const initialFitDoneRef = useRef(false)
+  const lastBearingRef = useRef<number>(0)
 
   useEffect(() => {
     userRef.current = user
@@ -132,6 +139,51 @@ export default function ActivityMap({
   useEffect(() => {
     destRef.current = destination
   }, [destination?.lat, destination?.lng])
+
+  // Rotate map based on compass heading during navigation
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !isNavigating) {
+      // Reset bearing when not navigating
+      if (map && lastBearingRef.current !== 0) {
+        map.easeTo({ bearing: 0, duration: 500 })
+        lastBearingRef.current = 0
+      }
+      return
+    }
+
+    if (compassHeading === null || !Number.isFinite(compassHeading)) return
+
+    // Map bearing is opposite of compass heading (map rotates under you)
+    const targetBearing = compassHeading
+
+    // Only update if bearing changed significantly (> 3 degrees)
+    const diff = Math.abs(targetBearing - lastBearingRef.current)
+    const normalizedDiff = diff > 180 ? 360 - diff : diff
+
+    if (normalizedDiff > 3) {
+      lastBearingRef.current = targetBearing
+      map.easeTo({
+        bearing: targetBearing,
+        duration: 300,
+        easing: (t: number) => t, // Linear for smooth rotation
+      })
+    }
+  }, [isNavigating, compassHeading])
+
+  // Keep map centered on user during navigation
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !isNavigating || !user) return
+
+    // Center on user with slight offset toward bottom so navigation panel doesn't cover the route
+    map.easeTo({
+      center: [user.lng, user.lat],
+      zoom: 16, // Closer zoom during navigation
+      duration: 500,
+      offset: [0, 50], // Offset upward so user position is lower on screen
+    })
+  }, [isNavigating, user?.lat, user?.lng])
 
   const recenterCtrlRef = useRef<{ ctrl: any; root: Root | null } | null>(null)
 
@@ -304,7 +356,7 @@ export default function ActivityMap({
           root.render(<UserRound size={20} strokeWidth={2.2} />)
           userRootRef.current = root
 
-          userMarkerRef.current = new maplibregl.Marker({ element: el, anchor: "bottom" })
+          userMarkerRef.current = new maplibregl.Marker({ element: el, anchor: "center" })
             .setLngLat([user.lng, user.lat])
             .addTo(map)
         } else {
