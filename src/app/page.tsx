@@ -15,6 +15,7 @@ import WeatherThemeLayer from "@/components/weather-theme-layer"
 import WeatherInfoGridCycler from "@/components/weather-info-grid-cycler"
 
 import { ResponsiveCardLayout } from "@/components/cards"
+import { FloatingFanMenu } from "@/components/FloatingFanMenu"
 import { useCardPreferences } from "@/hooks/useCardPreferences"
 import type { CardId } from "@/config/cards"
 
@@ -379,6 +380,11 @@ export default function Page() {
           </>
         )}
       </main>
+
+      {/* Floating Fan Menu - only visible on mobile when weather is loaded */}
+      {!loading && weatherForComponents && (
+        <FloatingFanMenu onSelect={setActiveTab} />
+      )}
     </WeatherThemeLayer>
   )
 }
