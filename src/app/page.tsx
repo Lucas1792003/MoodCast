@@ -14,6 +14,10 @@ import ARSkyViewer from "@/components/ar-sky-viewer"
 import WeatherThemeLayer from "@/components/weather-theme-layer"
 import WeatherInfoGridCycler from "@/components/weather-info-grid-cycler"
 
+import { ResponsiveCardLayout } from "@/components/cards"
+import { useCardPreferences } from "@/hooks/useCardPreferences"
+import type { CardId } from "@/config/cards"
+
 import { geocodeCity, getWeather } from "@/lib/weather-client"
 import type { WeatherResult } from "@/lib/weather-types"
 
@@ -48,6 +52,13 @@ export default function Page() {
 
   const [hasSearched, setHasSearched] = useState(false)
 
+  // Card preferences for customization
+  const {
+    preferences,
+    setActiveTab,
+    getVisibleCards,
+  } = useCardPreferences()
+
   const lastGeoCacheRef = useRef<{
     lat: number
     lon: number
@@ -55,7 +66,7 @@ export default function Page() {
     fetchedAt: number
   } | null>(null)
 
-  const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000 
+  const GEO_CACHE_MAX_AGE_MS = 10 * 60 * 1000
   const GEO_MATCH_RADIUS_M = 250
 
   const toRad = (d: number) => (d * Math.PI) / 180
@@ -145,7 +156,7 @@ export default function Page() {
             }
           })()
         } catch {
-          if (active) setError("Couldn’t load weather for your location.")
+          if (active) setError("Couldn't load weather for your location.")
         } finally {
           if (active) setLoading(false)
         }
@@ -155,14 +166,14 @@ export default function Page() {
         if (geoErr?.code === 1) {
           setError("Location permission denied. Please allow location access.")
         } else {
-          setError("Couldn’t get your current location.")
+          setError("Couldn't get your current location.")
         }
         setLoading(false)
       },
       {
         enableHighAccuracy: true,
         timeout: 8000,
-        maximumAge: 5 * 60 * 1000, 
+        maximumAge: 5 * 60 * 1000,
       }
     )
 
@@ -229,7 +240,6 @@ export default function Page() {
       setWeather(w)
       setLocationLabel(w.locationName || display)
 
-      // ✅ user searched a city
       setHasSearched(true)
     } catch {
       setError("Location not found or weather service unavailable.")
@@ -251,6 +261,45 @@ export default function Page() {
     if (c >= 95 && c <= 99) return "Thunderstorm"
     return "Mixed conditions"
   }
+
+  // Build card content map for ResponsiveCardLayout
+  const cardContent: Record<CardId, React.ReactNode> = {
+    weather: null, // Handled separately (always at top)
+    "weather-info": null, // Handled separately (always at top)
+    mood: weatherForComponents ? (
+      <MoodSection
+        temperature={weatherForComponents.temperature_2m}
+        weatherCode={weatherForComponents.weather_code}
+      />
+    ) : null,
+    outfit: weatherForComponents ? (
+      <OutfitSection
+        temperature={weatherForComponents.apparent_temperature}
+        weatherCode={weatherForComponents.weather_code}
+        locationLabel={locationLabel}
+        lat={weather?.latitude ?? null}
+        lon={weather?.longitude ?? null}
+      />
+    ) : null,
+    activity: weatherForComponents ? (
+      <ActivitySection
+        weather={weatherForComponents}
+        location={locationLabel}
+        selectedCityEnabled={hasSearched}
+        selectedLat={hasSearched ? weather?.latitude : null}
+        selectedLon={hasSearched ? weather?.longitude : null}
+      />
+    ) : null,
+    health: weatherForComponents ? (
+      <HealthSection
+        temperature={weatherForComponents.temperature_2m}
+        humidity={weatherForComponents.relative_humidity_2m}
+      />
+    ) : null,
+    "ar-sky": null, // Handled separately (always at bottom)
+  }
+
+  const visibleCards = getVisibleCards()
 
   return (
     <WeatherThemeLayer
@@ -295,6 +344,7 @@ export default function Page() {
 
         {!loading && weatherForComponents && (
           <>
+            {/* Weather section - always visible at top */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-stretch">
               <div className="lg:col-span-2 h-full">
                 <div className="h-full">
@@ -310,41 +360,22 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <MoodSection
-                temperature={weatherForComponents.temperature_2m}
+            {/* Responsive card layout - tabs on mobile, grid on desktop */}
+            <ResponsiveCardLayout
+              activeTab={preferences.activeTab}
+              onTabChange={setActiveTab}
+              visibleCards={visibleCards}
+            >
+              {cardContent}
+            </ResponsiveCardLayout>
+
+            {/* AR Sky Viewer - always at bottom on desktop, hidden on mobile tabs */}
+            <div className="hidden lg:block">
+              <ARSkyViewer
                 weatherCode={weatherForComponents.weather_code}
-              />
-              <OutfitSection
-                temperature={weatherForComponents.apparent_temperature}
-                weatherCode={weatherForComponents.weather_code}
-                locationLabel={locationLabel}
-                lat={weather?.latitude ?? null}
-                lon={weather?.longitude ?? null}
-              />
-            </div>
-
-            <div className="mb-8">
-              <ActivitySection
-                weather={weatherForComponents}
-                location={locationLabel}
-                selectedCityEnabled={hasSearched}
-                selectedLat={hasSearched ? weather?.latitude : null}
-                selectedLon={hasSearched ? weather?.longitude : null}
-              />
-            </div>
-
-            <div className="mb-8">
-              <HealthSection
                 temperature={weatherForComponents.temperature_2m}
-                humidity={weatherForComponents.relative_humidity_2m}
               />
             </div>
-
-            <ARSkyViewer
-              weatherCode={weatherForComponents.weather_code}
-              temperature={weatherForComponents.temperature_2m}
-            />
           </>
         )}
       </main>
