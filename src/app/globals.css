@@ -334,28 +334,112 @@ html.mc-force-motion *::after {
 }
 
 /* Heatwave shimmer (rises from bottom) */
-.mc-heat {
+/* =========================
+   HEATWAVE (Fun + Clean)
+   ========================= */
+
+.mc-heat,
+.mc-heat--2,
+.mc-heat-sparkle {
   position: absolute;
-  inset: -10% -20% -20% -20%;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 102, 0, 0.00) 0px,
-      rgba(255, 102, 0, 0.10) 10px,
-      rgba(255, 102, 0, 0.00) 20px
-    );
-  opacity: 0.55;
-  filter: blur(0.8px);
-  transform: translateY(30%);
-  animation: mc-heat-rise 6.5s ease-in-out infinite;
-  mix-blend-mode: overlay;
+  inset: -20%;
+  pointer-events: none;
 }
 
-.mc-heat--2 {
-  opacity: 0.35;
-  filter: blur(1.2px);
-  animation-duration: 8.5s;
+/* Warm haze layer */
+.mc-heat {
+  opacity: 0.45;
+  filter: blur(18px) saturate(140%);
+  mix-blend-mode: soft-light;
+
+  background:
+    radial-gradient(60% 40% at 20% 20%, rgba(255, 180, 120, 0.55), transparent 60%),
+    radial-gradient(55% 45% at 80% 25%, rgba(255, 220, 140, 0.45), transparent 62%),
+    radial-gradient(50% 40% at 55% 75%, rgba(255, 140, 110, 0.40), transparent 60%),
+    linear-gradient(180deg, rgba(255, 200, 120, 0.16), rgba(255, 120, 80, 0.10));
+
+  animation:
+    mc-heat-drift 7.5s ease-in-out infinite,
+    mc-heat-breathe 3.8s ease-in-out infinite;
 }
+
+/* Secondary layer: offset + slower + slightly sharper to sell shimmer */
+.mc-heat--2 {
+  opacity: 0.30;
+  filter: blur(12px) saturate(150%);
+  mix-blend-mode: soft-light;
+
+  background:
+    radial-gradient(50% 35% at 35% 35%, rgba(255, 210, 120, 0.45), transparent 62%),
+    radial-gradient(45% 35% at 70% 55%, rgba(255, 160, 120, 0.36), transparent 62%),
+    repeating-linear-gradient(
+      -12deg,
+      rgba(255, 255, 255, 0.00) 0px,
+      rgba(255, 255, 255, 0.00) 18px,
+      rgba(255, 255, 255, 0.08) 28px,
+      rgba(255, 255, 255, 0.00) 44px
+    );
+
+  animation:
+    mc-heat-drift-2 10.5s ease-in-out infinite,
+    mc-heat-ripple 2.6s ease-in-out infinite;
+}
+
+/* Little “sun glitter” dust (very subtle, makes it fun) */
+.mc-heat-sparkle {
+  opacity: 0.18;
+  filter: blur(0.5px);
+  mix-blend-mode: screen;
+
+  background:
+    radial-gradient(circle at 12% 28%, rgba(255, 255, 255, 0.35) 0 1px, transparent 2px),
+    radial-gradient(circle at 26% 62%, rgba(255, 255, 255, 0.28) 0 1px, transparent 2px),
+    radial-gradient(circle at 48% 40%, rgba(255, 255, 255, 0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 30%, rgba(255, 255, 255, 0.30) 0 1px, transparent 2px),
+    radial-gradient(circle at 84% 68%, rgba(255, 255, 255, 0.24) 0 1px, transparent 2px);
+
+  animation: mc-heat-sparkle 6.5s ease-in-out infinite;
+}
+
+/* Motion */
+@keyframes mc-heat-drift {
+  0%   { transform: translate3d(-1.5%, -1.2%, 0) scale(1.02); }
+  50%  { transform: translate3d( 1.8%,  0.9%, 0) scale(1.05); }
+  100% { transform: translate3d(-1.5%, -1.2%, 0) scale(1.02); }
+}
+
+@keyframes mc-heat-drift-2 {
+  0%   { transform: translate3d( 2.2%,  0.8%, 0) scale(1.03); }
+  50%  { transform: translate3d(-1.6%, -1.0%, 0) scale(1.06); }
+  100% { transform: translate3d( 2.2%,  0.8%, 0) scale(1.03); }
+}
+
+@keyframes mc-heat-breathe {
+  0%, 100% { opacity: 0.40; }
+  50%      { opacity: 0.52; }
+}
+
+/* A gentle “wobble” that reads like heat shimmer, not distortion */
+@keyframes mc-heat-ripple {
+  0%, 100% { transform: translate3d(0, 0, 0) skewX(-0.6deg); }
+  50%      { transform: translate3d(0, -0.8%, 0) skewX(0.9deg); }
+}
+
+@keyframes mc-heat-sparkle {
+  0%   { transform: translate3d(-0.6%, 0.4%, 0); opacity: 0.12; }
+  50%  { transform: translate3d( 0.8%, -0.6%, 0); opacity: 0.22; }
+  100% { transform: translate3d(-0.6%, 0.4%, 0); opacity: 0.12; }
+}
+
+/* Respect reduced motion (and your app’s motion toggles if you use them) */
+@media (prefers-reduced-motion: reduce) {
+  .mc-heat,
+  .mc-heat--2,
+  .mc-heat-sparkle {
+    animation: none !important;
+  }
+}
+
 
 @keyframes mc-heat-rise {
   0% { transform: translateY(35%); }

@@ -153,7 +153,7 @@ export default function Page() {
 
               if (label && active) setLocationLabel(label)
             } catch {
-
+              // ignore
             }
           })()
         } catch {
@@ -302,6 +302,18 @@ export default function Page() {
 
   const visibleCards = getVisibleCards()
 
+  // When user taps a fan icon on mobile, switch the tab AND auto-scroll to the cards area.
+  const cardsRef = useRef<HTMLDivElement | null>(null)
+
+  const handleFanSelect = (id: CardId) => {
+    setActiveTab(id)
+    requestAnimationFrame(() => {
+      const el = cardsRef.current
+      if (!el) return
+      el.scrollIntoView({ behavior: "smooth", block: "start" })
+    })
+  }
+
   return (
     <WeatherThemeLayer
       weatherCode={weatherForComponents?.weather_code ?? 3}
@@ -362,13 +374,15 @@ export default function Page() {
             </div>
 
             {/* Responsive card layout - tabs on mobile, grid on desktop */}
-            <ResponsiveCardLayout
-              activeTab={preferences.activeTab}
-              onTabChange={setActiveTab}
-              visibleCards={visibleCards}
-            >
-              {cardContent}
-            </ResponsiveCardLayout>
+            <div ref={cardsRef} id="cards" className="scroll-mt-[96px]">
+              <ResponsiveCardLayout
+                activeTab={preferences.activeTab}
+                onTabChange={setActiveTab}
+                visibleCards={visibleCards}
+              >
+                {cardContent}
+              </ResponsiveCardLayout>
+            </div>
 
             {/* AR Sky Viewer - always at bottom on desktop, hidden on mobile tabs */}
             <div className="hidden lg:block">
@@ -383,7 +397,7 @@ export default function Page() {
 
       {/* Floating Fan Menu - only visible on mobile when weather is loaded */}
       {!loading && weatherForComponents && (
-        <FloatingFanMenu onSelect={setActiveTab} />
+        <FloatingFanMenu onSelect={handleFanSelect} />
       )}
     </WeatherThemeLayer>
   )

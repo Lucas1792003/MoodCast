@@ -19,8 +19,11 @@ import {
 import { PrimaryCard } from "./activity/PrimaryCard"
 import { SuggestionCard } from "./activity/SuggestionCard"
 import { NavigationControls } from "./activity/NavigationControls"
+import { NavigationPanel } from "./activity/NavigationPanel"
 import { useGpsTracking } from "./activity/useGpsTracking"
 import { useRouting } from "./activity/useRouting"
+import { useNavigation } from "./activity/useNavigation"
+import { useCompassHeading } from "./activity/useCompassHeading"
 
 export default function ActivitySection({
   weather,
@@ -84,6 +87,29 @@ export default function ActivitySection({
     now,
     hasData: !!data,
   })
+
+  // Navigation hook for turn-by-turn directions
+  const navigation = useNavigation({
+    userPos,
+    destination: selectedPlace,
+    mode,
+    onArrival: () => {
+      // Could show a toast or celebration animation here
+      console.log("You have arrived!")
+    },
+  })
+
+  // Compass heading for map rotation during navigation
+  const { heading: compassHeading, requestPermission: requestCompassPermission } = useCompassHeading({
+    enabled: navigation.isNavigating,
+  })
+
+  // Wrapper to request compass permission before starting navigation (needed for iOS)
+  const handleStartNavigation = async () => {
+    // Request compass permission first (iOS requires user gesture)
+    await requestCompassPermission()
+    navigation.startNavigation()
+  }
 
   const subtitleByPlaceId = useMemo(
     () => generateSubtitleByPlaceId(data?.secondary, subtitleSeed, SUBTITLE_VARIANTS),
@@ -258,7 +284,10 @@ export default function ActivitySection({
       </div>
 
       {/* Main content area */}
-      <div className="mt-5 relative rounded-3xl border border-slate-200 bg-slate-50 overflow-hidden min-h-[260px] p-4">
+      <div className={cn(
+        "mt-5 relative rounded-3xl border border-slate-200 bg-slate-50 overflow-hidden p-4",
+        phase === "idle" || phase === "loading" ? "min-h-[80px]" : "min-h-[260px]"
+      )}>
         <LayoutGroup>
           <AnimatePresence mode="wait">
             {phase === "idle" && (
@@ -267,7 +296,7 @@ export default function ActivitySection({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-full flex items-center justify-center text-slate-600"
+                className="flex items-center justify-center text-slate-600 py-2"
               >
                 Click a button to get today's idea ✨
               </motion.div>
@@ -279,7 +308,7 @@ export default function ActivitySection({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="h-full flex items-center justify-center text-slate-700"
+                className="flex items-center justify-center text-slate-700 py-2"
               >
                 <div className="flex items-center gap-3">
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -339,16 +368,34 @@ export default function ActivitySection({
                 <div className="flex flex-col">
                   {canShowMap ? (
                     <>
-                      <ActivityMap
-                        center={{ lng: selectedPlace!.lon, lat: selectedPlace!.lat }}
-                        user={{ lng: userPos!.lng, lat: userPos!.lat }}
-                        destination={{ lng: selectedPlace!.lon, lat: selectedPlace!.lat }}
-                        routeGeojson={routeGeojson}
-                        places={allPlaces}
-                        selectedPlaceId={selectedPlaceId ?? undefined}
-                        onSelectPlace={(id) => selectPlace(id)}
-                        className="w-full flex-1 min-h-[320px] rounded-3xl overflow-hidden border border-slate-200 bg-slate-50"
-                      />
+                      <div className="relative w-full flex-1 min-h-[320px] rounded-3xl overflow-hidden border border-slate-200 bg-slate-50">
+                        <ActivityMap
+                          center={{ lng: selectedPlace!.lon, lat: selectedPlace!.lat }}
+                          user={{ lng: userPos!.lng, lat: userPos!.lat }}
+                          destination={{ lng: selectedPlace!.lon, lat: selectedPlace!.lat }}
+                          routeGeojson={navigation.isNavigating ? navigation.routeGeometry : routeGeojson}
+                          places={allPlaces}
+                          selectedPlaceId={selectedPlaceId ?? undefined}
+                          onSelectPlace={(id) => selectPlace(id)}
+                          className="w-full h-full"
+                          isNavigating={navigation.isNavigating}
+                          compassHeading={compassHeading}
+                        />
+
+                        {/* Navigation Panel overlay */}
+                        <NavigationPanel
+                          isNavigating={navigation.isNavigating}
+                          currentStep={navigation.currentStep}
+                          nextStep={navigation.nextStep}
+                          distanceToNextStepM={navigation.distanceToNextStepM}
+                          remainingDistanceM={navigation.remainingDistanceM}
+                          remainingDurationS={navigation.remainingDurationS}
+                          arrivalTime={navigation.arrivalTime}
+                          currentStepIndex={navigation.currentStepIndex}
+                          totalSteps={navigation.steps.length}
+                          onStop={navigation.stopNavigation}
+                        />
+                      </div>
 
                       <NavigationControls
                         mode={mode}
@@ -360,6 +407,8 @@ export default function ActivitySection({
                         selectedPlace={selectedPlace}
                         googleMapsHref={googleMapsHref}
                         appleMapsHref={appleMapsHref}
+                        onStartNavigation={handleStartNavigation}
+                        isNavigating={navigation.isNavigating}
                       />
                     </>
                   ) : (
@@ -388,7 +437,7 @@ export default function ActivitySection({
                   <div>
                     <div className="text-sm font-semibold text-slate-700 mb-3">Other things you can do nearby</div>
                     {data.secondary?.length ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
                         {data.secondary.map((s, i) => {
                           const p = s.place
                           const pid = p?.id
