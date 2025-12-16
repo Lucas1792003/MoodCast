@@ -122,9 +122,16 @@ export default function ActivityMap({
   const popupRef = useRef<any>(null)
 
   const userRef = useRef<LngLat | undefined>(user)
+  const destRef = useRef<LngLat | undefined>(destination)
+  const initialFitDoneRef = useRef(false)
+
   useEffect(() => {
     userRef.current = user
   }, [user?.lat, user?.lng])
+
+  useEffect(() => {
+    destRef.current = destination
+  }, [destination?.lat, destination?.lng])
 
   const recenterCtrlRef = useRef<{ ctrl: any; root: Root | null } | null>(null)
 
@@ -171,16 +178,37 @@ export default function ActivityMap({
           const root = createRoot(iconWrap)
           root.render(<LocateFixed size={18} strokeWidth={2.2} />)
 
-          btn.addEventListener("click", () => {
+          btn.addEventListener("click", async () => {
             const u = userRef.current
-            if (!u) return
-            const z = m.getZoom?.() ?? 13
-            m.flyTo({
-              center: [u.lng, u.lat],
-              zoom: Math.max(z, 14),
-              essential: true,
-              duration: 700,
-            })
+            const d = destRef.current
+            if (!u && !d) return
+
+            const maplibregl = (await import("maplibre-gl")).default
+            const bounds = new maplibregl.LngLatBounds()
+
+            if (u) bounds.extend([u.lng, u.lat])
+            if (d) bounds.extend([d.lng, d.lat])
+
+            // If both user and destination exist, fit to show the full route
+            if (u && d) {
+              m.fitBounds(bounds, { padding: 70, maxZoom: 15, duration: 700 })
+            } else if (u) {
+              // Only user position - center on user
+              m.flyTo({
+                center: [u.lng, u.lat],
+                zoom: 14,
+                essential: true,
+                duration: 700,
+              })
+            } else if (d) {
+              // Only destination - center on destination
+              m.flyTo({
+                center: [d.lng, d.lat],
+                zoom: 14,
+                essential: true,
+                duration: 700,
+              })
+            }
           })
 
           container.appendChild(btn)
@@ -410,19 +438,14 @@ export default function ActivityMap({
         if (map.getSource(sourceId)) map.removeSource(sourceId)
       }
 
-      // FIT bounds
-      const bounds = new maplibregl.LngLatBounds()
-      let hasAny = false
-
-      if (user) {
-        bounds.extend([user.lng, user.lat])
-        hasAny = true
+      // FIT bounds - only on initial load, not on every update
+      if (!initialFitDoneRef.current && (user || destination)) {
+        const bounds = new maplibregl.LngLatBounds()
+        if (user) bounds.extend([user.lng, user.lat])
+        if (destination) bounds.extend([destination.lng, destination.lat])
+        map.fitBounds(bounds, { padding: 70, maxZoom: 15, duration: 900 })
+        initialFitDoneRef.current = true
       }
-      if (destination) {
-        bounds.extend([destination.lng, destination.lat])
-        hasAny = true
-      }
-      if (hasAny) map.fitBounds(bounds, { padding: 70, maxZoom: 15, duration: 900 })
     })()
   }, [
     user?.lat,
