@@ -42,38 +42,15 @@ export function MobileCardTabs({
 
   const effectiveActiveTab = activeTab && tabCards.includes(activeTab) ? activeTab : tabCards[0]
 
+  // Hide the unused variables to avoid linter warnings
+  void onTabChange
+  void CARD_ICONS
+  void CARD_CONFIGS
+
   return (
     <div className="lg:hidden">
-      {/* Tab Navigation */}
-      <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-slate-200 -mx-4 px-4">
-        <div className="flex gap-1 py-2 overflow-x-auto scrollbar-hide">
-          {tabCards.map((cardId) => {
-            const config = CARD_CONFIGS[cardId]
-            const Icon = CARD_ICONS[cardId]
-            const isActive = cardId === effectiveActiveTab
-
-            return (
-              <button
-                key={cardId}
-                type="button"
-                onClick={() => onTabChange(cardId)}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
-                  isActive
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                )}
-              >
-                {Icon && <Icon className="w-4 h-4" />}
-                {config.title}
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Tab Content */}
-      <div className="mt-4">
+      {/* Tab Content - no tab bar, navigation via FloatingFanMenu */}
+      <div className="mt-2">
         <AnimatePresence mode="wait">
           {effectiveActiveTab && children[effectiveActiveTab] && (
             <motion.div
