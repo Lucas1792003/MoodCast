@@ -1,3 +1,19 @@
+export type HourlyForecastItem = {
+  time: string
+  temperature: number
+  weatherCode: number
+  precipitationProbability?: number | null
+  windSpeed?: number | null
+}
+
+export type DailyForecastItem = {
+  date: string
+  tempMax: number
+  tempMin: number
+  weatherCode: number
+  precipitationProbabilityMax?: number | null
+}
+
 export type WeatherResult = {
   locationName: string
   temperature: number
@@ -26,6 +42,9 @@ export type WeatherResult = {
 
   windGusts?: number | null
   windDirection?: number | null
+
+  hourlyForecast?: HourlyForecastItem[] | null
+  dailyForecast?: DailyForecastItem[] | null
 }
 
 export type GeocodeResult = {

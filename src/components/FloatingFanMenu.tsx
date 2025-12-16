@@ -11,6 +11,9 @@ import {
   Plus,
   HeartPulse,
   Check,
+  Clock,
+  CalendarDays,
+  AlertTriangle,
   type LucideIcon,
 } from "lucide-react"
 import { type CardId } from "@/config/cards"
@@ -43,6 +46,14 @@ function iconFor(id: CardId): LucideIcon {
       return MapPin
     case "health":
       return HeartPulse
+
+    case "forecast-hourly":
+      return Clock
+    case "weather-alerts":
+      return AlertTriangle
+    case "forecast-7day":
+      return CalendarDays
+
     default:
       return Menu
   }
@@ -59,6 +70,14 @@ function labelFor(id: CardId): string {
       return "Activity"
     case "health":
       return "Health"
+
+    case "forecast-hourly":
+      return "Hourly"
+    case "weather-alerts":
+      return "Alerts"
+    case "forecast-7day":
+      return "7-Day"
+
     default:
       return String(id)
   }
@@ -75,6 +94,14 @@ function tileColor(id: CardId) {
       return "from-sky-200/90 to-blue-200/90"
     case "health":
       return "from-emerald-200/90 to-teal-200/90"
+
+    case "forecast-hourly":
+      return "from-indigo-200/90 to-violet-200/90"
+    case "weather-alerts":
+      return "from-amber-200/90 to-orange-200/90"
+    case "forecast-7day":
+      return "from-cyan-200/90 to-sky-200/90"
+
     default:
       return "from-gray-200/90 to-gray-100/90"
   }
@@ -94,17 +121,31 @@ export function FloatingFanMenu({
 
   /** The 3 fan shortcuts */
   const MAX_QUICK = 3
-  const [quick, setQuick] = useState<CardId[]>(["mood", "outfit", "activity"])
+
+  // ✅ Defaults: hourly + alerts + 7-day (nice trio)
+  const [quick, setQuick] = useState<CardId[]>([
+    "forecast-hourly",
+    "weather-alerts",
+    "forecast-7day",
+  ])
 
   /** Which card is currently shown on the menu button when closed */
-  const [current, setCurrent] = useState<CardId>("mood")
+  const [current, setCurrent] = useState<CardId>("forecast-hourly")
 
   /** Plus opens this picker */
   const [pickerOpen, setPickerOpen] = useState(false)
   const [draftQuick, setDraftQuick] = useState<CardId[]>(quick)
 
   /** All possible cards (add more later) */
-  const ALL_CARDS: CardId[] = ["mood", "outfit", "activity", "health"]
+  const ALL_CARDS: CardId[] = [
+    "mood",
+    "outfit",
+    "activity",
+    "health",
+    "forecast-hourly",
+    "weather-alerts",
+    "forecast-7day",
+  ]
 
   /* ===== SIZES ===== */
   const BTN = 56
@@ -185,7 +226,9 @@ export function FloatingFanMenu({
 
   /** Fan items: 3 quick + plus */
   const fanItems: Item[] = useMemo(() => {
-    const normal = quick.slice(0, MAX_QUICK).map((id) => ({ id, icon: iconFor(id) }))
+    const normal = quick
+      .slice(0, MAX_QUICK)
+      .map((id) => ({ id, icon: iconFor(id) }))
     return [...normal, { id: "add" as const, icon: Plus }]
   }, [quick])
 
@@ -296,13 +339,11 @@ export function FloatingFanMenu({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* Bright, fun backdrop */}
             <div
               className="absolute inset-0 backdrop-blur-md bg-gradient-to-br from-pink-100/50 via-sky-100/50 to-purple-100/50"
               onClick={closePicker}
             />
 
-            {/* Panel */}
             <motion.div
               className={cn(
                 "absolute left-1/2 top-1/2 w-[92vw] max-w-md -translate-x-1/2 -translate-y-1/2",
@@ -318,7 +359,7 @@ export function FloatingFanMenu({
               <div className="flex items-center justify-between gap-3 px-1 pb-3">
                 <div>
                   <div className="text-sm font-semibold text-slate-800">
-                    Pick your favorites 
+                    Pick your favorites
                   </div>
                   <div className="text-xs text-slate-500">
                     Choose exactly {draftQuick.length}/{MAX_QUICK}
@@ -349,7 +390,6 @@ export function FloatingFanMenu({
                 </div>
               </div>
 
-              {/* Grid (icon + label) */}
               <div className="grid grid-cols-4 gap-3">
                 {ALL_CARDS.map((id) => {
                   const Icon = iconFor(id)
@@ -368,7 +408,10 @@ export function FloatingFanMenu({
                         selected ? "ring-2 ring-white/80 scale-[1.02]" : ""
                       )}
                     >
-                      <Icon className="h-6 w-6 text-slate-900" strokeWidth={1.8} />
+                      <Icon
+                        className="h-6 w-6 text-slate-900"
+                        strokeWidth={1.8}
+                      />
                       <span className="text-[11px] font-medium text-slate-800 leading-none">
                         {labelFor(id)}
                       </span>
@@ -384,7 +427,8 @@ export function FloatingFanMenu({
               </div>
 
               <div className="pt-3 text-xs text-slate-500">
-                Tip: tap tiles to select. “Done” unlocks when you pick {MAX_QUICK}.
+                Tip: tap tiles to select. “Done” unlocks when you pick{" "}
+                {MAX_QUICK}.
               </div>
             </motion.div>
           </motion.div>
@@ -408,7 +452,6 @@ export function FloatingFanMenu({
         }}
       >
         <div className="relative" style={{ width: BTN, height: BTN }}>
-          {/* FAN ITEMS */}
           {fanItems.map((item, i) => {
             const Icon = item.icon
             const p = points[i]
@@ -465,7 +508,6 @@ export function FloatingFanMenu({
             )
           })}
 
-          {/* MENU BUTTON */}
           <motion.button
             type="button"
             onClick={() => {

@@ -1,4 +1,3 @@
-import React from "react"
 import { Route, Clock } from "lucide-react"
 import { Pill } from "./ui"
 import { cn, formatDuration, metricPillClass, categoryPillClass } from "./utils"
@@ -65,16 +64,11 @@ export function SuggestionCard({
           </Pill>
         </div>
 
-        {/* Mobile: compact inline display */}
+        {/* Mobile: compact inline display - distance + category only */}
         <div className="flex sm:hidden items-center gap-2 text-[11px] text-slate-500">
           <span className="flex items-center gap-1">
             <Route className="w-3 h-3" />
             {typeof distM === "number" ? `${Math.round(distM)}m` : "—"}
-          </span>
-          <span className="text-slate-300">·</span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {eta ?? "—"}
           </span>
           {category && (
             <>

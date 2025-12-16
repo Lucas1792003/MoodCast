@@ -134,8 +134,24 @@ export async function GET(req: Request) {
       "uv_index",
       "precipitation_probability",
     ].join(",") +
-    `&hourly=precipitation_probability&forecast_hours=1` +
-    `&daily=sunrise,sunset&forecast_days=1` +
+    `&hourly=` +
+    [
+      "temperature_2m",
+      "weather_code",
+      "precipitation_probability",
+      "wind_speed_10m",
+    ].join(",") +
+    `&forecast_hours=24` +
+    `&daily=` +
+    [
+      "weather_code",
+      "temperature_2m_max",
+      "temperature_2m_min",
+      "precipitation_probability_max",
+      "sunrise",
+      "sunset",
+    ].join(",") +
+    `&forecast_days=7` +
     `&timezone=auto&temperature_unit=fahrenheit&wind_speed_unit=mph`
 
   const res = await fetch(url, { next: { revalidate: 300 } })
@@ -164,6 +180,57 @@ export async function GET(req: Request) {
   const probFromHourly = numOrNull(data?.hourly?.precipitation_probability?.[0])
   const precipitationProbability = probFromCurrent ?? probFromHourly
 
+  const hourly = data?.hourly ?? {}
+  const hourlyTimes: any[] = Array.isArray(hourly.time) ? hourly.time : []
+  const hourlyTemps: any[] = Array.isArray(hourly.temperature_2m) ? hourly.temperature_2m : []
+  const hourlyCodes: any[] = Array.isArray(hourly.weather_code) ? hourly.weather_code : []
+  const hourlyProb: any[] = Array.isArray(hourly.precipitation_probability)
+    ? hourly.precipitation_probability
+    : []
+  const hourlyWind: any[] = Array.isArray(hourly.wind_speed_10m) ? hourly.wind_speed_10m : []
+
+  const hourlyForecast = hourlyTimes
+    .slice(0, 24)
+    .map((t, i) => {
+      const temp = numOrNull(hourlyTemps[i])
+      const code = numOrNull(hourlyCodes[i])
+      if (temp == null || code == null || typeof t !== "string") return null
+      return {
+        time: t,
+        temperature: temp,
+        weatherCode: code,
+        precipitationProbability: numOrNull(hourlyProb[i]),
+        windSpeed: numOrNull(hourlyWind[i]),
+      }
+    })
+    .filter(Boolean)
+
+  const daily = data?.daily ?? {}
+  const dailyDates: any[] = Array.isArray(daily.time) ? daily.time : []
+  const dailyMax: any[] = Array.isArray(daily.temperature_2m_max) ? daily.temperature_2m_max : []
+  const dailyMin: any[] = Array.isArray(daily.temperature_2m_min) ? daily.temperature_2m_min : []
+  const dailyCodes: any[] = Array.isArray(daily.weather_code) ? daily.weather_code : []
+  const dailyProbMax: any[] = Array.isArray(daily.precipitation_probability_max)
+    ? daily.precipitation_probability_max
+    : []
+
+  const dailyForecast = dailyDates
+    .slice(0, 7)
+    .map((d, i) => {
+      const tmax = numOrNull(dailyMax[i])
+      const tmin = numOrNull(dailyMin[i])
+      const code = numOrNull(dailyCodes[i])
+      if (tmax == null || tmin == null || code == null || typeof d !== "string") return null
+      return {
+        date: d,
+        tempMax: tmax,
+        tempMin: tmin,
+        weatherCode: code,
+        precipitationProbabilityMax: numOrNull(dailyProbMax[i]),
+      }
+    })
+    .filter(Boolean)
+
   const out: WeatherResult = {
     locationName,
     temperature: c.temperature_2m,
@@ -191,6 +258,9 @@ export async function GET(req: Request) {
 
     windGusts: numOrNull(c.wind_gusts_10m),
     windDirection: numOrNull(c.wind_direction_10m),
+
+    hourlyForecast: hourlyForecast.length ? (hourlyForecast as any) : null,
+    dailyForecast: dailyForecast.length ? (dailyForecast as any) : null,
   }
 
   return NextResponse.json(out)
