@@ -20,6 +20,7 @@ import WeatherInfoGridCycler from "@/components/weather-info-grid-cycler"
 import { ResponsiveCardLayout } from "@/components/cards"
 import { FloatingFanMenu } from "@/components/FloatingFanMenu"
 import { useCardPreferences } from "@/hooks/useCardPreferences"
+import { useUser } from "@/hooks/useUser"
 import type { CardId } from "@/config/cards"
 import { adaptHourlyForecast, adaptDailyForecast } from "@/config/cards"
 
@@ -62,6 +63,7 @@ export default function Page() {
   const [selectedMood, setSelectedMood] = useState<MoodId | null>(null)
 
   const { preferences, setActiveTab, getVisibleCards } = useCardPreferences()
+  const { user } = useUser()
 
   const lastGeoCacheRef = useRef<{
     lat: number
@@ -353,7 +355,7 @@ export default function Page() {
       feelsLikeF={weatherForComponents?.apparent_temperature ?? null}
       windSpeed={weatherForComponents?.wind_speed_10m ?? null}
     >
-      <Header onSearch={handleLocationSearch} />
+      <Header onSearch={handleLocationSearch} user={user} />
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
         {error && (
