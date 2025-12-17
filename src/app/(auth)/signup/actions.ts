@@ -4,10 +4,17 @@ import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 
+// Helper to get origin URL reliably
+async function getOrigin() {
+  const headersList = await headers()
+  const host = headersList.get('host') || ''
+  const protocol = headersList.get('x-forwarded-proto') || 'https'
+  return headersList.get('origin') || `${protocol}://${host}`
+}
+
 export async function signup(formData: FormData) {
   const supabase = await createClient()
-  const headersList = await headers()
-  const origin = headersList.get('origin') || ''
+  const origin = await getOrigin()
 
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -42,8 +49,7 @@ export async function signup(formData: FormData) {
 
 export async function signUpWithGoogle() {
   const supabase = await createClient()
-  const headersList = await headers()
-  const origin = headersList.get('origin') || ''
+  const origin = await getOrigin()
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
