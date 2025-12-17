@@ -7,6 +7,9 @@ import {
   Shirt,
   MapPin,
   Heart,
+  CalendarDays,
+  Clock,
+  AlertTriangle,
   type LucideIcon,
 } from "lucide-react"
 import { type CardId, CARD_CONFIGS, MOBILE_TAB_CARDS } from "@/config/cards"
@@ -19,6 +22,9 @@ type MobileCardTabsProps = {
 }
 
 const CARD_ICONS: Partial<Record<CardId, LucideIcon>> = {
+  "weather-alerts": AlertTriangle,
+  "forecast-7day": CalendarDays,
+  "forecast-hourly": Clock,
   mood: Smile,
   outfit: Shirt,
   activity: MapPin,
@@ -40,12 +46,14 @@ export function MobileCardTabs({
     (id) => !visibleCards || visibleCards.includes(id)
   )
 
-  const effectiveActiveTab = activeTab && tabCards.includes(activeTab) ? activeTab : tabCards[0]
+  const effectiveActiveTab =
+    activeTab && tabCards.includes(activeTab) ? activeTab : tabCards[0]
 
   // Hide the unused variables to avoid linter warnings
   void onTabChange
   void CARD_ICONS
   void CARD_CONFIGS
+  void cn
 
   return (
     <div className="lg:hidden">
@@ -88,6 +96,30 @@ export function DesktopCardGrid({
         {cardsToShow.includes("mood") && children.mood}
         {cardsToShow.includes("outfit") && children.outfit}
       </div>
+
+      {/* Forecast row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 items-stretch">
+        {/* Left stack */}
+        <div className="flex flex-col gap-6 h-full">
+          {cardsToShow.includes("forecast-hourly") && children["forecast-hourly"]}
+
+          {cardsToShow.includes("weather-alerts") && (
+            <div className="flex-1">
+              {children["weather-alerts"]}
+            </div>
+          )}
+        </div>
+
+        {/* Right */}
+        <div className="h-full">
+          {cardsToShow.includes("forecast-7day") && (
+            <div className="h-full">
+              {children["forecast-7day"]}
+            </div>
+          )}
+        </div>
+      </div>
+
 
       {/* Activity */}
       {cardsToShow.includes("activity") && (

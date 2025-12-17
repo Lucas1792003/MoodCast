@@ -82,11 +82,11 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
         <div className="flex items-start justify-between mb-6">
           <div>
             <h2 className="text-3xl font-bold mb-1 drop-shadow">
-              {typeof tempF === "number" ? (
+              {typeof tempF === "number" && typeof tempC === "number" ? (
                 <>
-                  {Math.round(tempF)}°F{" "}
+                  {Math.round(tempC)}°C{" "}
                   <span className="text-white/85 text-xl font-semibold">
-                    ({Math.round(tempC!)}°C)
+                    ({Math.round(tempF)}°F)
                   </span>
                 </>
               ) : (
@@ -107,10 +107,10 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
 
         <p className="text-sm text-white/90 drop-shadow">
           The current conditions suggest a{" "}
-          {typeof tempF === "number"
-            ? tempF > 70
+          {typeof tempC === "number"
+            ? tempC > 21
               ? "warm"
-              : tempF > 50
+              : tempC > 10
               ? "mild"
               : "cool"
             : "pleasant"}{" "}

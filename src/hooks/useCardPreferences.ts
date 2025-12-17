@@ -24,8 +24,15 @@ function loadPreferences(): CardPreferences {
 
     const parsed = JSON.parse(stored) as Partial<CardPreferences>
 
+    // Merge stored order with any new cards introduced in the app.
+    const storedOrder = Array.isArray(parsed.order) ? (parsed.order as CardId[]) : []
+    const mergedOrder = [...storedOrder]
+    for (const id of DEFAULT_CARD_ORDER) {
+      if (!mergedOrder.includes(id)) mergedOrder.push(id)
+    }
+
     return {
-      order: Array.isArray(parsed.order) ? parsed.order : DEFAULT_CARD_ORDER,
+      order: mergedOrder.length ? mergedOrder : DEFAULT_CARD_ORDER,
       visibility: parsed.visibility ?? {},
       activeTab: parsed.activeTab ?? "mood",
     }
@@ -74,7 +81,9 @@ export function useCardPreferences() {
 
   const toggleCard = useCallback((cardId: CardId) => {
     setPreferences((prev) => {
-      const currentVisibility = prev.visibility[cardId] ?? CARD_CONFIGS[cardId].defaultEnabled
+      const config = CARD_CONFIGS[cardId]
+      if (!config) return prev // Guard against invalid card IDs
+      const currentVisibility = prev.visibility[cardId] ?? config.defaultEnabled
       return {
         ...prev,
         visibility: { ...prev.visibility, [cardId]: !currentVisibility },
@@ -93,6 +102,8 @@ export function useCardPreferences() {
   const isCardVisible = useCallback(
     (cardId: CardId): boolean => {
       const config = CARD_CONFIGS[cardId]
+      // Guard against invalid card IDs (e.g., from stale localStorage)
+      if (!config) return false
       if (!config.canHide) return true
       return preferences.visibility[cardId] ?? config.defaultEnabled
     },
@@ -100,7 +111,8 @@ export function useCardPreferences() {
   )
 
   const getVisibleCards = useCallback((): CardId[] => {
-    return preferences.order.filter((id) => isCardVisible(id))
+    // Filter out invalid card IDs that don't exist in CARD_CONFIGS
+    return preferences.order.filter((id) => CARD_CONFIGS[id] && isCardVisible(id))
   }, [preferences.order, isCardVisible])
 
   return {

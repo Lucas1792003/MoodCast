@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { Cloud, AlertTriangle } from "lucide-react"
 
 import Header from "@/components/header"
@@ -10,6 +10,9 @@ import OutfitSection from "@/components/outfit-section"
 import ActivitySection from "@/components/activity-section"
 import HealthSection from "@/components/health-section"
 import ARSkyViewer from "@/components/ar-sky-viewer"
+import HourlyForecastCard from "@/components/forecast-hourly-card"
+import Forecast7DayCard from "@/components/forecast-7day-card"
+import ExtremeWeatherAlertsCard from "@/components/extreme-weather-alerts-card"
 
 import WeatherThemeLayer from "@/components/weather-theme-layer"
 import WeatherInfoGridCycler from "@/components/weather-info-grid-cycler"
@@ -18,9 +21,11 @@ import { ResponsiveCardLayout } from "@/components/cards"
 import { FloatingFanMenu } from "@/components/FloatingFanMenu"
 import { useCardPreferences } from "@/hooks/useCardPreferences"
 import type { CardId } from "@/config/cards"
+import { adaptHourlyForecast, adaptDailyForecast } from "@/config/cards"
 
 import { geocodeCity, getWeather } from "@/lib/weather-client"
 import type { WeatherResult } from "@/lib/weather-types"
+import type { MoodId } from "@/lib/mood-types"
 
 type OpenMeteoCurrentLike = {
   temperature_2m: number
@@ -53,12 +58,10 @@ export default function Page() {
 
   const [hasSearched, setHasSearched] = useState(false)
 
-  // Card preferences for customization
-  const {
-    preferences,
-    setActiveTab,
-    getVisibleCards,
-  } = useCardPreferences()
+  // Mood state: null = use weather-suggested mood, otherwise user's choice
+  const [selectedMood, setSelectedMood] = useState<MoodId | null>(null)
+
+  const { preferences, setActiveTab, getVisibleCards } = useCardPreferences()
 
   const lastGeoCacheRef = useRef<{
     lat: number
@@ -77,7 +80,9 @@ export default function Page() {
     const dLon = toRad(bLon - aLon)
     const x =
       Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLon / 2) ** 2
+      Math.cos(toRad(aLat)) *
+        Math.cos(toRad(bLat)) *
+        Math.sin(dLon / 2) ** 2
     return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))
   }
 
@@ -115,7 +120,6 @@ export default function Page() {
     }
 
     let active = true
-
     setLoading(true)
     setError("")
 
@@ -143,13 +147,16 @@ export default function Page() {
 
           void (async () => {
             try {
-              const r = await fetch(`/api/reverse-city?lat=${latitude}&lon=${longitude}`, {
-                cache: "no-store",
-              })
+              const r = await fetch(
+                `/api/reverse-city?lat=${latitude}&lon=${longitude}`,
+                { cache: "no-store" }
+              )
               if (!r.ok) return
               const data = await r.json()
               const label =
-                typeof data?.label === "string" && data.label.trim() ? data.label.trim() : ""
+                typeof data?.label === "string" && data.label.trim()
+                  ? data.label.trim()
+                  : ""
 
               if (label && active) setLocationLabel(label)
             } catch {
@@ -202,14 +209,16 @@ export default function Page() {
         const lat = Number(latStr?.trim())
         const lon = Number(lonStr?.trim())
 
-        if (!Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error("Invalid coords")
+        if (!Number.isFinite(lat) || !Number.isFinite(lon))
+          throw new Error("Invalid coords")
 
         const label = labelPart ? decodeURIComponent(labelPart) : ""
 
         const cached = lastGeoCacheRef.current
         if (cached) {
           const ageOk = Date.now() - cached.fetchedAt <= GEO_CACHE_MAX_AGE_MS
-          const nearOk = distM(lat, lon, cached.lat, cached.lon) <= GEO_MATCH_RADIUS_M
+          const nearOk =
+            distM(lat, lon, cached.lat, cached.lon) <= GEO_MATCH_RADIUS_M
 
           if (ageOk && nearOk) {
             setWeather(cached.weather)
@@ -219,18 +228,13 @@ export default function Page() {
             return
           }
         }
+
         const w = await getWeather(lat, lon, label || undefined)
 
         setWeather(w)
         setLocationLabel(w.locationName || label || "Near you")
         setHasSearched(true)
-        lastGeoCacheRef.current = {
-          lat,
-          lon,
-          weather: w,
-          fetchedAt: Date.now(),
-        }
-
+        lastGeoCacheRef.current = { lat, lon, weather: w, fetchedAt: Date.now() }
         return
       }
 
@@ -240,7 +244,6 @@ export default function Page() {
 
       setWeather(w)
       setLocationLabel(w.locationName || display)
-
       setHasSearched(true)
     } catch {
       setError("Location not found or weather service unavailable.")
@@ -263,14 +266,46 @@ export default function Page() {
     return "Mixed conditions"
   }
 
-  // Build card content map for ResponsiveCardLayout
-  const cardContent: Record<CardId, React.ReactNode> = {
-    weather: null, // Handled separately (always at top)
-    "weather-info": null, // Handled separately (always at top)
+  const hourlyForecastData = useMemo(() => {
+    if (!weather?.hourlyForecast) return undefined
+    return adaptHourlyForecast({
+      time: weather.hourlyForecast.map((h: any) => h.time),
+      temperature_2m: weather.hourlyForecast.map((h: any) => h.temperature),
+      weathercode: weather.hourlyForecast.map((h: any) => h.weatherCode),
+    })
+  }, [weather?.hourlyForecast])
+
+  const dailyForecastData = useMemo(() => {
+    if (!weather?.dailyForecast) return undefined
+    return adaptDailyForecast({
+      time: weather.dailyForecast.map((d: any) => d.date),
+      temperature_2m_min: weather.dailyForecast.map((d: any) => d.tempMin),
+      temperature_2m_max: weather.dailyForecast.map((d: any) => d.tempMax),
+      weathercode: weather.dailyForecast.map((d: any) => d.weatherCode),
+    })
+  }, [weather?.dailyForecast])
+
+  // ✅ Use ReactNode without needing React namespace
+  const cardContent: Record<CardId, ReactNode> = {
+    weather: null,
+    "weather-info": null,
+    "forecast-hourly": <HourlyForecastCard data={hourlyForecastData} />,
+    "weather-alerts": (
+      <ExtremeWeatherAlertsCard
+        hourly={hourlyForecastData}
+        daily={dailyForecastData}
+        windSpeed={weatherForComponents?.wind_speed_10m ?? null}
+        precipitationProbability={weatherForComponents?.precipitation_probability ?? null}
+        currentWeatherCode={weatherForComponents?.weather_code ?? null}
+      />
+    ),
+    "forecast-7day": <Forecast7DayCard data={dailyForecastData} />,
     mood: weatherForComponents ? (
       <MoodSection
         temperature={weatherForComponents.temperature_2m}
         weatherCode={weatherForComponents.weather_code}
+        selectedMood={selectedMood}
+        onMoodChange={setSelectedMood}
       />
     ) : null,
     outfit: weatherForComponents ? (
@@ -280,6 +315,7 @@ export default function Page() {
         locationLabel={locationLabel}
         lat={weather?.latitude ?? null}
         lon={weather?.longitude ?? null}
+        mood={selectedMood}
       />
     ) : null,
     activity: weatherForComponents ? (
@@ -297,20 +333,16 @@ export default function Page() {
         humidity={weatherForComponents.relative_humidity_2m}
       />
     ) : null,
-    "ar-sky": null, // Handled separately (always at bottom)
+    "ar-sky": null,
   }
 
   const visibleCards = getVisibleCards()
-
-  // When user taps a fan icon on mobile, switch the tab AND auto-scroll to the cards area.
   const cardsRef = useRef<HTMLDivElement | null>(null)
 
   const handleFanSelect = (id: CardId) => {
     setActiveTab(id)
     requestAnimationFrame(() => {
-      const el = cardsRef.current
-      if (!el) return
-      el.scrollIntoView({ behavior: "smooth", block: "start" })
+      cardsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
     })
   }
 
@@ -350,14 +382,15 @@ export default function Page() {
               <p className="text-foreground/70">
                 Search for a city to see outfits, activities & mood tips.
               </p>
-              <p className="text-sm text-muted-foreground">Try: London, Tokyo, New York, Toronto…</p>
+              <p className="text-sm text-muted-foreground">
+                Try: London, Tokyo, New York, Toronto…
+              </p>
             </div>
           </div>
         )}
 
         {!loading && weatherForComponents && (
           <>
-            {/* Weather section - always visible at top */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-stretch">
               <div className="lg:col-span-2 h-full">
                 <div className="h-full">
@@ -373,7 +406,6 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Responsive card layout - tabs on mobile, grid on desktop */}
             <div ref={cardsRef} id="cards" className="scroll-mt-[96px]">
               <ResponsiveCardLayout
                 activeTab={preferences.activeTab}
@@ -384,7 +416,6 @@ export default function Page() {
               </ResponsiveCardLayout>
             </div>
 
-            {/* AR Sky Viewer - always at bottom on desktop, hidden on mobile tabs */}
             <div className="hidden lg:block">
               <ARSkyViewer
                 weatherCode={weatherForComponents.weather_code}
@@ -395,7 +426,6 @@ export default function Page() {
         )}
       </main>
 
-      {/* Floating Fan Menu - only visible on mobile when weather is loaded */}
       {!loading && weatherForComponents && (
         <FloatingFanMenu onSelect={handleFanSelect} />
       )}
