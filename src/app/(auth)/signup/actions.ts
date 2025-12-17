@@ -9,7 +9,10 @@ async function getOrigin() {
   const headersList = await headers()
   const host = headersList.get('host') || ''
   const protocol = headersList.get('x-forwarded-proto') || 'https'
-  return headersList.get('origin') || `${protocol}://${host}`
+  // Prefer env var for production, then construct from headers
+  return process.env.NEXT_PUBLIC_SITE_URL ||
+         headersList.get('origin') ||
+         `${protocol}://${host}`
 }
 
 export async function signup(formData: FormData) {
