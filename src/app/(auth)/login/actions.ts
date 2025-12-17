@@ -32,10 +32,12 @@ export async function signInWithGoogle() {
   const supabase = await createClient()
   const headersList = await headers()
 
-  // Get origin from headers - try multiple sources
+  // Get origin - prefer env var, then construct from headers
   const host = headersList.get('host') || ''
   const protocol = headersList.get('x-forwarded-proto') || 'https'
-  const origin = headersList.get('origin') || `${protocol}://${host}`
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ||
+                 headersList.get('origin') ||
+                 `${protocol}://${host}`
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
