@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Shirt } from "lucide-react"
 import LeavesOverlay from "./leaves-overlay"
+import { type MoodId, getMoodConfig } from "@/lib/mood-types"
 
 type Gender = "male" | "female"
 type Category = "head" | "outer" | "top" | "bottom" | "shoes" | "accessory"
@@ -36,6 +37,7 @@ interface OutfitSectionProps {
   locationLabel: string
   lat?: number | null
   lon?: number | null
+  mood?: MoodId | null // User's selected mood for outfit vibe
 }
 
 function weatherTagsFromCode(weatherCode: number) {
@@ -195,6 +197,7 @@ export default function OutfitSection({
   locationLabel,
   lat = null,
   lon = null,
+  mood = null,
 }: OutfitSectionProps) {
   const [gender, setGender] = useState<Gender>("female")
   const [seed, setSeed] = useState(1)
@@ -225,12 +228,15 @@ export default function OutfitSection({
     const controller = new AbortController()
     let cancelled = false
 
+    const moodVibe = mood ? getMoodConfig(mood).outfitVibe : null
+
     const requestKey = JSON.stringify({
       gender,
       seed,
       locationLabel,
       t: Math.round(temperature), // reduce spam from tiny temp changes
       wc: weatherCode,
+      mood: moodVibe,
     })
 
     // ✅ if same key, don't call again
@@ -255,6 +261,7 @@ export default function OutfitSection({
             weatherCode,
             lat,
             lon,
+            moodVibe, // e.g. "active, sporty, vibrant colors" or null
           }),
         })
 
@@ -296,7 +303,7 @@ export default function OutfitSection({
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current)
     }
     // ⚠️ intentionally exclude lat/lon from deps to prevent extra calls from tiny changes
-  }, [gender, seed, locationLabel, temperature, weatherCode])
+  }, [gender, seed, locationLabel, temperature, weatherCode, mood])
 
   const otherGender: Gender = gender === "male" ? "female" : "male"
 

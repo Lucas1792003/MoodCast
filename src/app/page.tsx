@@ -25,6 +25,7 @@ import { adaptHourlyForecast, adaptDailyForecast } from "@/config/cards"
 
 import { geocodeCity, getWeather } from "@/lib/weather-client"
 import type { WeatherResult } from "@/lib/weather-types"
+import type { MoodId } from "@/lib/mood-types"
 
 type OpenMeteoCurrentLike = {
   temperature_2m: number
@@ -56,6 +57,9 @@ export default function Page() {
   const [error, setError] = useState<string>("")
 
   const [hasSearched, setHasSearched] = useState(false)
+
+  // Mood state: null = use weather-suggested mood, otherwise user's choice
+  const [selectedMood, setSelectedMood] = useState<MoodId | null>(null)
 
   const { preferences, setActiveTab, getVisibleCards } = useCardPreferences()
 
@@ -300,6 +304,8 @@ export default function Page() {
       <MoodSection
         temperature={weatherForComponents.temperature_2m}
         weatherCode={weatherForComponents.weather_code}
+        selectedMood={selectedMood}
+        onMoodChange={setSelectedMood}
       />
     ) : null,
     outfit: weatherForComponents ? (
@@ -309,6 +315,7 @@ export default function Page() {
         locationLabel={locationLabel}
         lat={weather?.latitude ?? null}
         lon={weather?.longitude ?? null}
+        mood={selectedMood}
       />
     ) : null,
     activity: weatherForComponents ? (
