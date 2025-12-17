@@ -5,12 +5,14 @@ import { useState } from "react"
 import Image from "next/image"
 import { Search, Navigation, X, Info } from "lucide-react"
 import AboutModal from "./about-modal"
+import UserMenu from "./user-menu"
 
 interface HeaderProps {
   onSearch: (location: string) => void
+  user?: { email?: string | null } | null
 }
 
-export default function Header({ onSearch }: HeaderProps) {
+export default function Header({ onSearch, user }: HeaderProps) {
   const [searchInput, setSearchInput] = useState("")
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isLocating, setIsLocating] = useState(false)
@@ -138,7 +140,7 @@ export default function Header({ onSearch }: HeaderProps) {
               </form>
             </div>
 
-            <div className="shrink-0">
+            <div className="shrink-0 flex items-center gap-1 sm:gap-2">
               <button
                 type="button"
                 onClick={() => setIsAboutOpen(true)}
@@ -149,6 +151,8 @@ export default function Header({ onSearch }: HeaderProps) {
                 <Info className="h-4 w-4 sm:hidden" />
                 <span className="hidden sm:inline">About</span>
               </button>
+
+              <UserMenu user={user ?? null} />
             </div>
           </div>
         </div>
