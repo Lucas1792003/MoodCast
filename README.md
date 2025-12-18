@@ -84,7 +84,7 @@ Press **+** to open the full list and customize your shortcuts.
 Mood updates based on weather conditions, but you can adjust it for better accuracy.
 This is important because mood influences **outfit suggestions**.
 
-![Mood](./image-5.png)
+![Mood](./public/readme-pic/image-5.png)
 ![Mood selection](./public/readme-pic/image-6.png)
 ![Mood updated](./public/readme-pic/image-7.png)
 
