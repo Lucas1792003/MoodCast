@@ -117,7 +117,7 @@ export default function MoodSection({
   const energy = clamp(mood.energy, 0, 100)
 
   const [open, setOpen] = useState(false)
-  const cardRef = useRef<HTMLButtonElement | null>(null)
+  const cardRef = useRef<HTMLDivElement | null>(null)
 
   const moods = useMemo(
     () => ALL_MOODS.map((id) => ({ id, cfg: getMoodConfig(id) })),
@@ -136,11 +136,18 @@ export default function MoodSection({
   const softRing = rgba(accent, 0.12)
 
   return (
-    <button
+    <div
       ref={cardRef}
-      type="button"
-      onClick={() => setOpen(true)}
-      className="relative w-full overflow-hidden rounded-[26px] ring-1 ring-black/5 shadow-[0_18px_50px_-35px_rgba(0,0,0,0.45)] text-left transition hover:shadow-[0_22px_60px_-30px_rgba(0,0,0,0.5)] active:scale-[0.995]"
+      role="button"
+      tabIndex={0}
+      onClick={() => !open && setOpen(true)}
+      onKeyDown={(e) => {
+        if ((e.key === "Enter" || e.key === " ") && !open) {
+          e.preventDefault()
+          setOpen(true)
+        }
+      }}
+      className="relative w-full overflow-hidden rounded-[26px] ring-1 ring-black/5 shadow-[0_18px_50px_-35px_rgba(0,0,0,0.45)] text-left transition hover:shadow-[0_22px_60px_-30px_rgba(0,0,0,0.5)] active:scale-[0.995] cursor-pointer"
       style={{
         background:
           "linear-gradient(135deg, rgba(248,252,255,1) 0%, rgba(240,248,255,1) 55%, rgba(247,252,255,1) 100%)",
@@ -204,7 +211,7 @@ export default function MoodSection({
                     </div>
 
                     <span
-                      className="rounded-full px-3 py-1 text-xs font-semibold"
+                      className="hidden sm:inline-block rounded-full px-3 py-1 text-xs font-semibold"
                       style={{ backgroundColor: rgba(accent, 0.10), color: accent }}
                     >
                       {isCustom ? "Custom" : "Suggested"}
@@ -387,6 +394,6 @@ export default function MoodSection({
         className="pointer-events-none absolute inset-0 rounded-[26px]"
         style={{ boxShadow: `inset 0 0 0 1px ${softRing}` }}
       />
-    </button>
+    </div>
   )
 }

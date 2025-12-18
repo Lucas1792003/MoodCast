@@ -514,11 +514,11 @@ export default function ActivitySection({
                       style={{ transform: `translateX(-${mobileView * 100}%)` }}
                     >
                       {/* Page 1: Map */}
-                      <div className="w-full flex-shrink-0 min-h-[580px]">
+                      <div className="w-full flex-shrink-0 pr-2">
                         {canShowMap ? (
                           <div className="flex flex-col h-full">
                             <div className="text-sm font-semibold text-slate-700 mb-3">Route to destination</div>
-                            <div className="relative w-full h-[420px] rounded-3xl overflow-hidden border border-slate-200 bg-slate-50">
+                            <div className="relative w-full h-[320px] rounded-3xl overflow-hidden border border-slate-200 bg-slate-50">
                               <ActivityMap
                                 center={{ lng: selectedPlace!.lon, lat: selectedPlace!.lat }}
                                 user={{ lng: userPos!.lng, lat: userPos!.lat }}
@@ -559,124 +559,81 @@ export default function ActivitySection({
                               onStartNavigation={handleStartNavigation}
                               isNavigating={navigation.isNavigating}
                             />
-
-                            {/* Dot indicators under map */}
-                            <div className="flex items-center justify-center gap-2 mt-4">
-                              <button
-                                onClick={() => setMobileView(0)}
-                                className={cn(
-                                  "w-2 h-2 rounded-full transition-all",
-                                  mobileView === 0 ? "bg-blue-600 w-6" : "bg-slate-300"
-                                )}
-                                aria-label="View map"
-                              />
-                              <button
-                                onClick={() => setMobileView(1)}
-                                className={cn(
-                                  "w-2 h-2 rounded-full transition-all",
-                                  mobileView === 1 ? "bg-blue-600 w-6" : "bg-slate-300"
-                                )}
-                                aria-label="View places"
-                              />
-                            </div>
                           </div>
                         ) : (
-                          <div className="flex flex-col h-full">
-                            <div className="rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-600 flex-1 flex items-center justify-center">
-                              Allow location access to see the map + live tracking.
-                            </div>
-                            {/* Dot indicators */}
-                            <div className="flex items-center justify-center gap-2 mt-4">
-                              <button
-                                onClick={() => setMobileView(0)}
-                                className={cn(
-                                  "w-2 h-2 rounded-full transition-all",
-                                  mobileView === 0 ? "bg-blue-600 w-6" : "bg-slate-300"
-                                )}
-                                aria-label="View map"
-                              />
-                              <button
-                                onClick={() => setMobileView(1)}
-                                className={cn(
-                                  "w-2 h-2 rounded-full transition-all",
-                                  mobileView === 1 ? "bg-blue-600 w-6" : "bg-slate-300"
-                                )}
-                                aria-label="View places"
-                              />
-                            </div>
+                          <div className="rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-600 flex items-center justify-center min-h-[200px]">
+                            Allow location access to see the map + live tracking.
                           </div>
                         )}
                       </div>
 
                       {/* Page 2: Suggestions */}
-                      <div className="w-full flex-shrink-0 pl-4 min-h-[580px]">
-                        <div className="flex flex-col h-full">
-                          <div className="flex-1 space-y-4">
-                            <div>
-                              <div className="text-sm font-semibold text-slate-700 mb-3">Today's pick</div>
-                              <PrimaryCard
-                                data={data.primary}
-                                clickable={!!data.primary.place?.id}
-                                active={data.primary.place?.id === selectedPlaceId}
-                                onSelect={() => {
-                                  const id = data.primary.place?.id
-                                  if (id) selectPlace(id)
-                                }}
-                                travel={data.primary.place?.id ? travelById[data.primary.place.id] : null}
-                              />
-                            </div>
-
-                            <div>
-                              <div className="text-sm font-semibold text-slate-700 mb-3">Other things you can do nearby</div>
-                              {data.secondary?.length ? (
-                                <div className="grid grid-cols-2 gap-2">
-                                  {data.secondary.map((s, i) => {
-                                    const p = s.place
-                                    const pid = p?.id
-                                    const active = !!pid && pid === selectedPlaceId
-                                    return (
-                                      <SuggestionCard
-                                        key={`${s.headline}-${i}`}
-                                        title={s.headline}
-                                        subtitle={cleanSubtitle(s.message) || (pid ? subtitleByPlaceId[pid] : "") || "Nice spot nearby"}
-                                        address={p?.address}
-                                        category={p?.category}
-                                        active={!!active}
-                                        onSelect={pid ? () => selectPlace(pid) : undefined}
-                                        travel={pid ? travelById[pid] : null}
-                                        distanceFallbackM={p?.distanceM}
-                                      />
-                                    )
-                                  })}
-                                </div>
-                              ) : (
-                                <div className="text-slate-600">No extra nearby options found this time — try again.</div>
-                              )}
-                            </div>
+                      <div className="w-full flex-shrink-0 pl-2">
+                        <div className="space-y-4">
+                          <div>
+                            <div className="text-sm font-semibold text-slate-700 mb-3">Today's pick</div>
+                            <PrimaryCard
+                              data={data.primary}
+                              clickable={!!data.primary.place?.id}
+                              active={data.primary.place?.id === selectedPlaceId}
+                              onSelect={() => {
+                                const id = data.primary.place?.id
+                                if (id) selectPlace(id)
+                              }}
+                              travel={data.primary.place?.id ? travelById[data.primary.place.id] : null}
+                            />
                           </div>
 
-                          {/* Dot indicators under places */}
-                          <div className="flex items-center justify-center gap-2 mt-4">
-                            <button
-                              onClick={() => setMobileView(0)}
-                              className={cn(
-                                "w-2 h-2 rounded-full transition-all",
-                                mobileView === 0 ? "bg-blue-600 w-6" : "bg-slate-300"
-                              )}
-                              aria-label="View map"
-                            />
-                            <button
-                              onClick={() => setMobileView(1)}
-                              className={cn(
-                                "w-2 h-2 rounded-full transition-all",
-                                mobileView === 1 ? "bg-blue-600 w-6" : "bg-slate-300"
-                              )}
-                              aria-label="View places"
-                            />
+                          <div>
+                            <div className="text-sm font-semibold text-slate-700 mb-3">Other things you can do nearby</div>
+                            {data.secondary?.length ? (
+                              <div className="grid grid-cols-2 gap-2">
+                                {data.secondary.map((s, i) => {
+                                  const p = s.place
+                                  const pid = p?.id
+                                  const active = !!pid && pid === selectedPlaceId
+                                  return (
+                                    <SuggestionCard
+                                      key={`${s.headline}-${i}`}
+                                      title={s.headline}
+                                      subtitle={cleanSubtitle(s.message) || (pid ? subtitleByPlaceId[pid] : "") || "Nice spot nearby"}
+                                      address={p?.address}
+                                      category={p?.category}
+                                      active={!!active}
+                                      onSelect={pid ? () => selectPlace(pid) : undefined}
+                                      travel={pid ? travelById[pid] : null}
+                                      distanceFallbackM={p?.distanceM}
+                                    />
+                                  )
+                                })}
+                              </div>
+                            ) : (
+                              <div className="text-slate-600">No extra nearby options found this time — try again.</div>
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Dot indicators */}
+                  <div className="flex items-center justify-center gap-2 mt-4">
+                    <button
+                      onClick={() => setMobileView(0)}
+                      className={cn(
+                        "w-2 h-2 rounded-full transition-all",
+                        mobileView === 0 ? "bg-blue-600 w-6" : "bg-slate-300"
+                      )}
+                      aria-label="View map"
+                    />
+                    <button
+                      onClick={() => setMobileView(1)}
+                      className={cn(
+                        "w-2 h-2 rounded-full transition-all",
+                        mobileView === 1 ? "bg-blue-600 w-6" : "bg-slate-300"
+                      )}
+                      aria-label="View places"
+                    />
                   </div>
                 </div>
               </motion.div>
