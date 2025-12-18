@@ -18,6 +18,7 @@ export type MoodConfig = {
   accent: string // hex color for UI accents
   suggestion: string
   outfitVibe: string // passed to outfit section for AI prompt context
+  energy: number // 0-100 energy level for this mood
 }
 
 export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
@@ -29,6 +30,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#E9B44C", // golden yellow
     suggestion: "Perfect day to feel motivated and active!",
     outfitVibe: "active, sporty, vibrant colors, energetic",
+    energy: 95,
   },
   calm: {
     id: "calm",
@@ -38,6 +40,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#6B9C89", // sage green (your accent)
     suggestion: "Great day for introspection and relaxation.",
     outfitVibe: "relaxed, soft colors, comfortable, minimal",
+    energy: 45,
   },
   cozy: {
     id: "cozy",
@@ -47,6 +50,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#D4896A", // warm terracotta
     suggestion: "Perfect weather for indoor activities and comfort.",
     outfitVibe: "warm, layered, comfortable, soft textures",
+    energy: 35,
   },
   balanced: {
     id: "balanced",
@@ -56,6 +60,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#7B8FA1", // slate blue-gray
     suggestion: "A great day for balanced activities.",
     outfitVibe: "versatile, smart casual, neutral tones",
+    energy: 60,
   },
 
   // added moods 👇
@@ -67,6 +72,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#4F46E5", // indigo
     suggestion: "Lock in and make progress—one task at a time.",
     outfitVibe: "clean lines, dark neutrals, functional, minimal",
+    energy: 80,
   },
   romantic: {
     id: "romantic",
@@ -76,6 +82,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#EC4899", // pink
     suggestion: "Lean into softness and warmth today.",
     outfitVibe: "flowy, elegant, soft colors, gentle textures",
+    energy: 55,
   },
   creative: {
     id: "creative",
@@ -83,8 +90,9 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     emoji: "🎨",
     color: "from-orange-400 to-pink-500",
     accent: "#F97316", // orange
-    suggestion: "Make something fun—even if it’s imperfect.",
+    suggestion: "Make something fun—even if it's imperfect.",
     outfitVibe: "bold, artistic, playful layers, statement pieces",
+    energy: 75,
   },
   chill: {
     id: "chill",
@@ -94,6 +102,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#38BDF8", // sky blue
     suggestion: "No rush. Keep it light and easy.",
     outfitVibe: "oversized, comfy, casual, breathable",
+    energy: 30,
   },
   social: {
     id: "social",
@@ -103,6 +112,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#A855F7", // purple
     suggestion: "Reach out—good vibes are better shared.",
     outfitVibe: "fun, expressive, standout pieces, trendy",
+    energy: 85,
   },
   dreamy: {
     id: "dreamy",
@@ -112,6 +122,7 @@ export const MOOD_CONFIGS: Record<MoodId, MoodConfig> = {
     accent: "#7C3AED", // violet
     suggestion: "Let your mind wander and enjoy the mood.",
     outfitVibe: "soft fabrics, muted tones, ethereal, flowy",
+    energy: 40,
   },
 }
 
