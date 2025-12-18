@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { RotateCcw, Sparkles, ChevronDown, X } from "lucide-react"
+import { Sparkles, X, RotateCcw, ChevronDown } from "lucide-react"
 import {
   type MoodId,
   ALL_MOODS,
@@ -39,6 +39,70 @@ function rgba(hex: string, a: number) {
   }
 }
 
+const clamp = (v: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, v))
+
+/**
+ * Energy circle style taken from your example:
+ * - outer border ring (faint)
+ * - svg arc progress with strokeDasharray
+ * - center number + ENERGY label
+ */
+function EnergyCircle({
+  value,
+  accent,
+}: {
+  value: number
+  accent: string
+}) {
+  const energy = clamp(value, 0, 100)
+
+  // For viewBox 0..100, r=42 => circumference ≈ 263.89 (your example uses 264)
+  const C = 264
+  const dash = (energy / 100) * C
+
+  return (
+    <div className="flex flex-col items-center gap-2 shrink-0">
+      <div
+        className="relative grid place-items-center h-24 w-24 rounded-full border-4"
+        style={{
+          borderColor: rgba(accent, 0.22),
+          backgroundColor: rgba(accent, 0.06),
+          boxShadow: `0 18px 60px -45px ${rgba(accent, 0.65)}`,
+        }}
+        aria-label={`Energy ${energy}`}
+      >
+        {/* arc */}
+        <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="42"
+            fill="none"
+            stroke={accent}
+            strokeWidth="6"
+            strokeDasharray={`${dash} ${C}`}
+            strokeLinecap="round"
+            opacity="0.85"
+            style={{
+              filter: `drop-shadow(0 0 4px ${rgba(accent, 0.35)})`,
+            }}
+          />
+        </svg>
+
+        <div className="text-center leading-none">
+          <div className="text-2xl font-extrabold tabular-nums" style={{ color: accent }}>
+            {Math.round(energy)}
+          </div>
+          <div className="mt-0.5 text-[9px] font-semibold tracking-[0.14em] text-neutral-600">
+            ENERGY
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function MoodSection({
   weatherCode,
   selectedMood,
@@ -50,17 +114,16 @@ export default function MoodSection({
 
   const isCustom = selectedMood !== null && selectedMood !== suggestedMood
   const accent = mood.accent ?? "#4DB6D0"
-  const energy = Math.max(0, Math.min(100, (mood as any).energy ?? 70))
+  const energy = clamp(mood.energy, 0, 100)
 
   const [open, setOpen] = useState(false)
-  const cardRef = useRef<HTMLDivElement | null>(null)
+  const cardRef = useRef<HTMLButtonElement | null>(null)
 
   const moods = useMemo(
     () => ALL_MOODS.map((id) => ({ id, cfg: getMoodConfig(id) })),
     []
   )
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
@@ -70,159 +133,119 @@ export default function MoodSection({
     return () => window.removeEventListener("keydown", onKey)
   }, [open])
 
-  const softRing = rgba(accent, 0.22)
+  const softRing = rgba(accent, 0.12)
 
   return (
-    <div
+    <button
       ref={cardRef}
-      className="relative overflow-hidden rounded-[26px] bg-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5"
+      type="button"
+      onClick={() => setOpen(true)}
+      className="relative w-full overflow-hidden rounded-[26px] ring-1 ring-black/5 shadow-[0_18px_50px_-35px_rgba(0,0,0,0.45)] text-left transition hover:shadow-[0_22px_60px_-30px_rgba(0,0,0,0.5)] active:scale-[0.995]"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(248,252,255,1) 0%, rgba(240,248,255,1) 55%, rgba(247,252,255,1) 100%)",
+      }}
+      aria-haspopup="dialog"
+      aria-expanded={open}
     >
-      {/* Ambient wash (clipped) */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[26px]">
+      {/* ambient wash */}
+      <div className="pointer-events-none absolute inset-0">
         <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(120% 90% at 25% -10%, ${rgba(accent, 0.18)} 0%, transparent 60%),
-              radial-gradient(90% 70% at 110% 85%, ${rgba(accent, 0.12)} 0%, transparent 55%)
-            `,
-          }}
+          className="absolute -left-24 -top-28 h-72 w-72 rounded-full blur-2xl"
+          style={{ backgroundColor: rgba(accent, 0.12) }}
         />
+        <div
+          className="absolute -right-28 -bottom-28 h-72 w-72 rounded-full blur-2xl"
+          style={{ backgroundColor: rgba(accent, 0.10) }}
+        />
+        <div className="absolute inset-0 opacity-[0.55] [background:radial-gradient(900px_320px_at_40%_0%,rgba(255,255,255,0.85),transparent_60%)]" />
       </div>
 
-      <div className="relative p-7 sm:p-8">
-        {/* Top row */}
+      <div className="relative p-6 sm:p-7">
+        {/* top label */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4" style={{ color: accent }} />
-            <p className="text-sm font-semibold tracking-wide" style={{ color: accent }}>
-              YOUR VIBE
-            </p>
+            <div
+              className="text-sm font-semibold tracking-[0.20em]"
+              style={{ color: rgba(accent, 0.9) }}
+            >
+              MOOD
+            </div>
           </div>
 
           {isCustom && (
-            <button
-              type="button"
-              onClick={() => {
+            <span
+              onClick={(e) => {
+                e.stopPropagation()
                 onMoodChange(suggestedMood)
                 setOpen(false)
               }}
-              className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-xs font-semibold text-black/60 ring-1 ring-black/10 hover:bg-white hover:text-black/80 transition"
+              className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 text-xs font-semibold text-black/60 ring-1 ring-black/10 hover:bg-white hover:text-black/80 transition cursor-pointer"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reset
-            </button>
+            </span>
           )}
         </div>
 
-        {/* Main block (tap to open overlay) */}
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="mt-7 w-full text-left focus:outline-none"
-          aria-haspopup="dialog"
-          aria-expanded={open}
-        >
-          <div className="flex items-start gap-6">
-            {/* Icon tile */}
-            <div
-              className="relative grid h-[78px] w-[78px] place-items-center rounded-2xl bg-white/70 ring-1 ring-black/10"
-              style={{ boxShadow: `0 18px 70px -50px ${accent}` }}
-            >
-              <span className="text-4xl">{mood.emoji}</span>
+        {/* main row */}
+        <div className="mt-5">
+          <div className="flex items-start justify-between gap-6">
+            {/* left */}
+            <div className="min-w-0">
+              <div className="flex items-center gap-4">
+                <div className="text-4xl">{mood.emoji}</div>
 
-              {/* Suggested dot */}
-              {currentMoodId === suggestedMood && (
-                <span
-                  className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full"
-                  style={{
-                    backgroundColor: accent,
-                    boxShadow: `0 0 0 4px ${rgba(accent, 0.16)}`,
-                  }}
-                />
-              )}
-            </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <div className="truncate text-3xl sm:text-4xl font-extrabold text-neutral-900">
+                      {mood.label}
+                    </div>
 
-            {/* Text */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-3">
-                <h3 className="text-4xl font-semibold tracking-tight text-neutral-900">
-                  {mood.label}
-                </h3>
-
-                {isCustom ? (
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{ backgroundColor: rgba(accent, 0.14), color: accent }}
-                  >
-                    Custom
-                  </span>
-                ) : (
-                  <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold"
-                    style={{ backgroundColor: rgba(accent, 0.12), color: accent }}
-                  >
-                    Suggested
-                  </span>
-                )}
-
-                <span className="ml-auto inline-flex items-center gap-1 text-sm font-semibold text-neutral-500">
-                  Change <ChevronDown className="h-4 w-4" />
-                </span>
+                    <span
+                      className="rounded-full px-3 py-1 text-xs font-semibold"
+                      style={{ backgroundColor: rgba(accent, 0.10), color: accent }}
+                    >
+                      {isCustom ? "Custom" : "Suggested"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <p className="mt-2 text-base italic text-neutral-600">
-                “{mood.suggestion}”
-              </p>
+              <div className="mt-4 text-base italic text-neutral-600">
+                "{mood.suggestion}"
+              </div>
             </div>
-          </div>
-        </button>
 
-        {/* Energy */}
-        <div className="mt-10">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold tracking-widest text-neutral-600">
-              ENERGY LEVEL
-            </p>
-            <p className="text-lg font-semibold" style={{ color: accent }}>
-              {energy}%
-            </p>
+            {/* right: energy circle */}
+            <EnergyCircle value={energy} accent={accent} />
           </div>
+        </div>
 
-          <div className="mt-3 h-3 w-full rounded-full bg-black/10 overflow-hidden">
-            <div
-              className="h-3 rounded-full"
-              style={{
-                width: `${energy}%`,
-                background: `linear-gradient(90deg, ${rgba(accent, 0.65)} 0%, ${accent} 55%, ${rgba(
-                  accent,
-                  0.8
-                )} 100%)`,
-              }}
-            />
+        {/* bottom divider + hint */}
+        <div className="mt-6 border-t border-black/5 pt-5">
+          <div className="text-center text-sm text-neutral-500">
+            Tap to change your mood
           </div>
-
-          <p className="mt-3 text-xs text-neutral-500">
-            Tap the card to pick a different mood.
-          </p>
         </div>
       </div>
 
-      {/* ===== Overlay chooser (INSIDE card) ===== */}
+      {/* ===== overlay chooser (inside card) ===== */}
       {open && (
         <div className="absolute inset-0 z-40">
-          {/* soft scrim */}
-          <button
-            type="button"
+          <div
             aria-label="Close mood chooser"
-            onClick={() => setOpen(false)}
-            className="absolute inset-0"
+            onClick={(e) => {
+              e.stopPropagation()
+              setOpen(false)
+            }}
+            className="absolute inset-0 cursor-pointer"
             style={{
               background: `linear-gradient(180deg, ${rgba(accent, 0.10)} 0%, rgba(0,0,0,0.10) 100%)`,
             }}
           />
 
-          {/* Sheet */}
           <div className="absolute inset-3 sm:inset-4">
             <div
               className="h-full overflow-hidden rounded-2xl ring-1 ring-black/10 shadow-[0_40px_120px_-80px_rgba(0,0,0,0.75)]"
@@ -234,14 +257,10 @@ export default function MoodSection({
               role="dialog"
               aria-modal="true"
             >
-              {/* Header */}
               <div
                 className="flex items-start justify-between gap-3 px-4 py-3"
                 style={{
-                  background: `linear-gradient(180deg, ${rgba(accent, 0.12)} 0%, ${rgba(
-                    accent,
-                    0.06
-                  )} 100%)`,
+                  background: `linear-gradient(180deg, ${rgba(accent, 0.12)} 0%, ${rgba(accent, 0.06)} 100%)`,
                   borderBottom: `1px solid ${rgba(accent, 0.18)}`,
                 }}
               >
@@ -256,14 +275,16 @@ export default function MoodSection({
 
                 <button
                   type="button"
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setOpen(false)
+                  }}
                   className="rounded-full p-2 text-neutral-600 hover:bg-white/70 hover:text-neutral-900 transition ring-1 ring-black/5"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
 
-              {/* Scroll body */}
               <div
                 className={cn(
                   "h-[calc(100%-56px)] overflow-y-auto p-3",
@@ -288,9 +309,10 @@ export default function MoodSection({
                       <button
                         key={id}
                         type="button"
-                        onClick={() => {
-                          onMoodChange(id) // ✅ updates mood card
-                          setOpen(false)  // ✅ closes overlay
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onMoodChange(id)
+                          setOpen(false)
                         }}
                         className={cn(
                           "group relative flex items-center gap-2 rounded-2xl px-3 py-2.5 text-sm font-semibold transition ring-1",
@@ -298,10 +320,10 @@ export default function MoodSection({
                         )}
                         style={{
                           backgroundColor: active
-                            ? rgba(cfgAccent, 0.16)
+                            ? rgba(cfgAccent, 0.14)
                             : "rgba(255,255,255,0.78)",
                           borderColor: active
-                            ? rgba(cfgAccent, 0.32)
+                            ? rgba(cfgAccent, 0.30)
                             : "rgba(0,0,0,0.08)",
                           boxShadow: active
                             ? `0 14px 40px -28px ${rgba(cfgAccent, 0.55)}`
@@ -312,8 +334,8 @@ export default function MoodSection({
                         <span
                           className="grid h-8 w-8 place-items-center rounded-xl ring-1"
                           style={{
-                            backgroundColor: rgba(cfgAccent, 0.12),
-                            borderColor: rgba(cfgAccent, 0.24),
+                            backgroundColor: rgba(cfgAccent, 0.10),
+                            borderColor: rgba(cfgAccent, 0.22),
                           }}
                         >
                           <span className="text-base">{cfg.emoji}</span>
@@ -325,9 +347,9 @@ export default function MoodSection({
                           <span
                             className="ml-auto inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
                             style={{
-                              backgroundColor: rgba(cfgAccent, 0.14),
+                              backgroundColor: rgba(cfgAccent, 0.12),
                               color: cfgAccent,
-                              border: `1px solid ${rgba(cfgAccent, 0.22)}`,
+                              border: `1px solid ${rgba(cfgAccent, 0.20)}`,
                             }}
                           >
                             <span
@@ -353,7 +375,6 @@ export default function MoodSection({
                   })}
                 </div>
 
-                {/* bottom breathing room */}
                 <div className="h-2" />
               </div>
             </div>
@@ -361,11 +382,11 @@ export default function MoodSection({
         </div>
       )}
 
-      {/* soft border tint */}
+      {/* subtle inner border tint */}
       <div
         className="pointer-events-none absolute inset-0 rounded-[26px]"
         style={{ boxShadow: `inset 0 0 0 1px ${softRing}` }}
       />
-    </div>
+    </button>
   )
 }
