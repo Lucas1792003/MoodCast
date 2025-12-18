@@ -45,6 +45,7 @@ type Tile = {
   hint?: ReactNode
   colSpan?: 1 | 2
   isCustomValue?: boolean
+  allowOverflow?: boolean
 }
 
 function cn(...c: Array<string | null | undefined | false>) {
@@ -212,10 +213,10 @@ function WindRowsCompact({
     right: string
     divider?: boolean
   }) => (
-    <div className={cn("min-w-0", divider && "border-b border-border/70")}>
-      <div className="flex items-baseline justify-between gap-3 py-2">
-        <div className="text-[15px] font-semibold text-foreground">{left}</div>
-        <div className="text-[15px] font-semibold text-muted-foreground tabular-nums">
+    <div className={cn("", divider && "border-b border-border/70")}>
+      <div className="flex items-baseline gap-4 py-1.5">
+        <div className="text-[14px] font-semibold text-foreground w-[70px]">{left}</div>
+        <div className="text-[14px] font-semibold text-muted-foreground tabular-nums">
           {right}
         </div>
       </div>
@@ -313,6 +314,7 @@ export default function WeatherInfoGridCycler({
         icon: <Wind className="h-4 w-4 text-muted-foreground" />,
         colSpan: 2,
         isCustomValue: true,
+        allowOverflow: true,
         value: (() => {
           const wind = formatMaybe(weather.wind_speed_10m, (v) => `${Math.round(v)} km/h`)
           const gusts = formatMaybe(weather.wind_gusts_10m, (v) => `${Math.round(v)} km/h`)
@@ -322,20 +324,17 @@ export default function WeatherInfoGridCycler({
           const speedOnly = formatMaybe(weather.wind_speed_10m, (v) => `${Math.round(v)}`)
 
           return (
-            <div className="flex h-full min-h-0 items-center justify-between gap-3">
-              <div className="min-w-0 flex-1">
+            <div className="flex h-full items-center">
+              <div className="flex-1">
                 <WindRowsCompact wind={wind} gusts={gusts} direction={direction} />
               </div>
 
-              <div className="shrink-0 self-center">
-                {/* you can tweak this size if needed */}
-                <div className="aspect-square h-[92px] sm:h-[98px]">
-                  <WindCompassIOS
-                    fromDeg={weather.wind_direction_10m}
-                    speed={speedOnly}
-                    unit="km/h"
-                  />
-                </div>
+              <div className="h-[130px] w-[130px] shrink-0">
+                <WindCompassIOS
+                  fromDeg={weather.wind_direction_10m}
+                  speed={speedOnly}
+                  unit="km/h"
+                />
               </div>
             </div>
           )
@@ -379,13 +378,14 @@ export default function WeatherInfoGridCycler({
 
   return (
     <div className="relative self-stretch">
-      <div className="grid h-[clamp(260px,32vh,340px)] grid-cols-2 grid-rows-2 gap-3">
+      <div className="grid h-[clamp(300px,38vh,400px)] grid-cols-2 grid-rows-2 gap-3">
         {current.map((t) => (
           <div
             key={t.label}
             className={cn(
-              "flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-border bg-card/90 p-3 backdrop-blur",
-              t.colSpan === 2 && "col-span-2"
+              "flex h-full min-h-0 flex-col rounded-xl border border-border bg-card/90 p-3 backdrop-blur",
+              t.colSpan === 2 && "col-span-2",
+              t.allowOverflow ? "overflow-visible" : "overflow-hidden"
             )}
           >
             <div className="flex items-center gap-2">
