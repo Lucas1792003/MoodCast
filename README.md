@@ -94,7 +94,7 @@ This is important because mood influences **outfit suggestions**.
 Outfit suggestions for both genders with a falling-leaves animation.
 Outfits are generated based on weather info (**work in progress**).
 
-![Outfit](./image-8.png)
+![Outfit](./public/readme-pic/image-8.png)
 ![Outfit details](./public/readme-pic/image-9.png)
 
 ---
