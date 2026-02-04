@@ -42,32 +42,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/signup', '/auth/callback']
-  const isPublicRoute = publicRoutes.some(route =>
-    request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith('/auth/')
-  )
-
-  // Also allow API routes to be accessed without auth (they handle their own auth if needed)
-  const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
-
-  // Redirect unauthenticated users to login (except for public routes and API)
-  if (!user && !isPublicRoute && !isApiRoute) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
-
-  // Redirect authenticated users away from auth pages
-  if (
-    user &&
-    (request.nextUrl.pathname === '/login' ||
-      request.nextUrl.pathname === '/signup')
-  ) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
-  }
+  // Note: Authentication redirects removed - all routes are accessible
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:

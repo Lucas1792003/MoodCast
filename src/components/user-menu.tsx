@@ -38,19 +38,16 @@ export default function UserMenu({ user }: UserMenuProps) {
     const supabase = createClient()
     await supabase.auth.signOut()
     setOpen(false)
-    router.push('/login')
+    router.push('/')
     router.refresh()
   }
 
   if (!user) {
     return (
-      <Link
-        href="/login"
-        className="inline-flex items-center gap-2 rounded-full px-3 sm:px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition"
-      >
+      <div className="inline-flex items-center gap-2 rounded-full px-3 sm:px-4 py-2 text-sm font-medium text-muted-foreground">
         <User className="h-4 w-4" />
-        <span className="hidden sm:inline">Sign in</span>
-      </Link>
+        <span className="hidden sm:inline">Guest</span>
+      </div>
     )
   }
 
