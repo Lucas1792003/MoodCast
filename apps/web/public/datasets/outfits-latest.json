@@ -1,0 +1,783 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-13T00:00:00.000Z",
+  "outfits": [
+    {
+      "id": "ds_th_female_hot_clear_v0",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Straw sun hat",
+          "outer": "Sheer open kimono",
+          "top": "Sleeveless blouse",
+          "bottom": "Linen wide-leg pants",
+          "shoes": "Strappy sandals",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Light and airy layers perfect for Bangkok's clear hot days."
+      },
+      "keywords": ["th", "female", "hot", "clear"]
+    },
+    {
+      "id": "ds_th_female_hot_clear_v1",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Baseball cap",
+          "outer": "Cropped linen blazer",
+          "top": "Cotton crop top",
+          "bottom": "High-waist shorts",
+          "shoes": "Espadrille flats",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Casual and cool for a sunny Bangkok afternoon."
+      },
+      "keywords": ["th", "female", "hot", "clear"]
+    },
+    {
+      "id": "ds_th_female_hot_cloudy_v0",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["cloudy"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Light cotton cardigan",
+          "top": "Sleeveless tee",
+          "bottom": "Flowy midi skirt",
+          "shoes": "White sneakers",
+          "accessory": "Mini crossbody bag"
+        },
+        "reason": "Comfortable layers for a warm cloudy day in Bangkok."
+      },
+      "keywords": ["th", "female", "hot", "cloudy"]
+    },
+    {
+      "id": "ds_th_female_hot_rain_v0",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Wide-brim rain hat",
+          "outer": "Ultra-light rain jacket",
+          "top": "Breathable tank top",
+          "bottom": "Capri pants",
+          "shoes": "Waterproof sneakers",
+          "accessory": "Compact umbrella"
+        },
+        "reason": "Rain-ready but still light and breathable for Bangkok's tropical showers."
+      },
+      "keywords": ["th", "female", "hot", "rain"]
+    },
+    {
+      "id": "ds_th_female_hot_rain_v1",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Waterproof windbreaker",
+          "top": "Moisture-wicking tee",
+          "bottom": "Quick-dry shorts",
+          "shoes": "Waterproof sandals",
+          "accessory": "Compact umbrella"
+        },
+        "reason": "Quick-dry fabrics to handle Bangkok rain with ease."
+      },
+      "keywords": ["th", "female", "hot", "rain"]
+    },
+    {
+      "id": "ds_th_female_warm_clear_v0",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Sun hat",
+          "outer": "Button-up linen overshirt",
+          "top": "Cotton camisole",
+          "bottom": "Flowy midi skirt",
+          "shoes": "Espadrilles",
+          "accessory": "Tote bag"
+        },
+        "reason": "Relaxed elegance for warm and sunny Bangkok days."
+      },
+      "keywords": ["th", "female", "warm", "clear"]
+    },
+    {
+      "id": "ds_th_female_warm_clear_v1",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Straw beret",
+          "outer": "Thin denim jacket",
+          "top": "Striped linen tee",
+          "bottom": "Mom jeans",
+          "shoes": "White sneakers",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Casual and stylish for a comfortable Bangkok outing."
+      },
+      "keywords": ["th", "female", "warm", "clear"]
+    },
+    {
+      "id": "ds_th_female_warm_cloudy_v0",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["cloudy"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Baseball cap",
+          "outer": "Light denim jacket",
+          "top": "Fitted tee",
+          "bottom": "Wide-leg trousers",
+          "shoes": "Loafers",
+          "accessory": "Crossbody bag"
+        },
+        "reason": "Smart casual for a mild cloudy day in Bangkok."
+      },
+      "keywords": ["th", "female", "warm", "cloudy"]
+    },
+    {
+      "id": "ds_th_female_warm_rain_v0",
+      "region": "th",
+      "gender": "female",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Light rain shell",
+          "top": "Long-sleeve cotton tee",
+          "bottom": "Slim jogger pants",
+          "shoes": "Waterproof ankle boots",
+          "accessory": "Compact umbrella"
+        },
+        "reason": "Practical and comfortable for Bangkok's rainy season."
+      },
+      "keywords": ["th", "female", "warm", "rain"]
+    },
+    {
+      "id": "ds_th_male_hot_clear_v0",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Snapback cap",
+          "outer": "Sleeveless linen overshirt",
+          "top": "Moisture-wicking tee",
+          "bottom": "Linen shorts",
+          "shoes": "Leather sandals",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Minimal and breathable for Bangkok's blazing heat."
+      },
+      "keywords": ["th", "male", "hot", "clear"]
+    },
+    {
+      "id": "ds_th_male_hot_clear_v1",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Cap",
+          "outer": "Light polo shirt (open)",
+          "top": "Cotton tank top",
+          "bottom": "Chino shorts",
+          "shoes": "Flip flops",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Classic casual look that keeps you cool in the Bangkok sun."
+      },
+      "keywords": ["th", "male", "hot", "clear"]
+    },
+    {
+      "id": "ds_th_male_hot_cloudy_v0",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["cloudy"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Lightweight linen shirt",
+          "top": "Plain white tee",
+          "bottom": "Slim chino shorts",
+          "shoes": "Canvas sneakers",
+          "accessory": "Watch"
+        },
+        "reason": "Relaxed yet put-together for a warm cloudy Bangkok day."
+      },
+      "keywords": ["th", "male", "hot", "cloudy"]
+    },
+    {
+      "id": "ds_th_male_hot_rain_v0",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Waterproof cap",
+          "outer": "Ultra-light windbreaker",
+          "top": "Moisture-wicking tee",
+          "bottom": "Quick-dry shorts",
+          "shoes": "Waterproof sneakers",
+          "accessory": "Compact umbrella"
+        },
+        "reason": "Light rain-ready gear for Bangkok's unexpected downpours."
+      },
+      "keywords": ["th", "male", "hot", "rain"]
+    },
+    {
+      "id": "ds_th_male_hot_rain_v1",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 40,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Bangkok",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Packable rain jacket",
+          "top": "Breathable tee",
+          "bottom": "Slim trousers",
+          "shoes": "Waterproof sneakers",
+          "accessory": "Umbrella"
+        },
+        "reason": "Packable rain jacket keeps you dry without overheating."
+      },
+      "keywords": ["th", "male", "hot", "rain"]
+    },
+    {
+      "id": "ds_th_male_warm_clear_v0",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["clear"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Straw fedora",
+          "outer": "Linen short-sleeve shirt",
+          "top": "Plain tee (under)",
+          "bottom": "Chinos",
+          "shoes": "Loafers",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Smart casual for a warm clear Bangkok day."
+      },
+      "keywords": ["th", "male", "warm", "clear"]
+    },
+    {
+      "id": "ds_th_male_warm_cloudy_v0",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["cloudy"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Snapback",
+          "outer": "Light hoodie",
+          "top": "Graphic tee",
+          "bottom": "Slim jeans",
+          "shoes": "Sneakers",
+          "accessory": "Backpack"
+        },
+        "reason": "Laid-back streetwear for a mild Bangkok evening."
+      },
+      "keywords": ["th", "male", "warm", "cloudy"]
+    },
+    {
+      "id": "ds_th_male_warm_rain_v0",
+      "region": "th",
+      "gender": "male",
+      "min_temp_c": 22,
+      "max_temp_c": 30,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Bangkok",
+        "pieces": {
+          "head": "Rain cap",
+          "outer": "Lightweight rain jacket",
+          "top": "Long-sleeve tee",
+          "bottom": "Slim trousers",
+          "shoes": "Waterproof sneakers",
+          "accessory": "Umbrella"
+        },
+        "reason": "Rain-smart layers for Bangkok's warm wet season."
+      },
+      "keywords": ["th", "male", "warm", "rain"]
+    },
+    {
+      "id": "ds_global_female_hot_any_v0",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 50,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Global",
+        "pieces": {
+          "head": "Wide-brim sun hat",
+          "outer": "Sheer cover-up",
+          "top": "Sleeveless crop top",
+          "bottom": "Linen shorts",
+          "shoes": "Flat sandals",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Beat the heat with minimal, breezy layers."
+      },
+      "keywords": ["global", "female", "hot"]
+    },
+    {
+      "id": "ds_global_female_hot_any_v1",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 28,
+      "max_temp_c": 50,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Global",
+        "pieces": {
+          "head": "Baseball cap",
+          "outer": "Cropped linen blazer",
+          "top": "Fitted tank",
+          "bottom": "Wide-leg trousers",
+          "shoes": "Espadrilles",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Chic and cool for the hottest days."
+      },
+      "keywords": ["global", "female", "hot"]
+    },
+    {
+      "id": "ds_global_female_warm_any_v0",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 20,
+      "max_temp_c": 28,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Global",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Light denim jacket",
+          "top": "Fitted tee",
+          "bottom": "Mom jeans",
+          "shoes": "White sneakers",
+          "accessory": "Tote bag"
+        },
+        "reason": "Relaxed and versatile for pleasant warm days."
+      },
+      "keywords": ["global", "female", "warm"]
+    },
+    {
+      "id": "ds_global_female_warm_any_v1",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 20,
+      "max_temp_c": 28,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Global",
+        "pieces": {
+          "head": "Baseball cap",
+          "outer": "Button-up overshirt",
+          "top": "Cotton camisole",
+          "bottom": "Flowy midi skirt",
+          "shoes": "Loafers",
+          "accessory": "Crossbody bag"
+        },
+        "reason": "Effortless warm-weather style."
+      },
+      "keywords": ["global", "female", "warm"]
+    },
+    {
+      "id": "ds_global_female_cool_any_v0",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 12,
+      "max_temp_c": 20,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Layered Casual • Global",
+        "pieces": {
+          "head": "Knit beanie",
+          "outer": "Trench coat",
+          "top": "Ribbed knit sweater",
+          "bottom": "Straight-leg jeans",
+          "shoes": "Ankle boots",
+          "accessory": "Light scarf"
+        },
+        "reason": "Elegant layering for cool weather days."
+      },
+      "keywords": ["global", "female", "cool"]
+    },
+    {
+      "id": "ds_global_female_cool_any_v1",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 12,
+      "max_temp_c": 20,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Layered Casual • Global",
+        "pieces": {
+          "head": "Beret",
+          "outer": "Wool blazer",
+          "top": "Turtleneck",
+          "bottom": "Wide-leg trousers",
+          "shoes": "Chelsea boots",
+          "accessory": "Scarf"
+        },
+        "reason": "Polished layers for a crisp cool day."
+      },
+      "keywords": ["global", "female", "cool"]
+    },
+    {
+      "id": "ds_global_female_cold_any_v0",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": -10,
+      "max_temp_c": 12,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Warm Layers • Global",
+        "pieces": {
+          "head": "Wool beanie",
+          "outer": "Puffer coat",
+          "top": "Thermal turtleneck",
+          "bottom": "Fleece-lined jeans",
+          "shoes": "Insulated boots",
+          "accessory": "Wool scarf"
+        },
+        "reason": "Stay warm and cozy in cold weather."
+      },
+      "keywords": ["global", "female", "cold"]
+    },
+    {
+      "id": "ds_global_female_cold_any_v1",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": -10,
+      "max_temp_c": 12,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Warm Layers • Global",
+        "pieces": {
+          "head": "Fur-lined beanie",
+          "outer": "Long wool coat",
+          "top": "Chunky knit sweater",
+          "bottom": "Thick tights + skirt",
+          "shoes": "Knee-high boots",
+          "accessory": "Leather gloves"
+        },
+        "reason": "Layered warmth with a stylish winter edge."
+      },
+      "keywords": ["global", "female", "cold"]
+    },
+    {
+      "id": "ds_global_male_hot_any_v0",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 50,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Global",
+        "pieces": {
+          "head": "Baseball cap",
+          "outer": "Linen shirt (open)",
+          "top": "Plain white tee",
+          "bottom": "Linen shorts",
+          "shoes": "Canvas slip-ons",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Minimal and cool for hot days anywhere."
+      },
+      "keywords": ["global", "male", "hot"]
+    },
+    {
+      "id": "ds_global_male_hot_any_v1",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 28,
+      "max_temp_c": 50,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Light & Breezy • Global",
+        "pieces": {
+          "head": "Bucket hat",
+          "outer": "Lightweight polo",
+          "top": "Tee (under)",
+          "bottom": "Chino shorts",
+          "shoes": "Leather sandals",
+          "accessory": "Sunglasses"
+        },
+        "reason": "Sporty-casual look that handles the heat."
+      },
+      "keywords": ["global", "male", "hot"]
+    },
+    {
+      "id": "ds_global_male_warm_any_v0",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 20,
+      "max_temp_c": 28,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Global",
+        "pieces": {
+          "head": "Cap",
+          "outer": "Light hoodie",
+          "top": "Graphic tee",
+          "bottom": "Slim chinos",
+          "shoes": "Sneakers",
+          "accessory": "Watch"
+        },
+        "reason": "Classic casual for a comfortable warm day."
+      },
+      "keywords": ["global", "male", "warm"]
+    },
+    {
+      "id": "ds_global_male_warm_any_v1",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 20,
+      "max_temp_c": 28,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Global",
+        "pieces": {
+          "head": "Snapback",
+          "outer": "Overshirt",
+          "top": "Plain tee",
+          "bottom": "Slim jeans",
+          "shoes": "White sneakers",
+          "accessory": "Backpack"
+        },
+        "reason": "Laid-back and put-together for warm days."
+      },
+      "keywords": ["global", "male", "warm"]
+    },
+    {
+      "id": "ds_global_male_cool_any_v0",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 12,
+      "max_temp_c": 20,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Layered Casual • Global",
+        "pieces": {
+          "head": "Beanie",
+          "outer": "Bomber jacket",
+          "top": "Crewneck sweater",
+          "bottom": "Slim jeans",
+          "shoes": "Chelsea boots",
+          "accessory": "Scarf"
+        },
+        "reason": "Sharp layered look for cool-weather outings."
+      },
+      "keywords": ["global", "male", "cool"]
+    },
+    {
+      "id": "ds_global_male_cool_any_v1",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 12,
+      "max_temp_c": 20,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Layered Casual • Global",
+        "pieces": {
+          "head": "Flat cap",
+          "outer": "Wool trench coat",
+          "top": "Flannel shirt",
+          "bottom": "Straight-leg jeans",
+          "shoes": "Leather sneakers",
+          "accessory": "Wool scarf"
+        },
+        "reason": "Classic layers for cool crisp days."
+      },
+      "keywords": ["global", "male", "cool"]
+    },
+    {
+      "id": "ds_global_male_cold_any_v0",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": -10,
+      "max_temp_c": 12,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Warm Layers • Global",
+        "pieces": {
+          "head": "Wool beanie",
+          "outer": "Parka jacket",
+          "top": "Thermal henley",
+          "bottom": "Fleece-lined trousers",
+          "shoes": "Insulated boots",
+          "accessory": "Wool scarf"
+        },
+        "reason": "Insulated layers to stay warm in cold conditions."
+      },
+      "keywords": ["global", "male", "cold"]
+    },
+    {
+      "id": "ds_global_male_cold_any_v1",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": -10,
+      "max_temp_c": 12,
+      "weather_tags": ["any"],
+      "outfit_json": {
+        "styleTitle": "Warm Layers • Global",
+        "pieces": {
+          "head": "Knit beanie",
+          "outer": "Heavy wool overcoat",
+          "top": "Chunky knit sweater",
+          "bottom": "Thick denim jeans",
+          "shoes": "Winter boots",
+          "accessory": "Leather gloves"
+        },
+        "reason": "Heavy-duty warmth for cold winter days."
+      },
+      "keywords": ["global", "male", "cold"]
+    },
+    {
+      "id": "ds_global_female_warm_rain_v0",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 18,
+      "max_temp_c": 28,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Global",
+        "pieces": {
+          "head": "Waterproof bucket hat",
+          "outer": "Trench coat",
+          "top": "Knit top",
+          "bottom": "Slim trousers",
+          "shoes": "Ankle rain boots",
+          "accessory": "Compact umbrella"
+        },
+        "reason": "Classic trench and rain boots for a rainy warm day."
+      },
+      "keywords": ["global", "female", "warm", "rain"]
+    },
+    {
+      "id": "ds_global_male_warm_rain_v0",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 18,
+      "max_temp_c": 28,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Easy Comfort • Global",
+        "pieces": {
+          "head": "Rain cap",
+          "outer": "Packable rain jacket",
+          "top": "Long-sleeve tee",
+          "bottom": "Slim chinos",
+          "shoes": "Waterproof sneakers",
+          "accessory": "Compact umbrella"
+        },
+        "reason": "Packable rain jacket that folds away when the sun comes out."
+      },
+      "keywords": ["global", "male", "warm", "rain"]
+    },
+    {
+      "id": "ds_global_female_cool_rain_v0",
+      "region": "global",
+      "gender": "female",
+      "min_temp_c": 10,
+      "max_temp_c": 18,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Layered Casual • Global",
+        "pieces": {
+          "head": "Waterproof hood",
+          "outer": "Waterproof parka",
+          "top": "Turtleneck",
+          "bottom": "Straight-leg jeans",
+          "shoes": "Rubber rain boots",
+          "accessory": "Umbrella"
+        },
+        "reason": "Fully waterproof layers for a cold rainy day."
+      },
+      "keywords": ["global", "female", "cool", "rain"]
+    },
+    {
+      "id": "ds_global_male_cool_rain_v0",
+      "region": "global",
+      "gender": "male",
+      "min_temp_c": 10,
+      "max_temp_c": 18,
+      "weather_tags": ["rain"],
+      "outfit_json": {
+        "styleTitle": "Layered Casual • Global",
+        "pieces": {
+          "head": "Waterproof beanie",
+          "outer": "Waterproof hooded jacket",
+          "top": "Fleece mid-layer",
+          "bottom": "Water-resistant trousers",
+          "shoes": "Rubber boots",
+          "accessory": "Umbrella"
+        },
+        "reason": "Technical layers to stay dry in cool rainy weather."
+      },
+      "keywords": ["global", "male", "cool", "rain"]
+    }
+  ]
+}

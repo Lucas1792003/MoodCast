@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "MoodCast",
+    "slug": "moodcast",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "moodcast",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#6B9C89"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.moodcast.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "MoodCast needs your location to show local weather and activity suggestions.",
+        "NSLocationAlwaysUsageDescription": "MoodCast uses your location to provide weather updates and nearby activities."
+      }
+    },
+    "android": {
+      "package": "com.moodcast.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#6B9C89"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow MoodCast to use your location for weather and activity suggestions."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id"
+      }
+    }
+  }
+}
