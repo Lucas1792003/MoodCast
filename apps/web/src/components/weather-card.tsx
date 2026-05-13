@@ -48,8 +48,9 @@ export default function WeatherCard({ weather, location }: WeatherCardProps) {
   // Put these in /public:
   // /public/day.mp4
   // /public/night.mp4
-  const dayVideo = "/day.mp4"
-  const nightVideo = "/night.mp4"
+  const prefix = process.env.NODE_ENV === "production" ? "/MoodCast" : ""
+  const dayVideo = `${prefix}/day.mp4`
+  const nightVideo = `${prefix}/night.mp4`
 
   // Keep day bright; night a bit darker for readability
   const overlayClass = isDay ? "bg-black/0" : "bg-black/30"

@@ -13,9 +13,9 @@ export const metadata: Metadata = {
     "Your weather-powered lifestyle companion. Sync your mood, fashion, activities, and wellness with the weather.",
   generator: "v0.app",
   icons: {
-    icon: [{ url: "/app_icon.png", type: "image/png" }],
-    apple: [{ url: "/app_icon.png", type: "image/png" }],
-    shortcut: ["/app_icon.png"],
+    icon: [{ url: "/MoodCast/app_icon.png", type: "image/png" }],
+    apple: [{ url: "/MoodCast/app_icon.png", type: "image/png" }],
+    shortcut: ["/MoodCast/app_icon.png"],
   },
 }
 

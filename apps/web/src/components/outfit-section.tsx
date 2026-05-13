@@ -242,7 +242,8 @@ export default function OutfitSection({
       setError("")
 
       try {
-        const res = await fetch(`/datasets/outfits-latest.json`, { cache: "force-cache" })
+        const prefix = process.env.NODE_ENV === "production" ? "/MoodCast" : ""
+        const res = await fetch(`${prefix}/datasets/outfits-latest.json`, { cache: "force-cache" })
         if (!res.ok) throw new Error("dataset fetch failed")
         const ds = await res.json()
         const outfits: any[] = Array.isArray(ds?.outfits) ? ds.outfits : []

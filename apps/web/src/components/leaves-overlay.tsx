@@ -1,5 +1,7 @@
 "use client"
 
+import { assetPath } from "@/lib/asset-path"
+
 function pickVariant(i: number) {
 
   const x = Math.sin((i + 1) * 999) * 10000
@@ -9,8 +11,8 @@ function pickVariant(i: number) {
 export default function LeavesOverlay({ variant }: { variant: "sakura" | "autumn" }) {
   const count = 40 
 
-  const src1 = variant === "sakura" ? "/sakura_1.png" : "/autumn_1.png"
-  const src2 = variant === "sakura" ? "/sakura_2.png" : "/autumn_2.png"
+  const src1 = variant === "sakura" ? assetPath("/sakura_1.png") : assetPath("/autumn_1.png")
+  const src2 = variant === "sakura" ? assetPath("/sakura_2.png") : assetPath("/autumn_2.png")
 
   return (
     <div className="leaves-container" aria-hidden="true">
