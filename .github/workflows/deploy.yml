@@ -24,9 +24,12 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Remove root workspace config
+        run: rm -f package.json package-lock.json
+
       - name: Install dependencies
         working-directory: apps/web
-        run: npm install --install-strategy=nested
+        run: npm install
 
       - name: Build web app
         working-directory: apps/web
