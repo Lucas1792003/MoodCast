@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { reverseCity } from "@/lib/weather-client"
-import Image from "next/image"
+import { assetPath } from "@/lib/asset-path"
 import { Search, Navigation, X, Info } from "lucide-react"
 import AboutModal from "./about-modal"
 
@@ -76,13 +76,12 @@ export default function Header({ onSearch }: HeaderProps) {
 
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm border border-border">
-                <Image
-                  src="/app_icon.png"
+                <img
+                  src={assetPath("/app_icon.png")}
                   alt="MoodCast"
                   width={32}
                   height={32}
                   className="w-8 h-8 object-contain"
-                  priority
                 />
               </div>
 
