@@ -130,7 +130,7 @@ export default function WeatherThemeLayer({
           intensity={snowIntensity}
           densityBoost={densityBoost}
           wind={windPush}
-          iconSrc="/snowflake.png"
+          iconSrc={`${process.env.NODE_ENV === "production" ? "/MoodCast" : ""}/snowflake.png`}
           iconRate={0.35}
         />
       </EffectsPortal>
