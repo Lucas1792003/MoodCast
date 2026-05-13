@@ -26,7 +26,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: apps/web
-        run: npm install
+        run: npm install --install-strategy=nested
 
       - name: Build web app
         working-directory: apps/web
