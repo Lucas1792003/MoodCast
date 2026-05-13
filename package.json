@@ -2,14 +2,9 @@
   "name": "moodcast-monorepo",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
   "scripts": {
-    "web": "npm run dev --workspace=apps/web",
-    "mobile": "npm run start --workspace=apps/mobile",
-    "build:web": "npm run build --workspace=apps/web",
-    "build:mobile": "npm run build --workspace=apps/mobile"
+    "web": "npm --prefix apps/web run dev",
+    "mobile": "npm --prefix apps/mobile run start",
+    "build:web": "npm --prefix apps/web run build"
   }
 }
